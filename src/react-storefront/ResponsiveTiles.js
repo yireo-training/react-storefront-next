@@ -36,7 +36,7 @@ ResponsiveTiles.propTypes = {
   cols: PropTypes.object,
 
   /**
-   * The spacing between the tiles in pixels. Defaults to 15
+   * The spacing between the tiles in theme spacing units. Defaults to 1
    */
   spacing: PropTypes.number
 }
@@ -49,7 +49,7 @@ ResponsiveTiles.defaultProps = {
     lg: 5,
     xl: 5
   },
-  spacing: 15
+  spacing: 1
 }
 
 function createTiles({ cols }) {
@@ -77,12 +77,12 @@ function createTiles({ cols }) {
         overflowY: 'auto',
         listStyle: 'none',
         padding: 0,
-        margin: `-${theme.spacing(0.5)}px`,
+        margin: `-${theme.spacing(1)}px`,
         WebkitOverflowScrolling: 'touch' // Add iOS momentum scrolling.
       },
       tile: {
         ...breakpoints,
-        padding: `${theme.spacing(0.5)}px`,
+        padding: `${theme.spacing(1)}px`,
         height: 'auto'
       }
     }

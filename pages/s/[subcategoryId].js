@@ -1,12 +1,35 @@
+import { useEffect } from 'react'
 import { Typography, Grid, Container } from '@material-ui/core'
 import withHistoryCache from '../../src/react-storefront/router/withHistoryCache'
 import ResponsiveTiles from '../../src/react-storefront/ResponsiveTiles'
 import ProductItem from './_ProductItem'
+import fetch from 'cross-fetch'
+import ShowMore from '../../src/react-storefront/ShowMore'
+import useHistoryStore from '../../src/react-storefront/hooks/useHistoryStore'
+import Head from 'next/head'
 
-export default function Subcategory({ subcategory }) {
-  if (!subcategory) return null
+export default function Subcategory(props) {
+  const [store, updateStore] = useHistoryStore(props, { page: 0 })
+  const { subcategory, page } = store
+
+  async function fetchMore() {
+    const more = await fetch(`/api/s/${subcategory.id}?page=${page + 1}`).then(res => res.json())
+
+    updateStore({
+      ...store,
+      page: page + 1,
+      subcategory: {
+        ...subcategory,
+        products: [...subcategory.products, ...more.products]
+      }
+    })
+  }
+
   return (
     <Container maxWidth="lg">
+      <Head>
+        <title>{subcategory.title}</title>
+      </Head>
       <Grid container>
         <Grid item xs={12}>
           <Typography component="h1" variant="h6">
@@ -19,6 +42,9 @@ export default function Subcategory({ subcategory }) {
               <ProductItem key={product.id} product={product} index={i} />
             ))}
           </ResponsiveTiles>
+        </Grid>
+        <Grid item xs={12}>
+          <ShowMore loadMore={fetchMore} />
         </Grid>
       </Grid>
     </Container>

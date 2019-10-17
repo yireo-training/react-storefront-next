@@ -16,15 +16,19 @@ export default function storeInitialPropsInHistory() {
     replaceState.call(history, { rsf: state.rsf, ...data }, title, url)
   }
 
-  history.pushState = async (...args) => {
-    const { components, pathname, as } = Router.router
-    let props = components[pathname].props.pageProps
+  // history.pushState = async (...args) => {
+  //   const { components, pathname, as } = Router.router
+  //   const component = components[pathname]
 
-    if (props.lazy && props.lazy.then) {
-      let props = await props.lazy
-    }
+  //   console.log('component', component)
 
-    history.replaceState({ ...history.state, rsf: { props } }, document.title, as)
-    pushState.apply(history, args)
-  }
+  //   let props = component.props.pageProps
+
+  //   if (props && props.lazy && props.lazy.then) {
+  //     props = await props.lazy
+  //   }
+
+  //   history.replaceState({ ...history.state, rsf: { props } }, document.title, as)
+  //   pushState.apply(history, args)
+  // }
 }
