@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Typography, Grid, Container } from '@material-ui/core'
 import withHistoryCache from '../../src/react-storefront/router/withHistoryCache'
 import ResponsiveTiles from '../../src/react-storefront/ResponsiveTiles'
@@ -7,6 +6,7 @@ import fetch from 'cross-fetch'
 import ShowMore from '../../src/react-storefront/ShowMore'
 import useHistoryStore from '../../src/react-storefront/hooks/useHistoryStore'
 import Head from 'next/head'
+import BackToTop from '../../src/react-storefront/BackToTop'
 
 export default function Subcategory(props) {
   const [store, updateStore] = useHistoryStore(props, { page: 0 })
@@ -30,6 +30,7 @@ export default function Subcategory(props) {
       <Head>
         <title>{subcategory.title}</title>
       </Head>
+      <BackToTop />
       <Grid container>
         <Grid item xs={12}>
           <Typography component="h1" variant="h6">

@@ -2,7 +2,7 @@
  * @license
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
-import React, { Component } from 'react'
+import React from 'react'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
 import makeStyles from '@material-ui/styles/makeStyles'
