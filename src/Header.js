@@ -1,6 +1,7 @@
 import { AppBar, IconButton, Toolbar, Typography, Container } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import { makeStyles } from '@material-ui/styles'
+import CartButton from '../src/react-storefront/CartButton'
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
@@ -31,6 +32,8 @@ export default function Header() {
           <Typography className={classes.title} variant="h6" noWrap>
             React Storefront
           </Typography>
+          <Spacer />
+          <CartButton quantity={2} />
         </Toolbar>
       </Container>
     </AppBar>
