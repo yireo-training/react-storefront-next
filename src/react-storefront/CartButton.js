@@ -5,6 +5,7 @@ import Cart from '@material-ui/icons/ShoppingCart'
 import ToolbarButton from './ToolbarButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Badge from '@material-ui/core/Badge'
+import clsx from 'clsx'
 
 export const styles = theme => ({
   badge: {
@@ -19,31 +20,45 @@ export const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFCartButton' })
 
+/**
+ * A cart header button that display the number of items in the cart using a badge.
+ *
+ * Example:
+ *
+ * ```js
+ * <CartButton href="/cart" quantity={1}/>
+ * ```
+ */
 export default function CartButton({
   classes,
-  cart,
   href,
   as,
   server,
   onClick,
   icon,
   quantity,
-  ...buttonProps
+  linkProps,
+  badgeProps,
+  buttonProps
 }) {
   classes = useStyles({ classes })
   const cartIcon = icon || <Cart className={classes.icon} />
 
   return (
     <Link
-      className={classes.link}
+      {...linkProps}
+      className={clsx(classes.link, linkProps.className)}
       href={href}
       as={as}
       server={server}
       onClick={onClick}
-      anchorProps={{ 'data-th': 'cart-link' }}
     >
-      <ToolbarButton aria-label="Cart" color="inherit" {...buttonProps}>
-        <Badge classes={{ badge: classes.badge }} badgeContent={quantity} color="primary">
+      <ToolbarButton {...buttonProps}>
+        <Badge
+          badgeContent={quantity}
+          {...badgeProps}
+          classes={{ ...badgeProps.classes, badge: classes.badge }}
+        >
           {cartIcon}
         </Badge>
       </ToolbarButton>
@@ -70,9 +85,34 @@ CartButton.propTypes = {
   /**
    * Optional Custom cart icon
    */
-  icon: PropTypes.element
+  icon: PropTypes.element,
+
+  /**
+   * Props for the Button element.
+   */
+  buttonProps: PropTypes.object,
+
+  /**
+   * Props for the Badge element.
+   */
+  badgeProps: PropTypes.object,
+
+  /**
+   * Props for the Link element.
+   */
+  linkProps: PropTypes.object
 }
 
 CartButton.defaultProps = {
-  href: '/cart'
+  href: '/cart',
+  badgeProps: {
+    color: 'primary'
+  },
+  buttonProps: {
+    ['aria-label']: 'Cart',
+    color: 'inherit'
+  },
+  linkProps: {
+    anchorProps: { 'data-th': 'cart-link' }
+  }
 }
