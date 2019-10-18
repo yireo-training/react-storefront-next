@@ -17,5 +17,5 @@ export default function fetchProduct(req, res) {
         }
       })
     )
-  }, 500)
+  }, 0)
 }

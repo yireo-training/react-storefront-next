@@ -5,8 +5,7 @@ import Popper from '@material-ui/core/Popper'
 import Hidden from '@material-ui/core/Hidden'
 import Fade from '@material-ui/core/Hidden'
 import Paper from '@material-ui/core/Paper'
-import { useState, useRef, useEffect } from 'react'
-import Router from 'next/Router'
+import { useState, useRef } from 'react'
 
 const styles = theme => ({
   link: {
