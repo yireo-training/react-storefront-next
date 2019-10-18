@@ -15,6 +15,10 @@ export const styles = theme => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
     background: 'transparent',
 
+    '&$expanded': {
+      margin: 0
+    },
+
     '&::before': {
       display: 'none'
     },
@@ -65,7 +69,9 @@ export const styles = theme => ({
   },
 
   expandedPanel: {
-    margin: 0
+    '&$root': {
+      margin: 0
+    }
   },
 
   expandIcon: {},
@@ -135,9 +141,9 @@ export default function ExpandableSection(props) {
       classes={{
         root: clsx({
           [classes.root]: true,
-          [classes.margins]: margins,
-          [classes.expandedPanel]: true
-        })
+          [classes.margins]: margins
+        }),
+        expanded: classes.expandedPanel
       }}
       expanded={expandedState}
       defaultExpanded={defaultExpanded}
