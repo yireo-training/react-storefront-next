@@ -1,37 +1,35 @@
-import React from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import MuiLink from '@material-ui/core/Link';
-import ProTip from '../src/ProTip';
-import Link from '../src/Link';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <MuiLink color="inherit" href="https://material-ui.com/">
-        Your Website
-      </MuiLink>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import React from 'react'
+import Container from '@material-ui/core/Container'
+import CmsSlot from '../src/react-storefront/CmsSlot'
+import Row from '../src/react-storefront/Row'
 
 export default function Index() {
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Next.js example
-        </Typography>
-        <Link href="/about" color="secondary">
-          Go to the about page
-        </Link>
-        <ProTip />
-        <Copyright />
-      </Box>
+    <Container maxWidth="lg">
+      <Row>
+        <CmsSlot
+          style={{ minHeight: 320 }}
+          lazyLoadImages
+        >{`<img data-rsf-lazy data-src="https://via.placeholder.com/500x500/cccccc?text=Hero Image" width="100%"/>`}</CmsSlot>
+      </Row>
+      <Row>
+        <CmsSlot
+          style={{ minHeight: 320 }}
+          lazyLoadImages
+        >{`<img data-rsf-lazy data-src="https://via.placeholder.com/500x500/cccccc?text=Ad 1" width="100%"/>`}</CmsSlot>
+      </Row>
+      <Row>
+        <CmsSlot
+          style={{ minHeight: 320 }}
+          lazyLoadImages
+        >{`<img data-rsf-lazy data-src="https://via.placeholder.com/500x500/cccccc?text=Ad 2" width="100%"/>`}</CmsSlot>
+      </Row>
+      <Row>
+        <CmsSlot
+          style={{ minHeight: 320 }}
+          lazyLoadImages
+        >{`<img data-rsf-lazy data-src="https://via.placeholder.com/500x500/cccccc?text=Ad 3" width="100%"/>`}</CmsSlot>
+      </Row>
     </Container>
-  );
+  )
 }

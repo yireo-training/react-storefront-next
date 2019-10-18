@@ -29,7 +29,7 @@ export const styles = theme => ({
   },
 
   toolBar: {
-    height: theme.headerHeight || '64px',
+    height: '64px',
     padding: `0 7px`,
     maxWidth: theme.maxWidth,
     flex: 1

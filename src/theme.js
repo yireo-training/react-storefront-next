@@ -22,7 +22,8 @@ const theme = createMuiTheme({
     amp: {
       modal: 999
     }
-  }
+  },
+  loadMaskOffsetTop: 64 + 56 + 4
 })
 
 export default theme

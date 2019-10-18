@@ -1,4 +1,5 @@
 import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Link from '../../src/Link'
 import { useObserver, useLocalStore } from 'mobx-react'
@@ -8,6 +9,7 @@ import ButtonSelector from '../../src/react-storefront/ButtonSelector'
 import QuantitySelector from '../../src/react-storefront/QuantitySelector'
 import useLazyProps from '../../src/react-storefront/hooks/useLazyProps'
 import fetchProps from '../../src/react-storefront/props/fetchProps'
+import LoadMask from '../../src/react-storefront/LoadMask'
 
 export default function Product(lazyProps) {
   const { props, loading } = useLazyProps(lazyProps)
@@ -17,33 +19,45 @@ export default function Product(lazyProps) {
 
     return (
       <Container maxWidth="lg">
-        <Link href="/s/[subcategoryId]" as="/s/1">
-          Subcategory 1
-        </Link>
-
-        <Typography variant="h6" component="h1">
-          {product.name}
-        </Typography>
-
-        {loading ? (
-          <div>loading...</div>
-        ) : (
-          <>
-            <MediaCarousel product={product} />
-            <ButtonSelector
-              options={product.colors.options}
-              value={product.colors.selected}
-              onSelectionChange={(_e, color) => {
-                product.colors.selected = color
-              }}
-            />
-            <QuantitySelector value={product.quantity} onChange={q => (product.quantity = q)} />
-            <div style={{ height: 500 }}></div>
-            <Lazy style={{ minHeight: 200 }}>
-              <div>Lazy content</div>
-            </Lazy>
-          </>
-        )}
+        <Grid spacing={2} container>
+          <Grid item xs={12}>
+            <Link href="/s/[subcategoryId]" as="/s/1">
+              Subcategory 1
+            </Link>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6" component="h1">
+              {product.name}
+            </Typography>
+          </Grid>
+          {loading ? (
+            <LoadMask fullscreen />
+          ) : (
+            <>
+              <Grid item xs={12}>
+                <MediaCarousel product={product} />
+              </Grid>
+              <Grid item xs={12}>
+                <ButtonSelector
+                  options={product.colors.options}
+                  value={product.colors.selected}
+                  onSelectionChange={(_e, color) => {
+                    product.colors.selected = color
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <QuantitySelector value={product.quantity} onChange={q => (product.quantity = q)} />
+              </Grid>
+              <div style={{ height: 500 }}></div>
+              <Grid item xs={12}>
+                <Lazy style={{ minHeight: 200 }}>
+                  <div>Lazy content</div>
+                </Lazy>
+              </Grid>
+            </>
+          )}
+        </Grid>
       </Container>
     )
   })

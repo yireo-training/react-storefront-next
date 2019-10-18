@@ -5,15 +5,17 @@ export default function fetchProduct(req, res) {
     query: { productId }
   } = req
 
-  res.end(
-    JSON.stringify({
-      app: {
-        title: `Product ${productId}`
-      },
-      product: {
-        ...createProduct(productId),
-        selectedImage: 0
-      }
-    })
-  )
+  setTimeout(() => {
+    res.end(
+      JSON.stringify({
+        app: {
+          title: `Product ${productId}`
+        },
+        product: {
+          ...createProduct(productId),
+          selectedImage: 0
+        }
+      })
+    )
+  }, 500)
 }
