@@ -57,10 +57,14 @@ MyDocument.getInitialProps = async ctx => {
   const sheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
 
+  ctx.res.setHeader('service-worker-allowed', '/')
+
   ctx.renderPage = async () => {
     const document = originalRenderPage({
       enhanceApp: App => props => sheets.collect(<App {...props} />)
     })
+
+    // return document
     return await renderAmp(document)
   }
 

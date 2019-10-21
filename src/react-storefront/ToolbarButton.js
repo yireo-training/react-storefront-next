@@ -41,7 +41,7 @@ ToolbarButton.propTypes = {
   /**
    * The icon
    */
-  icon: PropTypes.element.isRequired,
+  icon: PropTypes.element,
 
   /**
    * The label text (optional)

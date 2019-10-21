@@ -27,7 +27,7 @@ import PropTypes from 'prop-types'
  * ```
  */
 const Link = forwardRef(function(props, ref) {
-  const { as, href, prefetch, skeletonProps, onClick, ...other } = props
+  const { as, href, prefetch, skeletonProps, onClick, anchorProps, ...other } = props
 
   const app = useContext(PWAContext)
 

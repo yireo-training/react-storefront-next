@@ -54,7 +54,14 @@ export default function Subcategory(props) {
 
 Subcategory.getInitialProps = withHistoryCache(async ({ query }) => {
   if (typeof window !== 'undefined') {
-    return window.fetch(`/api/s/${query.subcategoryId}`).then(res => res.json())
+    return window
+      .fetch(`/api/s/${query.subcategoryId}`, {
+        cache: 'force-cache',
+        headers: {
+          'x-rsf-api-version': '1'
+        }
+      })
+      .then(res => res.json())
   } else {
     let result
 

@@ -6,6 +6,8 @@ export default function fetchProduct(req, res) {
   } = req
 
   setTimeout(() => {
+    res.setHeader('cache-control', 'no-cache, no-store')
+
     res.end(
       JSON.stringify({
         app: {
@@ -17,5 +19,5 @@ export default function fetchProduct(req, res) {
         }
       })
     )
-  }, 0)
+  }, 1000)
 }
