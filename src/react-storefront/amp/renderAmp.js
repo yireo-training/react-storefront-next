@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
+import ReactDOMServer from 'react-dom/server'
 
 export default async function renderAmp(document) {
-  // const $ = cheerio.load(document.html)
   // $('img').attr({ height: '64', width: '64' })
   // document.html = $('body').html()
 

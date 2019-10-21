@@ -9,7 +9,9 @@ import storeInitialPropsInHistory from '../src/react-storefront/router/storeInit
 import PWA from '../src/react-storefront/PWA'
 import useLazyProps from '../src/react-storefront/hooks/useLazyProps'
 import Nav from './_Nav'
+import { registerSW } from 'react-storefront/serviceWorker'
 
+// registerSW()
 storeInitialPropsInHistory()
 
 const styles = theme => ({
