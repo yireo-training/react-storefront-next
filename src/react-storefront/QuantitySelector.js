@@ -73,7 +73,7 @@ export default function QuantitySelector({
       'aria-label': ariaLabel,
       name,
       ...inputProps,
-      'amp-bind': `value=>${ampStateId}.quantity`
+      'amp-bind': `value=>${ampStateId}.quantity || ${value}`
     },
     [amp ? 'readOnly' : 'disabled']: true
   }

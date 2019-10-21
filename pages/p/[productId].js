@@ -1,6 +1,4 @@
-import Container from '@material-ui/core/Container'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Container, Grid, Typography, Paper } from '@material-ui/core'
 import Link from '../../src/Link'
 import { useObserver, useLocalStore } from 'mobx-react'
 import { Button } from '@material-ui/core'
@@ -10,6 +8,8 @@ import QuantitySelector from '../../src/react-storefront/QuantitySelector'
 import useLazyProps from '../../src/react-storefront/hooks/useLazyProps'
 import fetchProps from '../../src/react-storefront/props/fetchProps'
 import LoadMask from '../../src/react-storefront/LoadMask'
+import TabPanel from '../../src/react-storefront/TabPanel'
+import CmsSlot from '../../src/react-storefront/CmsSlot'
 
 export default function Product(lazyProps) {
   const { props, loading } = useLazyProps(lazyProps)
@@ -48,6 +48,17 @@ export default function Product(lazyProps) {
               </Grid>
               <Grid item xs={12}>
                 <QuantitySelector value={product.quantity} onChange={q => (product.quantity = q)} />
+              </Grid>
+              <Grid item xs={12}>
+                <TabPanel>
+                  <CmsSlot label="Description">Description</CmsSlot>
+                  <CmsSlot label="Specs">Test</CmsSlot>
+                  <div label="Reviews">
+                    {['here', 'here2', 'here3'].map((review, i) => (
+                      <Paper key={i}>{review}</Paper>
+                    ))}
+                  </div>
+                </TabPanel>
               </Grid>
               <div style={{ height: 500 }}></div>
               <Grid item xs={12}>

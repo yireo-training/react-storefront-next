@@ -46,7 +46,7 @@ export default function CartButton({
 
   return (
     <Link
-      {...linkProps}
+      {...linkProps.anchorProps}
       className={clsx(classes.link, linkProps.className)}
       href={href}
       as={as}
