@@ -2,7 +2,7 @@
  * @license
  * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
  */
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Collapse from '@material-ui/core/Collapse'
@@ -15,18 +15,27 @@ import { useAmp } from 'next/amp'
 
 export default function Branch(props) {
   return useObserver(() => {
-    const { useExpanders, expandFirstItem, simple, depth, index, item, ...others } = props
+    const {
+      useExpandersAtLevel,
+      expandFirstItem,
+      isFirstItem,
+      depth,
+      index,
+      item,
+      ...others
+    } = props
     const amp = useAmp()
     const { setSelected, classes } = useContext(MenuContext)
-    const showExpander = simple || (depth > 0 && useExpanders)
-    const slideToItem = item => setSelected(item, { expandFirstItem })
-    const toggleItemExpaned = item => (item.expanded = !item.expanded)
+    const showExpander = useExpandersAtLevel === depth
+    const slideToItem = item => setSelected(item)
+    const [expanded, setExpanded] = useState(showExpander && isFirstItem && expandFirstItem)
+    const toggleItemExpaned = () => setExpanded(!expanded)
 
     const interactionProps = {
       onClick: showExpander ? toggleItemExpaned.bind(null, item) : slideToItem.bind(null, item),
       classes: {
         root: clsx(classes.listItem, item.className, {
-          [classes.expanded]: item.expanded,
+          [classes.expanded]: expanded,
           [classes.expander]: showExpander
         })
       }
@@ -48,6 +57,7 @@ export default function Branch(props) {
             {...others}
             item={item}
             leaf={false}
+            expanded={expanded}
             showExpander={showExpander}
             sublist={sublist}
           />
@@ -61,14 +71,14 @@ export default function Branch(props) {
             in: true,
             'amp-bind': `class=>rsfMenu.sublist == '${sublist}' ? '${classes.visible}' : '${classes.hidden}'`
           }
-        : { in: item.expanded }
+        : { in: expanded }
 
       elements.push(
         <Collapse {...collapseProps} timeout="auto" key="collapse">
           <List component="div" classes={{ root: classes.list }}>
             {item.items &&
               item.items.map((item, i) => (
-                <MenuItem {...props} depth={depth + 1} item={item} key={i} />
+                <MenuItem {...props} depth={depth + 1} isFirstItem={i === 0} item={item} key={i} />
               ))}
           </List>
         </Collapse>

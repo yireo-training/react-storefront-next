@@ -19,7 +19,6 @@ export default function Menu({
   align,
   drawerWidth,
   persistent,
-  simple,
   menuStore,
   ...others
 }) {
@@ -48,7 +47,7 @@ export default function Menu({
             modal: classes.modal
           }}
         >
-          <MenuBody drawerWidth={drawerWidth} simple={simple} {...others} />
+          <MenuBody drawerWidth={drawerWidth} {...others} />
         </Drawer>
         <SEOLinks />
       </MenuContext.Provider>
@@ -96,9 +95,9 @@ Menu.propTypes = {
   renderLeafFooter: PropTypes.func,
 
   /**
-   * Set to true to use expandable menu items below depth 1
+   * Set level at which menu items will be expandable
    */
-  useExpanders: PropTypes.bool,
+  useExpandersAtLevel: PropTypes.number,
 
   /**
    * Set to true to expand first item for not root items
@@ -124,12 +123,6 @@ Menu.propTypes = {
    * Called when the menu is closed
    */
   onClose: PropTypes.func,
-
-  /**
-   * Set to true to render a simple set of expanders rather than a multi-level drill down.
-   * Defaults to false.
-   */
-  simple: PropTypes.bool,
 
   /**
    * The icon to use for collapsed groups
@@ -189,7 +182,6 @@ Menu.propTypes = {
 
 Menu.defaultProps = {
   drawerWidth: 330,
-  simple: false,
   expandFirstItem: false,
   align: 'left',
   trackSelected: false

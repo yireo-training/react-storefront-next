@@ -51,6 +51,7 @@ export default function MenuBody(props) {
                   <MenuItem
                     {...props}
                     item={item}
+                    isFirstItem={key === 0}
                     key={key}
                     depth={depth}
                     classes={{ list: classes.list, listItem: classes.listItem }}

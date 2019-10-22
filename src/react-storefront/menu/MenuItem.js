@@ -22,6 +22,7 @@ export default function Item({ item, itemRenderer, ...props }) {
           expandFirstItem={props.expandFirstItem}
           itemContentRenderer={props.itemContentRenderer}
           itemRenderer={itemRenderer}
+          isFirstItem={props.isFirstItem}
           trackSelected={props.trackSelected}
           ExpandIcon={props.ExpandIcon}
           CollapseIcon={props.CollapseIcon}
@@ -29,8 +30,7 @@ export default function Item({ item, itemRenderer, ...props }) {
           item={item}
           index={props.index}
           depth={props.depth}
-          useExpanders={props.useExpanders}
-          simple={props.simple}
+          useExpandersAtLevel={props.useExpandersAtLevel}
           depth={props.depth}
         />
       )

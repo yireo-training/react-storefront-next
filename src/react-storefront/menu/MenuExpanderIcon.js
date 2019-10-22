@@ -6,7 +6,13 @@ import MenuContext from './MenuContext'
 import { useObserver } from 'mobx-react'
 import { useAmp } from 'next/amp'
 
-export default function ExpanderIcon({ ExpandIcon, CollapseIcon, showExpander, sublist, item }) {
+export default function ExpanderIcon({
+  ExpandIcon,
+  CollapseIcon,
+  showExpander,
+  sublist,
+  expanded
+}) {
   return useObserver(() => {
     const { classes } = useContext(MenuContext)
     const amp = useAmp()
@@ -30,7 +36,7 @@ export default function ExpanderIcon({ ExpandIcon, CollapseIcon, showExpander, s
         </>
       )
     } else {
-      return item.expanded ? (
+      return expanded ? (
         <CollapseIcon className={classes.icon} />
       ) : (
         <ExpandIcon className={classes.icon} />

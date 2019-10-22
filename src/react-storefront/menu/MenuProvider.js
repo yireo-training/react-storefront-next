@@ -1,6 +1,4 @@
-import MenuContext from './MenuContext'
 import { useLocalStore } from 'mobx-react'
-import { toJS } from 'mobx'
 
 export function useMenuStore(menu) {
   const store = useLocalStore(() => ({
@@ -15,10 +13,6 @@ export function useMenuStore(menu) {
         store.levels.push(item)
       } else {
         store.levels[store.level] = item
-      }
-
-      if (options.expandFirstItem && item.items.every(itm => itm.expanded === false)) {
-        item.items[0].expanded = true
       }
     }
   }))
