@@ -2,7 +2,7 @@ export default function createMenu() {
   const items = []
 
   for (let i = 1; i <= 10; i++) {
-    items.push(createCategoryItem(i))
+    items.push(createGroup(i))
   }
 
   return {
@@ -19,6 +19,7 @@ function createGroup(i) {
 
   return {
     text: `Group ${i}`,
+    ui: 'expand',
     items
   }
 }
@@ -32,6 +33,7 @@ function createCategoryItem(i) {
 
   return {
     text: `Category ${i}`,
+    ui: 'expand',
     items
   }
 }

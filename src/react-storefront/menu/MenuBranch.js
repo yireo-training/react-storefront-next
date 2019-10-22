@@ -15,10 +15,10 @@ import { useAmp } from 'next/amp'
 
 export default function Branch(props) {
   return useObserver(() => {
-    const { useExpanders, expandFirstItem, simple, depth, index, item, ...others } = props
+    const { useExpanders, expandFirstItem, depth, index, item, ...others } = props
     const amp = useAmp()
     const { setSelected, classes } = useContext(MenuContext)
-    const showExpander = simple || (depth > 0 && useExpanders)
+    const showExpander = depth > 0 && useExpanders
     const slideToItem = item => setSelected(item, { expandFirstItem })
     const toggleItemExpaned = item => (item.expanded = !item.expanded)
 
