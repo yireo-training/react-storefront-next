@@ -17,8 +17,6 @@ export default function Product(lazyProps) {
   return useObserver(() => {
     const product = useLocalStore(() => ({ ...props.product, selectedImage: 0 }))
 
-    console.log('loading', loading)
-
     return (
       <Container maxWidth="lg">
         <Grid spacing={2} container>
@@ -53,16 +51,16 @@ export default function Product(lazyProps) {
               <QuantitySelector value={product.quantity} onChange={q => (product.quantity = q)} />
             </Grid>
             <Grid item xs={12}>
-                <TabPanel>
-                  <CmsSlot label="Description">Description</CmsSlot>
-                  <CmsSlot label="Specs">Test</CmsSlot>
-                  <div label="Reviews">
-                    {['here', 'here2', 'here3'].map((review, i) => (
-                      <Paper key={i}>{review}</Paper>
-                    ))}
-                  </div>
-                </TabPanel>
-              </Grid>
+              <TabPanel>
+                <CmsSlot label="Description">Description</CmsSlot>
+                <CmsSlot label="Specs">Test</CmsSlot>
+                <div label="Reviews">
+                  {['here', 'here2', 'here3'].map((review, i) => (
+                    <Paper key={i}>{review}</Paper>
+                  ))}
+                </div>
+              </TabPanel>
+            </Grid>
             <div style={{ height: 500 }}></div>
             <Grid item xs={12}>
               <Lazy style={{ minHeight: 200 }}>

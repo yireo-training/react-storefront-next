@@ -7,7 +7,7 @@ import { useAmp } from 'next/amp'
 import Head from 'next/head'
 import { Tabs, Tab, makeStyles } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import classnames from 'classnames'
+import clsx from 'clsx'
 
 export const useStyles = makeStyles(
   theme => ({
@@ -99,7 +99,7 @@ export default function TabPanel({
     if (amp) {
       label = (
         <div
-          className={classnames('label', { selected: selected === i })}
+          className={clsx('label', { selected: selected === i })}
           amp-bind={`class=>${ampStateId}.${ampStateProperty} == "tab${i}" || (${i} == 0 && !${ampStateId}.${ampStateProperty}) ? 'label selected' : 'label'`}
         >
           {label}
@@ -113,8 +113,8 @@ export default function TabPanel({
         label={label}
         on={`tap:AMP.setState({ ${ampStateId}: { ${ampStateProperty}: 'tab${i}' }})`}
         classes={{
-          root: classnames({ [classes.ampTab]: amp }),
-          labelContainer: classnames({ [classes.ampTabLabelContainer]: amp })
+          root: clsx({ [classes.ampTab]: amp }),
+          labelContainer: clsx({ [classes.ampTabLabelContainer]: amp })
         }}
       />
     )
@@ -125,7 +125,7 @@ export default function TabPanel({
         role="tabpanel"
         option={`tab${i}`}
         selected={i === selected}
-        className={classnames(classes.panel, {
+        className={clsx(classes.panel, {
           [classes.hidden]: !amp && i !== selected,
           [classes.ampPanel]: amp
         })}
@@ -168,7 +168,7 @@ export default function TabPanel({
         value={selected}
         onChange={onChangeHandler}
         classes={{
-          indicator: classnames({ [classes.ampTabIndicator]: amp })
+          indicator: clsx({ [classes.ampTabIndicator]: amp })
         }}
       >
         {tabs}
