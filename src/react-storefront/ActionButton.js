@@ -5,10 +5,6 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 
 export const styles = theme => ({
-  raised: {
-    boxShadow: 'none',
-    backgroundColor: '#F4F2F1'
-  },
   label: {
     justifyContent: 'space-between',
     alignItems: 'baseline',

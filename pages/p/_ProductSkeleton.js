@@ -3,8 +3,6 @@ import Skeleton from 'react-storefront/Skeleton'
 import { Grid } from '@material-ui/core'
 
 export default function ProductSkeleton() {
-  console.log('showing ProductSkeleton')
-
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={4}>

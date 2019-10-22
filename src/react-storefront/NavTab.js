@@ -28,9 +28,18 @@ const useStyles = makeStyles(styles, { name: 'RSFNavTab' })
 
 export default function NavTab({ classes, href, as, children, ...props }) {
   classes = useStyles({ classes })
+
   const [overTab, setOverTab] = useState(false)
   const [overMenu, setOverMenu] = useState(false)
-  const anchorEl = useRef()
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const toggleMenu = (show, event) => {
+    setOverTab(show)
+
+    if (show) {
+      setAnchorEl(event.currentTarget)
+    }
+  }
 
   return (
     <>
@@ -38,9 +47,8 @@ export default function NavTab({ classes, href, as, children, ...props }) {
         className={classes.link}
         href={href}
         as={as}
-        onMouseEnter={() => setOverTab(true)}
-        onMouseLeave={() => setOverTab(false)}
-        ref={anchorEl}
+        onMouseEnter={e => toggleMenu(true, e)}
+        onMouseLeave={e => toggleMenu(false, e)}
       >
         <Tab className={classes.tab} {...props} />
       </Link>
@@ -49,7 +57,7 @@ export default function NavTab({ classes, href, as, children, ...props }) {
           <Popper
             className={classes.menu}
             open={overTab || overMenu}
-            anchorEl={anchorEl.current}
+            anchorEl={anchorEl}
             transition
           >
             {({ TransitionProps }) => (

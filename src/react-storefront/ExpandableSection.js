@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
@@ -8,6 +8,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Typography from '@material-ui/core/Typography'
 import AmpExpandableSection from './amp/AmpExpandableSection'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import useStateFromProp from './hooks/useStateFromProp'
+import { useAmp } from 'next/amp'
 
 export const styles = theme => ({
   root: {
@@ -91,7 +93,6 @@ const useStyles = makeStyles(styles, { name: 'RSFExpandableSection' })
  */
 export default function ExpandableSection(props) {
   let {
-    amp,
     classes,
     children = [],
     title,
@@ -105,11 +106,11 @@ export default function ExpandableSection(props) {
     ...others
   } = props
 
-  if (amp) return <AmpExpandableSection {...props} />
-
   classes = useStyles({ classes })
-  const [expandedState, setExpandedState] = useState(expanded || defaultExpanded)
-  useEffect(() => setExpandedState(expanded), [expanded])
+
+  const [expandedState, setExpandedState] = useStateFromProp(expanded || defaultExpanded || false)
+
+  if (useAmp()) return <AmpExpandableSection {...props} />
 
   /**
    * Gets the classes for the ExpansionPanelSummary
@@ -132,8 +133,9 @@ export default function ExpandableSection(props) {
   function handleChange(e, expanded) {
     if (onChange) {
       onChange(e, expanded)
+    } else {
+      setExpandedState(expanded)
     }
-    setExpandedState(expanded)
   }
 
   return (
@@ -192,12 +194,12 @@ ExpandableSection.propTypes = {
   /**
    * The icon to use for collapsed groups
    */
-  ExpandIcon: PropTypes.func,
+  ExpandIcon: PropTypes.object,
 
   /**
    * The icon to use for expanded groups
    */
-  CollapseIcon: PropTypes.func,
+  CollapseIcon: PropTypes.object,
 
   /**
    * Set to false to remove the default left and right margins. Defaults to `true`.
