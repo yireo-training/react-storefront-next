@@ -17,7 +17,7 @@ export default async function fetchProps(url) {
   }
 
   if (typeof window === 'undefined') {
-    return await doFetch()
+    return (await doFetch()).json()
   } else {
     const res = await doFetch(true)
 
