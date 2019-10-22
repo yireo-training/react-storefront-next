@@ -19,16 +19,16 @@ export default async function fetchProps(url) {
   if (typeof window === 'undefined') {
     return await doFetch()
   } else {
-    const res = await doFetch(true)
+    return { lazy: doFetch().then(res => res.json()) }
 
-    console.log('res.status', res.status)
+    // const res = await doFetch(true)
 
-    if (res.status === 204) {
-      // response not found in browser cache, fetch from the network and return lazy props
-      return { lazy: doFetch().then(res => res.json()) }
-    } else {
-      // response was found in the cache, return immediately
-      return res.json()
-    }
+    // if (res.status === 204) {
+    //   // response not found in browser cache, fetch from the network and return lazy props
+    //   return { lazy: doFetch().then(res => res.json()) }
+    // } else {
+    //   // response was found in the cache, return immediately
+    //   return res.json()
+    // }
   }
 }

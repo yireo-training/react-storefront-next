@@ -39,7 +39,7 @@ const Link = forwardRef(function(props, ref) {
   }
 
   return (
-    <NextLink href={href} prefetch={prefetch} as={as}>
+    <NextLink href={href} prefetch={false} as={as}>
       <a ref={ref} {...other} onClick={handleClick} />
     </NextLink>
   )

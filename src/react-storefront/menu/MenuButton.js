@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import Hidden from '@material-ui/core/Hidden'
-import ToolbarButton from './ToolbarButton'
+import ToolbarButton from '../ToolbarButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import PWAContext from './PWAContext'
+import MenuContext from './MenuContext'
 import MenuIcon from './MenuIcon'
 import PropTypes from 'prop-types'
 import { useObserver } from 'mobx-react'
@@ -18,8 +18,7 @@ const useStyles = makeStyles(styles, { name: 'RSFMenuButton' })
 /**
  * The button that controls that opens and closes the main app menu.
  */
-export default function MenuButton({ MenuIcon, menuIconProps, classes }) {
-  const { menu } = useContext(PWAContext)
+export default function MenuButton({ MenuIcon, menuIconProps, menuStore, classes }) {
   classes = useStyles({ classes })
 
   return useObserver(() => (
@@ -31,8 +30,8 @@ export default function MenuButton({ MenuIcon, menuIconProps, classes }) {
         <ToolbarButton
           aria-label="Menu"
           color="inherit"
-          onClick={() => (menu.open = !menu.open)}
-          icon={<MenuIcon open={menu.open} {...menuIconProps} />}
+          onClick={() => (menuStore.open = !menuStore.open)}
+          icon={<MenuIcon open={menuStore.open} {...menuIconProps} />}
         />
       </a>
     </Hidden>

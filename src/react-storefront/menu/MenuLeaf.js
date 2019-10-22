@@ -1,0 +1,36 @@
+import React, { useContext } from 'react'
+import ListItem from '@material-ui/core/ListItem'
+import clsx from 'clsx'
+import MenuItemContent from './MenuItemContent'
+import Link from '../Link'
+import MenuContext from './MenuContext'
+import { useObserver } from 'mobx-react'
+
+export default function Leaf({ item, trackSelected, ...others }) {
+  return useObserver(() => {
+    const menu = useContext(MenuContext)
+    const { classes } = menu
+
+    return (
+      <Link
+        href={item.href}
+        as={item.as}
+        className={classes.link}
+        server={item.server}
+        state={item.state ? () => JSON.parse(item.state) : null}
+        onClick={() => (menu.open = false)}
+      >
+        <ListItem
+          button
+          divider
+          selected={trackSelected && app.location.pathname === item.url.replace(/\?.*/, '')}
+          classes={{
+            root: clsx(classes.listItem, classes.leaf, item.className)
+          }}
+        >
+          <MenuItemContent {...others} item={item} showExpander={false} leaf />
+        </ListItem>
+      </Link>
+    )
+  })
+}

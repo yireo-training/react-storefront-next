@@ -6,11 +6,7 @@ import { makeStyles, Typography } from '@material-ui/core'
 import ExpandableSection from '../src/react-storefront/ExpandableSection'
 import ActionButton from '../src/react-storefront/ActionButton'
 
-const useStyles = makeStyles(theme => ({
-  row: {
-    border: '10px solid red'
-  }
-}))
+const useStyles = makeStyles(theme => ({}))
 
 export default function Index() {
   const classes = useStyles()
@@ -46,7 +42,7 @@ export default function Index() {
           lazyLoadImages
         >{`<img data-rsf-lazy data-src="https://via.placeholder.com/500x500/cccccc?text=Ad 2" width="100%"/>`}</CmsSlot>
       </Row>
-      <Row classes={{ root: classes.row }}>
+      <Row>
         <CmsSlot
           style={{ minHeight: 320 }}
           lazyLoadImages

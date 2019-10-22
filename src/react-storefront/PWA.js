@@ -8,14 +8,14 @@ import Router from 'next/router'
 
 const ampContextValue = { ampStateId: 'rsf' }
 
-export default function PWA({ children }) {
+export default function PWA({ children, menu }) {
   const amp = useAmp()
 
   const app = useLocalStore(() => ({
     amp,
     loading: false,
     hydrating: true,
-    menu: { open: false },
+    menu: { open: false, ...menu },
     skeletonProps: null
   }))
 

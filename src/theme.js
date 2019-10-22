@@ -23,6 +23,7 @@ const theme = createMuiTheme({
       modal: 999
     }
   },
+  headerHeight: 64,
   loadMaskOffsetTop: 64 + 56 + 4
 })
 

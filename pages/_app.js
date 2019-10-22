@@ -4,12 +4,16 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../src/theme'
 import Header from './_Header'
 import { makeStyles } from '@material-ui/core'
-import AppContext from '../src/AppContext'
 import storeInitialPropsInHistory from '../src/react-storefront/router/storeInitialPropsInHistory'
 import PWA from '../src/react-storefront/PWA'
 import useLazyProps from '../src/react-storefront/hooks/useLazyProps'
 import Nav from './_Nav'
+import Menu from 'react-storefront/menu/Menu'
 import { registerSW } from 'react-storefront/serviceWorker'
+import createMenu from '../src/mocks/createMenu'
+import { useMenuStore } from 'react-storefront/menu/MenuProvider'
+
+const menu = createMenu()
 
 // registerSW()
 storeInitialPropsInHistory()
@@ -34,20 +38,19 @@ export default function MyApp({ Component, pageProps }) {
     }
   }, [])
 
+  const menuStore = useMenuStore(menu)
+
   return (
     <PWA>
-      <AppContext.Provider value={{}}>
-        <>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Header />
-            <Nav />
-            <main className={classes.main}>
-              <Component {...pageProps} />
-            </main>
-          </ThemeProvider>
-        </>
-      </AppContext.Provider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Header menuStore={menuStore} />
+        <Menu align="right" useExpanders menuStore={menuStore} />
+        <Nav />
+        <main className={classes.main}>
+          <Component {...pageProps} />
+        </main>
+      </ThemeProvider>
     </PWA>
   )
 }
@@ -59,7 +62,7 @@ MyApp.getInitialProps = async function({ Component, ctx }) {
     pageProps = await Component.getInitialProps(ctx)
   }
 
-  return { pageProps }
+  return { pageProps: { ...pageProps, menu } }
 }
 
 // class MyApp extends App {

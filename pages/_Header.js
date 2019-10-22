@@ -1,7 +1,7 @@
 import { Typography, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import AppBar from '../src/react-storefront/AppBar'
-import MenuButton from '../src/react-storefront/MenuButton'
+import MenuButton from '../src/react-storefront/menu/MenuButton'
 import Spacer from '../src/react-storefront/Spacer'
 import CartButton from '../src/react-storefront/CartButton'
 
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function Header() {
+export default function Header({ menuStore }) {
   const classes = useStyles()
 
   return (
@@ -27,7 +27,7 @@ export default function Header() {
         </Typography>
         <Spacer />
         <CartButton quantity={4} />
-        <MenuButton />
+        <MenuButton menuStore={menuStore} />
       </Container>
     </AppBar>
   )
