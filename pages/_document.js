@@ -78,12 +78,14 @@ MyDocument.getInitialProps = async ctx => {
     styles: (
       <>
         {initialProps.styles}
-        {isAmp && (
+        {isAmp ? (
           <style
             dangerouslySetInnerHTML={{
               __html: initialProps.head.find(item => item.key === 'amp-custom').props['amp-custom']
             }}
           />
+        ) : (
+          sheets.getStyleElement()
         )}
       </>
     )
