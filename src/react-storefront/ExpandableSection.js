@@ -17,10 +17,6 @@ export const styles = theme => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
     background: 'transparent',
 
-    '&$expanded': {
-      margin: 0
-    },
-
     '&::before': {
       display: 'none'
     },

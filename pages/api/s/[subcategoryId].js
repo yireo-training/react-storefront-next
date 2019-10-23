@@ -16,9 +16,6 @@ export default function getSubcategory(req, res) {
       } else {
         res.end(
           JSON.stringify({
-            app: {
-              menu: [{ text: 'Shirts' }, { text: 'Shoes' }, { text: 'Pants' }]
-            },
             subcategory: {
               id: subcategoryId,
               name: `Subcategory ${subcategoryId}`,

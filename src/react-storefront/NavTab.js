@@ -26,7 +26,7 @@ const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFNavTab' })
 
-export default function NavTab({ classes, href, as, children, ...props }) {
+function NavTab({ classes, href, as, children, ...props }) {
   classes = useStyles({ classes })
 
   const [overTab, setOverTab] = useState(false)
@@ -78,3 +78,5 @@ export default function NavTab({ classes, href, as, children, ...props }) {
     </>
   )
 }
+
+export default React.memo(NavTab)

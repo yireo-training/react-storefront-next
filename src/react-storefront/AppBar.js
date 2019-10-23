@@ -9,6 +9,7 @@ import throttle from 'lodash/throttle'
 import Toolbar from '@material-ui/core/Toolbar'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import PWAContext from './PWAContext'
+import { useObserver } from 'mobx-react'
 
 export const styles = theme => ({
   root: {
@@ -78,83 +79,85 @@ export const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFAppBar' })
 
-export default function AppBar({ classes, children, fixed, offline, offlineWarning }) {
-  classes = useStyles({ classes })
+export default function AppBar({ classes, children, fixed, offlineWarning }) {
+  return useObserver(() => {
+    classes = useStyles({ classes })
 
-  const [state, applyState] = useState({
-    stuck: false,
-    hidden: false,
-    animate: false
-  })
-  const { stuck, hidden, animate } = state
-  const setState = newState => applyState({ ...state, ...newState })
-  const lastScrollY = useRef()
-  const unstickAt = useRef()
-  const throttledScrollY = useRef()
-  const { amp, menu } = useContext(PWAContext)
-  const sampleScrollSpeed = throttle(() => (throttledScrollY.current = window.scrollY), 100)
-  const items = React.Children.toArray(children)
+    const [state, applyState] = useState({
+      stuck: false,
+      hidden: false,
+      animate: false
+    })
+    const { stuck, hidden, animate } = state
+    const setState = newState => applyState({ ...state, ...newState })
+    const lastScrollY = useRef()
+    const unstickAt = useRef()
+    const throttledScrollY = useRef()
+    const { amp, menu, offline } = useContext(PWAContext)
+    const sampleScrollSpeed = throttle(() => (throttledScrollY.current = window.scrollY), 100)
+    const items = React.Children.toArray(children)
 
-  const onScroll = () => {
-    const height = 64,
-      { scrollY } = window,
-      unstickBufferZone = 15
+    const onScroll = () => {
+      const height = 64,
+        { scrollY } = window,
+        unstickBufferZone = 15
 
-    if (scrollY === 0) {
-      setState({ hidden: false, stuck: false, animate: false })
-    } else if (scrollY > height && !menu.open && !hidden) {
-      setState({ hidden: true })
+      if (scrollY === 0) {
+        setState({ hidden: false, stuck: false, animate: false })
+      } else if (scrollY > height && !menu.open && !hidden) {
+        setState({ hidden: true })
+      }
+
+      if (scrollY > 0 && throttledScrollY.current > scrollY + unstickBufferZone && !stuck) {
+        unstickAt.current = scrollY + unstickBufferZone
+        setState({ stuck: true })
+      } else if (scrollY > unstickAt.current && stuck && !menu.open) {
+        unstickAt.current = null
+        setState({ stuck: false })
+      }
+
+      if (lastScrollY.current > scrollY && stuck) {
+        unstickAt.current = scrollY + unstickBufferZone
+      }
+
+      lastScrollY.current = scrollY
+      sampleScrollSpeed()
     }
 
-    if (scrollY > 0 && throttledScrollY.current > scrollY + unstickBufferZone && !stuck) {
-      unstickAt.current = scrollY + unstickBufferZone
-      setState({ stuck: true })
-    } else if (scrollY > unstickAt.current && stuck && !menu.open) {
-      unstickAt.current = null
-      setState({ stuck: false })
-    }
+    useEffect(() => {
+      window.addEventListener('scroll', onScroll, { passive: true })
+      return () => window.removeEventListener('scroll', onScroll, { passive: true })
+    }, [state])
 
-    if (lastScrollY.current > scrollY && stuck) {
-      unstickAt.current = scrollY + unstickBufferZone
-    }
+    useEffect(() => {
+      if (hidden && !animate) {
+        setTimeout(() => setState({ animate: true }), 100)
+      }
+    }, [hidden])
 
-    lastScrollY.current = scrollY
-    sampleScrollSpeed()
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll, { passive: true })
-  }, [state])
-
-  useEffect(() => {
-    if (hidden && !animate) {
-      setTimeout(() => setState({ animate: true }), 100)
-    }
-  }, [hidden])
-
-  return (
-    <div>
-      {offline && <div className={classes.offline}>{offlineWarning}</div>}
-      <div className={clsx({ [classes.root]: true, [classes.withAmp]: amp })}>
-        <div
-          className={clsx({
-            [classes.wrap]: true,
-            [classes.fixed]: fixed,
-            [classes.hidden]: hidden || menu.open,
-            [classes.stuck]: (hidden && stuck) || menu.open,
-            [classes.unstuck]: hidden && !stuck,
-            [classes.animate]: animate && window.scrollY > 0,
-            [classes.menuOpen]: menu.open
-          })}
-        >
-          <Toolbar disableGutters classes={{ root: classes.toolBar }}>
-            {items}
-          </Toolbar>
+    return (
+      <div>
+        {offline && <div className={classes.offline}>{offlineWarning}</div>}
+        <div className={clsx({ [classes.root]: true, [classes.withAmp]: amp })}>
+          <div
+            className={clsx({
+              [classes.wrap]: true,
+              [classes.fixed]: fixed,
+              [classes.hidden]: hidden || menu.open,
+              [classes.stuck]: (hidden && stuck) || menu.open,
+              [classes.unstuck]: hidden && !stuck,
+              [classes.animate]: animate && window.scrollY > 0,
+              [classes.menuOpen]: menu.open
+            })}
+          >
+            <Toolbar disableGutters classes={{ root: classes.toolBar }}>
+              {items}
+            </Toolbar>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  })
 }
 
 AppBar.propTypes = {

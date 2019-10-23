@@ -4,33 +4,32 @@ import clsx from 'clsx'
 import MenuItemContent from './MenuItemContent'
 import Link from '../Link'
 import MenuContext from './MenuContext'
-import { useObserver } from 'mobx-react'
 
-export default function Leaf({ item, trackSelected, ...others }) {
-  return useObserver(() => {
-    const menu = useContext(MenuContext)
-    const { classes } = menu
+function MenuLeaf({ item, trackSelected, ...others }) {
+  const { close, classes } = useContext(MenuContext)
 
-    return (
-      <Link
-        href={item.href}
-        as={item.as}
-        className={classes.link}
-        server={item.server}
-        state={item.state ? () => JSON.parse(item.state) : null}
-        onClick={() => (menu.open = false)}
+  return (
+    <Link
+      href={item.href}
+      as={item.as}
+      className={classes.link}
+      server={item.server}
+      state={item.state ? () => JSON.parse(item.state) : null}
+      onClick={close}
+    >
+      <ListItem
+        button
+        divider
+        selected={trackSelected && app.location.pathname === item.url.replace(/\?.*/, '')}
+        classes={{
+          root: clsx(classes.listItem, classes.leaf, item.className)
+        }}
       >
-        <ListItem
-          button
-          divider
-          selected={trackSelected && app.location.pathname === item.url.replace(/\?.*/, '')}
-          classes={{
-            root: clsx(classes.listItem, classes.leaf, item.className)
-          }}
-        >
-          <MenuItemContent {...others} item={item} showExpander={false} leaf />
-        </ListItem>
-      </Link>
-    )
-  })
+        <MenuItemContent {...others} item={item} showExpander={false} leaf />
+      </ListItem>
+    </Link>
+  )
 }
+
+// export default MenuLeaf
+export default React.memo(MenuLeaf)

@@ -25,19 +25,22 @@ import PWAContext from '../PWAContext'
  */
 export default function useLazyProps(props) {
   const { skeletonProps } = useContext(PWAContext)
-  const [store, setStore] = useState({ loading: true, props: skeletonProps || {} })
+
+  const isLazy = props.lazy && props.lazy.then ? true : false
+
+  const [store, setStore] = useState(() => ({
+    loading: isLazy,
+    props: isLazy ? skeletonProps || {} : props
+  }))
 
   useEffect(() => {
-    if (props.lazy && props.lazy.then) {
-      props.lazy.then(props => {
-        setStore({ loading: false, props })
-      })
+    if (isLazy) {
+      console.log('props', props)
+      const { lazy, ...others } = props
+      setStore({ loading: true, props: others })
+      lazy.then(props => setStore({ loading: false, props }))
     }
-  }, [])
+  }, [props])
 
-  if (props.lazy && props.lazy.then) {
-    return store
-  } else {
-    return { loading: false, props: props }
-  }
+  return store
 }

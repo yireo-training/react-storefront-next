@@ -1,41 +1,25 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Branch from './MenuBranch'
 import Leaf from './MenuLeaf'
-import { useObserver } from 'mobx-react'
+import MenuContext from './MenuContext'
 
-export default function Item({ item, itemRenderer, ...props }) {
-  return useObserver(() => {
-    let NodeType = Leaf,
-      result = null
+export default function Item({ item, ...props }) {
+  const { itemRenderer } = useContext(MenuContext)
 
-    if (item.items) {
-      NodeType = Branch
-    }
+  let NodeType = Leaf,
+    result = null
 
-    if (itemRenderer) {
-      result = itemRenderer(item, item.leaf)
-    }
+  if (item.items) {
+    NodeType = Branch
+  }
 
-    if (result == null) {
-      result = (
-        <NodeType
-          expandFirstItem={props.expandFirstItem}
-          itemContentRenderer={props.itemContentRenderer}
-          itemRenderer={itemRenderer}
-          trackSelected={props.trackSelected}
-          ExpandIcon={props.ExpandIcon}
-          CollapseIcon={props.CollapseIcon}
-          theme={props.theme}
-          item={item}
-          index={props.index}
-          depth={props.depth}
-          useExpanders={props.useExpanders}
-          simple={props.simple}
-          depth={props.depth}
-        />
-      )
-    }
+  if (itemRenderer) {
+    result = itemRenderer(item, item.leaf)
+  }
 
-    return result
-  })
+  if (result == null) {
+    result = <NodeType item={item} itemRenderer={itemRenderer} {...props} />
+  }
+
+  return result
 }
