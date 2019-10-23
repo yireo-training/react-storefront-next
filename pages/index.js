@@ -1,25 +1,36 @@
 import React from 'react'
 import Container from '@material-ui/core/Container'
-import CmsSlot from '../src/react-storefront/CmsSlot'
-import Row from '../src/react-storefront/Row'
+import CmsSlot from 'react-storefront/CmsSlot'
+import Row from 'react-storefront/Row'
 import { makeStyles, Typography } from '@material-ui/core'
-import ExpandableSection from '../src/react-storefront/ExpandableSection'
-import ActionButton from '../src/react-storefront/ActionButton'
+import ExpandableSection from 'react-storefront/ExpandableSection'
+import ActionButton from 'react-storefront/ActionButton'
+import Accordion from 'react-storefront/Accordion'
+import Link from 'react-storefront/Link'
 
 const useStyles = makeStyles(theme => ({}))
 
 export default function Index() {
   const classes = useStyles()
+  const sections = []
+
+  for (let i = 0; i < 10; i++) {
+    sections.push(
+      <ExpandableSection key={i} title={`Section ${i}`} caption="Click Here">
+        <Typography>This is a help section</Typography>
+      </ExpandableSection>
+    )
+  }
 
   return (
     <Container maxWidth="lg">
       <Row>
-        <ExpandableSection title="Help" caption="Click Here">
-          <Typography>This is a help section</Typography>
-        </ExpandableSection>
-        <ExpandableSection title="Buy" caption="Click Here">
-          <Typography>This is a help section</Typography>
-        </ExpandableSection>
+        <Link href="/p/[productId]" as="/p/1">
+          Product 1
+        </Link>
+      </Row>
+      <Row>
+        <Accordion>{sections}</Accordion>
       </Row>
       <Row>
         <ActionButton label="Sort" value="Lowest Price" />

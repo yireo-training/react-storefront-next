@@ -45,7 +45,7 @@ export default function MyApp({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header menuStore={menuStore} />
-        <Menu align="right" useExpandersAtLevel={1} expandFirstItem menuStore={menuStore} />
+        <Menu align="right" useExpandersAtLevel={0} menuStore={menuStore} />
         <Nav />
         <main className={classes.main}>
           <Component {...pageProps} />

@@ -19,6 +19,7 @@ function createGroup(i) {
 
   return {
     text: `Group ${i}`,
+    ui: 'expand',
     items
   }
 }
@@ -32,6 +33,7 @@ function createCategoryItem(i) {
 
   return {
     text: `Category ${i}`,
+    ui: 'expand',
     items
   }
 }

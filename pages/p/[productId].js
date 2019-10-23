@@ -1,21 +1,20 @@
+import { useEffect } from 'react'
+import { useObserver } from 'mobx-react'
 import { Container, Grid, Typography, Paper } from '@material-ui/core'
 import Link from '../../src/Link'
-import { useObserver, useLocalStore } from 'mobx-react'
 import { Button } from '@material-ui/core'
 import Lazy from '../../src/react-storefront/Lazy'
 import ButtonSelector from '../../src/react-storefront/ButtonSelector'
 import QuantitySelector from '../../src/react-storefront/QuantitySelector'
-import useLazyProps from '../../src/react-storefront/hooks/useLazyProps'
+import useLazyStore from '../../src/react-storefront/hooks/useLazyStore'
 import fetchProps from '../../src/react-storefront/props/fetchProps'
 import TabPanel from '../../src/react-storefront/TabPanel'
 import CmsSlot from '../../src/react-storefront/CmsSlot'
 import ProductSkeleton from './_ProductSkeleton'
 
 export default function Product(lazyProps) {
-  const { props, loading } = useLazyProps(lazyProps)
-
   return useObserver(() => {
-    const product = useLocalStore(() => ({ ...props.product, selectedImage: 0 }))
+    const { loading, product } = useLazyStore(lazyProps, { quantity: 1 })
 
     return (
       <Container maxWidth="lg">
@@ -27,7 +26,7 @@ export default function Product(lazyProps) {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h6" component="h1">
-              {product.name}
+              {product && product.name}
             </Typography>
           </Grid>
         </Grid>
@@ -36,16 +35,18 @@ export default function Product(lazyProps) {
         ) : (
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
-              <MediaCarousel product={product} />
+              {/* {product.images && <MediaCarousel product={product} />} */}
             </Grid>
             <Grid item xs={12} md={8}>
-              <ButtonSelector
-                options={product.colors.options}
-                value={product.colors.selected}
-                onSelectionChange={(_e, color) => {
-                  product.colors.selected = color
-                }}
-              />
+              {product.colors && (
+                <ButtonSelector
+                  options={product.colors.options}
+                  value={product.colors.selected}
+                  onSelectionChange={(_e, color) => {
+                    product.colors.selected = color
+                  }}
+                />
+              )}
             </Grid>
             <Grid item xs={12}>
               <QuantitySelector value={product.quantity} onChange={q => (product.quantity = q)} />
