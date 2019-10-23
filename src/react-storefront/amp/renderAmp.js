@@ -1,7 +1,6 @@
 import cheerio from 'cheerio'
-import ReactDOMServer from 'react-dom/server'
 
-export default async function renderAmp(document) {
+export default async function renderAmp(document, sheets) {
   // $('img').attr({ height: '64', width: '64' })
   // document.html = $('body').html()
 
@@ -70,23 +69,24 @@ export default async function renderAmp(document) {
     $('body').append(sidebar)
   }
 
-  // let styleId = 0
-  // const inlineStyles = new Map()
+  let styleId = 0
+  const inlineStyles = new Map()
+  const styles = []
 
-  // // move all inline styles to classes in the main style tag
-  // $('*[style]').each((i, el) => {
-  //   const $el = $(el)
-  //   const style = $el.attr('style')
-  //   let className = inlineStyles.get(style)
+  // move all inline styles to classes in the main style tag
+  $('*[style]').each((i, el) => {
+    const $el = $(el)
+    const style = $el.attr('style')
+    let className = inlineStyles.get(style)
 
-  //   if (!className) {
-  //     className = `mi${styleId++}`
-  //     inlineStyles.set(style, className)
-  //     //styles.push(`.${className} {${style}}`)
-  //   }
-  //   $el.removeAttr('style')
-  //   $el.addClass(className)
-  // })
+    if (!className) {
+      className = `mi${styleId++}`
+      inlineStyles.set(style, className)
+      styles.push(`.${className} {${style}}`)
+    }
+    $el.removeAttr('style')
+    $el.addClass(className)
+  })
 
   document.html = $.html()
 
@@ -101,6 +101,13 @@ export default async function renderAmp(document) {
       async
       custom-element="amp-analytics"
       src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"
+    />,
+    <style
+      amp-custom={sheets
+        .toString()
+        .replace(/\!important/g, '')
+        .concat(styles.join(''))}
+      key={'amp-custom'}
     />
   )
 

@@ -66,7 +66,7 @@ MyDocument.getInitialProps = async ctx => {
     })
 
     // return document
-    return await renderAmp(document)
+    return await renderAmp(document, sheets)
   }
 
   const initialProps = await Document.getInitialProps(ctx)
@@ -79,7 +79,7 @@ MyDocument.getInitialProps = async ctx => {
         {initialProps.styles}
         <style
           dangerouslySetInnerHTML={{
-            __html: sheets.toString().replace(/\!important/g, '')
+            __html: initialProps.head.find(item => item.key === 'amp-custom').props['amp-custom']
           }}
         />
       </>
