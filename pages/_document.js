@@ -11,7 +11,7 @@ class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           {/* <meta
-            key="viewpor"
+            key="viewport"
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           /> */}
@@ -32,6 +32,8 @@ class MyDocument extends Document {
 }
 
 MyDocument.getInitialProps = async ctx => {
+  const isAmp = ctx.req.url.includes('amp=1')
+
   // Resolution order
   //
   // On the server:
@@ -65,8 +67,7 @@ MyDocument.getInitialProps = async ctx => {
       enhanceApp: App => props => sheets.collect(<App {...props} />)
     })
 
-    // return document
-    return await renderAmp(document, sheets)
+    return isAmp ? await renderAmp(document, sheets) : document
   }
 
   const initialProps = await Document.getInitialProps(ctx)
@@ -77,11 +78,13 @@ MyDocument.getInitialProps = async ctx => {
     styles: (
       <>
         {initialProps.styles}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: initialProps.head.find(item => item.key === 'amp-custom').props['amp-custom']
-          }}
-        />
+        {isAmp && (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: initialProps.head.find(item => item.key === 'amp-custom').props['amp-custom']
+            }}
+          />
+        )}
       </>
     )
   }
