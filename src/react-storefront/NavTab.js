@@ -5,7 +5,7 @@ import Popper from '@material-ui/core/Popper'
 import Hidden from '@material-ui/core/Hidden'
 import Fade from '@material-ui/core/Hidden'
 import Paper from '@material-ui/core/Paper'
-import { useState, useRef } from 'react'
+import { useState, useCallback } from 'react'
 
 const styles = theme => ({
   link: {
@@ -33,13 +33,14 @@ function NavTab({ classes, href, as, children, ...props }) {
   const [overMenu, setOverMenu] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const toggleMenu = (show, event) => {
-    setOverTab(show)
+  const showMenu = useCallback(event => {
+    setOverTab(true)
+    setAnchorEl(event.currentTarget)
+  })
 
-    if (show) {
-      setAnchorEl(event.currentTarget)
-    }
-  }
+  const hideMenu = useCallback(() => setOverTab(false))
+  const leaveMenu = useCallback(() => setOverMenu(false))
+  const enterMenu = useCallback(() => setOverMenu(true))
 
   return (
     <>
@@ -47,8 +48,8 @@ function NavTab({ classes, href, as, children, ...props }) {
         className={classes.link}
         href={href}
         as={as}
-        onMouseEnter={e => toggleMenu(true, e)}
-        onMouseLeave={e => toggleMenu(false, e)}
+        onMouseEnter={showMenu}
+        onMouseLeave={hideMenu}
       >
         <Tab className={classes.tab} {...props} />
       </Link>
@@ -62,12 +63,7 @@ function NavTab({ classes, href, as, children, ...props }) {
           >
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper
-                  square
-                  onMouseEnter={() => setOverMenu(true)}
-                  onMouseLeave={() => setOverMenu(false)}
-                  onClick={() => setOverMenu(false)}
-                >
+                <Paper square onMouseEnter={enterMenu} onMouseLeave={leaveMenu} onClick={leaveMenu}>
                   {children}
                 </Paper>
               </Fade>
