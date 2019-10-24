@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@material-ui/core/Container'
 import CmsSlot from 'react-storefront/CmsSlot'
 import Row from 'react-storefront/Row'
@@ -9,6 +9,27 @@ import Accordion from 'react-storefront/Accordion'
 import Link from 'react-storefront/Link'
 
 const useStyles = makeStyles(theme => ({}))
+
+function ThrowError() {
+  const [error, setError] = useState(false)
+
+  if (error) {
+    throw new Error('test')
+  } else {
+    return (
+      <div>
+        <button
+          onClick={() => {
+            throw new Error('test')
+          }}
+        >
+          Throw Error
+        </button>
+        <button onClick={() => setError(true)}>Render Error</button>
+      </div>
+    )
+  }
+}
 
 export default function Index() {
   const classes = useStyles()
@@ -25,9 +46,10 @@ export default function Index() {
   return (
     <Container maxWidth="lg">
       <Row>
-        <Link href="/p/[productId]" as="/p/1">
-          Product 1
-        </Link>
+        <ThrowError />
+      </Row>
+      <Row>
+        <a href="/s/1">Subcategory 1</a>
       </Row>
       <Row>
         <Accordion>{sections}</Accordion>

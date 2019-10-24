@@ -1,7 +1,9 @@
 import { useLocalStore } from 'mobx-react'
 
+import { useState, useMemo } from 'react'
+
 export function useMenuStore(menu) {
-  const store = useLocalStore(() => ({
+  const [state, setState] = useState({
     open: false,
     level: 0,
     levels: [{ ...menu, root: true }],
@@ -15,7 +17,7 @@ export function useMenuStore(menu) {
         store.levels[store.level] = item
       }
     }
-  }))
+  })
 
   return store
 }

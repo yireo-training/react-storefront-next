@@ -63,7 +63,7 @@ export default function NavTabs({ classes, paperProps, children, style, ...other
         value={value === -1 ? false : value}
         {...others}
       >
-        {children.map(child => React.cloneElement(child))}
+        {children}
       </Tabs>
     </Paper>
   )

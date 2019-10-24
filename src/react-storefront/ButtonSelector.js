@@ -5,6 +5,7 @@ import Image from './Image'
 import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import clsx from 'clsx'
+import { useAmp } from 'next/amp'
 
 export const styles = theme => ({
   buttons: {
@@ -111,7 +112,9 @@ const useStyles = makeStyles(styles, { name: 'RSFButtonSelector' })
  * ```
  */
 export default function ButtonSelector(props) {
-  let { amp, options, ampStateId, name, showSelectedText, classes } = props
+  let { options, ampStateId, name, showSelectedText, classes } = props
+
+  const amp = useAmp()
 
   if (!options) return null
 

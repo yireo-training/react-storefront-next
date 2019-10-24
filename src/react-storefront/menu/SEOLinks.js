@@ -8,10 +8,7 @@ import NoScript from '../NoScript'
 import MenuContext from './MenuContext'
 import { useObserver } from 'mobx-react'
 
-export default function SEOLinks() {
-  const { levels } = useContext(MenuContext)
-  const root = levels.length && levels[0]
-
+export default function SEOLinks({ root }) {
   if (!root) return null
 
   let links = [],

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import menuStyles from './menuStyles'
 import MenuContext from './MenuContext'
@@ -13,25 +13,93 @@ export const styles = menuStyles
 
 const useStyles = makeStyles(styles, { name: 'RSFMenu' })
 
-export default function Menu({
+function Menu({
   classes,
   className,
   align,
   drawerWidth,
   persistent,
-  menuStore,
+  root,
+  open,
+  onClose,
+  expandFirstItem,
+  renderLeafFooter,
+  renderLeafHeader,
+  itemRenderer,
+  itemContentRenderer,
+  useExpanders,
   ...others
 }) {
   classes = useStyles({ classes })
-  menuStore.classes = classes
 
-  return useObserver(() => (
+  const [state, setState] = useState(() => {
+    return {
+      level: 0,
+      levels: [{ ...root, root: true }]
+    }
+  })
+
+  // this is needed so we can always update the *current* state, not the snapshot that
+  // was present when the callbacks were memoized
+  const stateRef = useRef(state)
+
+  useEffect(() => {
+    stateRef.current = state
+  }, [state])
+
+  // this ensures that the expanded state is reset when showing a new level
+  const nextKey = useRef(0)
+
+  const onItemClick = (item, depth) => {
+    const levels = [...stateRef.current.levels]
+    const level = depth + 1
+
+    item.key = nextKey.current++ // this ensures that the expanded state is reset when showing a new level
+
+    if (level >= levels.length) {
+      levels.push(item)
+    } else {
+      levels[level] = item
+    }
+
+    setState({
+      level,
+      levels: levels.slice(0, level + 1)
+    })
+  }
+
+  const goBack = level => {
+    setState({
+      level,
+      levels: stateRef.current.levels
+    })
+  }
+
+  // it is implortant to memoize the context, otherwise it will cause all consumers rerender
+  // every time Menu rerenders
+  const context = useMemo(
+    () => ({
+      classes,
+      onItemClick,
+      goBack,
+      expandFirstItem,
+      renderLeafFooter,
+      renderLeafHeader,
+      itemRenderer,
+      useExpanders,
+      itemContentRenderer,
+      close: onClose
+    }),
+    [classes]
+  )
+
+  return (
     <>
-      <MenuContext.Provider value={menuStore}>
+      <MenuContext.Provider value={context}>
         <Drawer
           variant={persistent ? 'persistent' : 'temporary'}
-          open={menuStore.open || persistent}
-          onClose={() => (menuStore.open = false)}
+          open={open || persistent}
+          onClose={onClose}
           anchor={align}
           ModalProps={{
             keepMounted: true
@@ -47,16 +115,22 @@ export default function Menu({
             modal: classes.modal
           }}
         >
-          <MenuBody drawerWidth={drawerWidth} {...others} />
+          <MenuBody
+            level={state.level}
+            levels={state.levels}
+            root={root}
+            drawerWidth={drawerWidth}
+            {...others}
+          />
         </Drawer>
-        <SEOLinks />
+        <SEOLinks root={root} />
       </MenuContext.Provider>
     </>
-  ))
+  )
 }
 
 Menu.propTypes = {
-  menu: PropTypes.object,
+  root: PropTypes.object,
 
   /**
    * The width of the drawer in pixels
@@ -186,3 +260,5 @@ Menu.defaultProps = {
   align: 'left',
   trackSelected: false
 }
+
+export default React.memo(Menu)

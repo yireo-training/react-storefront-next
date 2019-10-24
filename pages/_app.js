@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../src/theme'
@@ -6,12 +6,14 @@ import Header from './_Header'
 import { makeStyles } from '@material-ui/core'
 import storeInitialPropsInHistory from '../src/react-storefront/router/storeInitialPropsInHistory'
 import PWA from '../src/react-storefront/PWA'
-import useLazyProps from '../src/react-storefront/hooks/useLazyProps'
 import Nav from './_Nav'
 import Menu from 'react-storefront/menu/Menu'
 import { registerSW } from 'react-storefront/serviceWorker'
 import createMenu from '../src/mocks/createMenu'
-import { useMenuStore } from 'react-storefront/menu/MenuProvider'
+import reportError from '../src/reportError'
+import MenuButton from '../src/react-storefront/menu/MenuButton'
+import useJssStyles from 'react-storefront/hooks/useJssStyles'
+import Router from 'next/router'
 
 const menu = createMenu()
 
@@ -27,28 +29,37 @@ const styles = theme => ({
 const useStyles = makeStyles(styles)
 
 export default function MyApp({ Component, pageProps }) {
+  useJssStyles()
   const classes = useStyles()
-
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side')
-
-    if (jssStyles) {
-      jssStyles.parentNode.removeChild(jssStyles)
-    }
-  }, [])
-
-  const menuStore = useMenuStore(menu)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <PWA>
+    <PWA onError={reportError}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header menuStore={menuStore} />
-        <Menu align="right" useExpandersAtLevel={0} menuStore={menuStore} />
+        <Header>
+          <MenuButton open={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
+        </Header>
+        <Menu
+          align="right"
+          useExpanders
+          root={menu}
+          open={menuOpen}
+          // expandFirstItem
+          // itemContentRenderer={() => <div>content</div>}
+          // itemRenderer={() => <div>sdfsd</div>}
+          // renderLeafHeader={() => <div>leaf header</div>}
+          // renderLeafFooter={() => <div>leaf footer</div>}
+          onClose={() => setMenuOpen(false)}
+        />
         <Nav />
         <main className={classes.main}>
-          <Component {...pageProps} />
+          {useMemo(
+            () => (
+              <Component {...pageProps} />
+            ),
+            [pageProps]
+          )}
         </main>
       </ThemeProvider>
     </PWA>
@@ -56,76 +67,15 @@ export default function MyApp({ Component, pageProps }) {
 }
 
 MyApp.getInitialProps = async function({ Component, ctx }) {
+  console.log(Router)
+
   let pageProps = {}
 
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx)
   }
 
-  return { pageProps: { ...pageProps, menu } }
+  const { app, ...page } = pageProps
+
+  return { pageProps: { ...page, app: { app, ...menu } } }
 }
-
-// class MyApp extends App {
-//   constructor({ pageProps }) {
-//     super()
-
-//     this.state = {
-//       app: pageProps.app || {}
-//     }
-//   }
-
-//   componentDidMount() {
-//     // Remove the server-side injected CSS.
-//     const jssStyles = document.querySelector('#jss-server-side')
-
-//     if (jssStyles) {
-//       jssStyles.parentNode.removeChild(jssStyles)
-//     }
-//   }
-
-//   render() {
-//     const { Component, classes, pageProps } = this.props
-
-//     console.log('app.render')
-
-//     return (
-//       <PWA>
-//         <AppContext.Provider value={this.appContextValue}>
-//           <>
-//             <Head>
-//               <Title />
-//             </Head>
-//             <ThemeProvider theme={theme}>
-//               <CssBaseline />
-//               <Header />
-//               <Nav />
-//               <main className={classes.main}>
-//                 <Component {...pageProps} />
-//               </main>
-//             </ThemeProvider>
-//           </>
-//         </AppContext.Provider>
-//       </PWA>
-//     )
-//   }
-
-//   static async getInitialProps({ Component, ctx }) {
-//     let pageProps = {}
-
-//     if (Component.getInitialProps) {
-//       pageProps = await Component.getInitialProps(ctx)
-//     }
-
-//     return { pageProps }
-//   }
-// }
-
-function Title(props) {
-  console.log('Title')
-  return <title>foo</title>
-  return useLazyProps(props, ({ props }) => {
-    return <title>{props.app && props.app.title}</title>
-  })
-}
-
-// export default withStyles(styles)(MyApp)

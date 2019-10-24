@@ -19,7 +19,7 @@ export default async function fetchProps(url) {
   if (typeof window === 'undefined') {
     return (await doFetch()).json()
   } else {
-    return { lazy: doFetch().then(res => res.json()) }
+    return { url, lazy: doFetch().then(res => res.json()) }
 
     // const res = await doFetch(true)
 

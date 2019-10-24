@@ -18,7 +18,7 @@ const useStyles = makeStyles(styles, { name: 'RSFMenuButton' })
 /**
  * The button that controls that opens and closes the main app menu.
  */
-export default function MenuButton({ MenuIcon, menuIconProps, menuStore, classes }) {
+export default function MenuButton({ MenuIcon, menuIconProps, open, onClick, classes }) {
   classes = useStyles({ classes })
 
   return useObserver(() => (
@@ -30,8 +30,8 @@ export default function MenuButton({ MenuIcon, menuIconProps, menuStore, classes
         <ToolbarButton
           aria-label="Menu"
           color="inherit"
-          onClick={() => (menuStore.open = !menuStore.open)}
-          icon={<MenuIcon open={menuStore.open} {...menuIconProps} />}
+          onClick={onClick}
+          icon={<MenuIcon open={open} {...menuIconProps} />}
         />
       </a>
     </Hidden>

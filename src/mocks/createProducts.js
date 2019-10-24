@@ -5,8 +5,6 @@ export default function createProducts(count, page = 0) {
 
   let start = page * count
 
-  console.log('start', start)
-
   for (let i = 0; i < count; i++) {
     products.push(createProduct(start + i + 1))
   }

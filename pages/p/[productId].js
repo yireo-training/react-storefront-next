@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useObserver } from 'mobx-react'
 import { Container, Grid, Typography, Paper } from '@material-ui/core'
 import Link from '../../src/Link'
@@ -7,12 +7,13 @@ import Lazy from '../../src/react-storefront/Lazy'
 import ButtonSelector from '../../src/react-storefront/ButtonSelector'
 import QuantitySelector from '../../src/react-storefront/QuantitySelector'
 import useLazyStore from '../../src/react-storefront/hooks/useLazyStore'
+import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 import fetchProps from '../../src/react-storefront/props/fetchProps'
 import TabPanel from '../../src/react-storefront/TabPanel'
 import CmsSlot from '../../src/react-storefront/CmsSlot'
 import ProductSkeleton from './_ProductSkeleton'
 
-export default function Product(lazyProps) {
+const Product = React.memo(lazyProps => {
   return useObserver(() => {
     const { loading, product } = useLazyStore(lazyProps, { quantity: 1 })
 
@@ -30,7 +31,7 @@ export default function Product(lazyProps) {
             </Typography>
           </Grid>
         </Grid>
-        {loading ? (
+        {loading || !product ? (
           <ProductSkeleton />
         ) : (
           <Grid container spacing={2}>
@@ -73,7 +74,7 @@ export default function Product(lazyProps) {
       </Container>
     )
   })
-}
+})
 
 function MediaCarousel({ product }) {
   return useObserver(() => (
@@ -92,5 +93,7 @@ function MediaCarousel({ product }) {
 
 Product.getInitialProps = ({ query }) =>
   fetchProps(`http://localhost:3000/api/p/${query.productId}`)
+
+export default Product
 
 export const config = { amp: 'hybrid' }
