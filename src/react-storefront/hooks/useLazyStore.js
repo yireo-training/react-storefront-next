@@ -2,7 +2,7 @@ import useLazyProps from './useLazyProps'
 import { useLocalStore } from 'mobx-react'
 import { useEffect } from 'react'
 import merge from 'lodash/merge'
-import { toJS } from 'mobx'
+import { toJS, runInAction } from 'mobx'
 import Router from 'next/router'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
@@ -15,7 +15,7 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   }))
 
   useEffect(() => {
-    merge(store, props, { loading })
+    runInAction(() => merge(store, props, { loading }))
   }, [loading, props])
 
   // save the page state in history.state before navigation

@@ -24,7 +24,7 @@ export default function MenuExpander({ expanded, onClick, item, depth, sublist, 
         item.items.map((item, i) => (
           <MenuItem
             {...props}
-            depth={depth + 1}
+            depth={depth}
             item={item}
             key={i}
             defaultExpanded={expandFirstItem && i === 0}

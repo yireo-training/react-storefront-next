@@ -8,9 +8,11 @@ import MenuExpander from './MenuExpander'
 
 function MenuBranch(props) {
   const { depth, index, item, defaultExpanded, ...others } = props
+  console.log('branch', item.text)
   const amp = useAmp()
-  const { onItemClick, classes, useExpandersAtLevel } = useContext(MenuContext)
-  const showExpander = useExpandersAtLevel === depth
+  const { onItemClick, classes, useExpanders } = useContext(MenuContext)
+  const hasSubBranches = item.items.some(child => child.items != null)
+  const showExpander = !hasSubBranches && useExpanders
   const [expanded, setExpanded] = useState(showExpander && defaultExpanded)
 
   const interactionProps = {

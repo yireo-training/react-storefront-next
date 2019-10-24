@@ -86,8 +86,8 @@ function Menu({
       renderLeafFooter,
       renderLeafHeader,
       itemRenderer,
-      useExpanders,
       itemContentRenderer,
+      useExpanders,
       close: onClose
     }),
     [classes]
@@ -171,7 +171,7 @@ Menu.propTypes = {
   /**
    * Set level at which menu items will be expandable
    */
-  useExpandersAtLevel: PropTypes.number,
+  useExpanders: PropTypes.number,
 
   /**
    * Set to true to expand first item for not root items

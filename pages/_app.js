@@ -45,7 +45,7 @@ export default function MyApp({ Component, pageProps }) {
           useExpanders
           root={menu}
           open={menuOpen}
-          // expandFirstItem
+          expandFirstItem
           // itemContentRenderer={() => <div>content</div>}
           // itemRenderer={() => <div>sdfsd</div>}
           // renderLeafHeader={() => <div>leaf header</div>}
