@@ -13,6 +13,7 @@ import createMenu from '../src/mocks/createMenu'
 import reportError from '../src/reportError'
 import MenuButton from '../src/react-storefront/menu/MenuButton'
 import useJssStyles from 'react-storefront/hooks/useJssStyles'
+import Router from 'next/router'
 
 const menu = createMenu()
 
@@ -44,7 +45,7 @@ export default function MyApp({ Component, pageProps }) {
           useExpanders
           root={menu}
           open={menuOpen}
-          expandFirstItem
+          // expandFirstItem
           // itemContentRenderer={() => <div>content</div>}
           // itemRenderer={() => <div>sdfsd</div>}
           // renderLeafHeader={() => <div>leaf header</div>}
@@ -66,6 +67,8 @@ export default function MyApp({ Component, pageProps }) {
 }
 
 MyApp.getInitialProps = async function({ Component, ctx }) {
+  console.log(Router)
+
   let pageProps = {}
 
   if (Component.getInitialProps) {

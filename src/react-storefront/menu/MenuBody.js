@@ -5,16 +5,7 @@ import MenuContext from './MenuContext'
 import LeafHeader from './LeafHeader'
 import LeafFooter from './LeafFooter'
 
-function MenuBody({
-  level,
-  levels,
-  rootHeader,
-  rootFooter,
-  renderLeafHeader,
-  renderLeafFooter,
-  drawerWidth,
-  children
-}) {
+function MenuBody({ level, levels, rootHeader, rootFooter, drawerWidth, children }) {
   const { goBack, classes, expandFirstItem } = useContext(MenuContext)
   const position = -drawerWidth * level
 
@@ -22,34 +13,29 @@ function MenuBody({
     <>
       {children}
       <div className={classes.bodyWrap} style={{ transform: `translateX(${position}px)`, flex: 1 }}>
-        {levels.map((list, depth) => (
+        {levels.map((item, depth) => (
           <List
             style={{ width: `${drawerWidth}px` }}
             classes={{ root: classes.list, padding: classes.padding }}
             key={depth}
           >
-            {list.root ? (
+            {item.root ? (
               rootHeader
             ) : (
-              <LeafHeader
-                classes={classes}
-                goBack={() => goBack(level - 1)}
-                list={list}
-                render={renderLeafHeader}
-              />
+              <LeafHeader classes={classes} goBack={() => goBack(level - 1)} item={item} />
             )}
 
-            {list.items &&
-              list.items.map((item, i) => (
+            {item.items &&
+              item.items.map((child, i) => (
                 <MenuItem
-                  item={item}
-                  key={list.key + '-' + i} // this ensures that the expanded state is after showing a new level
+                  item={child}
+                  key={item.key + '-' + i} // this ensures that the expanded state is after showing a new level
                   depth={depth}
                   defaultExpanded={i === 0 && expandFirstItem}
                 />
               ))}
 
-            {list.root ? rootFooter : <LeafFooter list={list} render={renderLeafFooter} />}
+            {item.root ? rootFooter : <LeafFooter item={item} />}
           </List>
         ))}
       </div>

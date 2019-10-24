@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import MenuContext from './MenuContext'
 import PropTypes from 'prop-types'
 import ListItem from '@material-ui/core/ListItem'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
-export default function LeafHeader({ render, classes, goBack, list, parentPath }) {
+export default function LeafHeader({ goBack, item, parentPath }) {
+  const { renderLeafHeader, classes } = useContext(MenuContext)
+
   const backButtonAmpProps = {
     on: `tap:AMP.setState({ rsfMenu: { list: '${parentPath}' } })`
   }
 
-  if (render) {
-    return render({ list, goBack, backButtonAmpProps })
+  if (renderLeafHeader) {
+    return renderLeafHeader({ item, goBack, backButtonAmpProps })
   } else {
     return (
       <ListItem divider button onClick={goBack} {...backButtonAmpProps}>
@@ -20,7 +23,7 @@ export default function LeafHeader({ render, classes, goBack, list, parentPath }
         </ListItemIcon>
         <ListItemText
           classes={{ root: classes.headerText }}
-          primary={<div className={classes.headerText}>{list.text} </div>}
+          primary={<div className={classes.headerText}>{item.text} </div>}
         />
       </ListItem>
     )
@@ -28,10 +31,14 @@ export default function LeafHeader({ render, classes, goBack, list, parentPath }
 }
 
 LeafHeader.propTypes = {
-  render: PropTypes.func,
+  /**
+   * Goes back to the previous item in the menu hierarchy
+   */
   goBack: PropTypes.func,
-  classes: PropTypes.object.isRequired,
-  list: PropTypes.shape({
+  /**
+   * The menu item being rendered
+   */
+  item: PropTypes.shape({
     text: PropTypes.string
   }).isRequired
 }

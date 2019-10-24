@@ -49,6 +49,9 @@ export default function Index() {
         <ThrowError />
       </Row>
       <Row>
+        <a href="/s/1">Subcategory 1</a>
+      </Row>
+      <Row>
         <Accordion>{sections}</Accordion>
       </Row>
       <Row>

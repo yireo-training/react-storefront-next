@@ -18,6 +18,8 @@ app.prepare().then(() => {
 
     if (pathname === '/service-worker.js') {
       app.serveStatic(req, res, path.join(__dirname, '.next', 'service-worker.js'))
+    } else if (pathname === '/pages-manifest.json') {
+      app.serveStatic(req, res, path.join(__dirname, '.next', 'server', 'pages-manifest.json'))
     } else {
       handle(req, res, parsedUrl)
     }

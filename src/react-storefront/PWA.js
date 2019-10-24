@@ -7,6 +7,7 @@ import { useObserver } from 'mobx-react'
 import Router from 'next/router'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
+import useSimpleNavigation from './router/useSimpleNavigation'
 
 const ampContextValue = { ampStateId: 'rsf' }
 
@@ -22,18 +23,21 @@ export default function PWA({ children, menu, errorReporter }) {
     skeletonProps: null
   }))
 
+  // enable client-side navigation when the user clicks a simple HTML anchor element
+  useSimpleNavigation()
+
   useEffect(() => {
     app.hydrating = false
 
+    // const handleOnline = () => (app.offline = false)
+    // const handleOffline = () => (app.offline = true)
+
+    // app.offline = !navigator.onLine
+    // window.addEventListener('online', handleOnline)
+    // window.addEventListener('offline', handleOffline)
+
     const onRouteChangeComplete = () => (app.skeletonProps = null)
-    const handleOnline = () => (app.offline = false)
-    const handleOffline = () => (app.offline = true)
-
-    app.offline = !navigator.onLine
-
     Router.events.on('routeChangeComplete', onRouteChangeComplete)
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
 
     return () => {
       Router.events.off('routeChangeComplete', onRouteChangeComplete)
