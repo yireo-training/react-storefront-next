@@ -1,10 +1,10 @@
 import React from 'react'
-import Link from '../../src/react-storefront/Link'
-import { Vbox } from '../../src/react-storefront/Box'
-import Image from '../../src/react-storefront/Image'
+import Link from 'react-storefront/Link'
+import { Vbox } from 'react-storefront/Box'
+import Image from 'react-storefront/Image'
 import { makeStyles, Typography } from '@material-ui/core'
-import { price } from '../../src/react-storefront/format'
-import Rating from '../../src/react-storefront/Rating'
+import { price } from 'react-storefront/format'
+import Rating from 'react-storefront/Rating'
 
 const useStyles = makeStyles(theme => ({
   root: {

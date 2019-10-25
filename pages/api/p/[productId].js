@@ -13,7 +13,7 @@ export default function fetchProduct(req, res) {
         app: {
           title: `Product ${productId}`
         },
-        product: {
+        pageData: {
           ...createProduct(productId),
           selectedImage: 0
         }

@@ -16,7 +16,7 @@ export default function getSubcategory(req, res) {
       } else {
         res.end(
           JSON.stringify({
-            subcategory: {
+            pageData: {
               id: subcategoryId,
               name: `Subcategory ${subcategoryId}`,
               title: `Subcategory ${subcategoryId}`,

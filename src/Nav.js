@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import NavTab from '../src/react-storefront/NavTab'
-import NavTabs from '../src/react-storefront/NavTabs'
-import Row from '../src/react-storefront/Row'
-import Link from '../src/react-storefront/Link'
+import NavTab from './react-storefront/NavTab'
+import NavTabs from './react-storefront/NavTabs'
+import Row from './react-storefront/Row'
+import Link from './react-storefront/Link'
 
 export default function Nav() {
   const [tabs, setTabs] = useState(data)

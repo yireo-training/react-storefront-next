@@ -6,41 +6,40 @@ import { toJS, runInAction } from 'mobx'
 import Router from 'next/router'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
-  const { lazy, ...props } = lazyProps
+  const { lazy, url, ...props } = lazyProps
 
   const store = useLocalStore(() => ({
     ...props,
     ...additionalData,
-    loading: lazyProps.lazy
+    loading: lazyProps.lazy != null
   }))
 
   const updateState = useCallback(state => {
-    runInAction(() => merge(store, state, state.props))
+    runInAction(() => merge(store, { loading: false, ...state.props }))
   })
 
   useLazyProps(lazyProps, updateState)
 
   const goingBack = useRef(false)
 
-  // save the page state in history.state before navigation
-  const onHistoryChange = (...args) => {
-    if (goingBack.current) {
-      goingBack.current = false
-      return
+  const recordState = () => {
+    const uri = location.pathname + location.search + location.hash
+    const snapshot = toJS(store.pageData, { detectCycles: false })
+
+    const historyState = {
+      ...history.state,
+      rsf: { [uri]: snapshot }
     }
 
-    const { loading, app, ...state } = toJS(store)
+    history.replaceState(historyState, document.title, uri)
+  }
 
-    console.log('storing history state', location.pathname + location.search, state.subcategory.id)
-
-    history.replaceState(
-      {
-        ...history.state,
-        rsf: { props: state }
-      },
-      document.title,
-      location.pathname + location.search + location.hash
-    )
+  // save the page state in history.state before navigation
+  const onHistoryChange = (...args) => {
+    if (!goingBack.current) {
+      recordState()
+      goingBack.current = false
+    }
   }
 
   useEffect(() => {

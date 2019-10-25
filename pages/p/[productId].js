@@ -1,24 +1,24 @@
 import { useObserver } from 'mobx-react'
 import { Container, Grid, Typography, Paper } from '@material-ui/core'
-import Link from '../../src/Link'
+import Link from 'react-storefront/Link'
 import { Button } from '@material-ui/core'
-import Lazy from '../../src/react-storefront/Lazy'
-import ButtonSelector from '../../src/react-storefront/ButtonSelector'
-import QuantitySelector from '../../src/react-storefront/QuantitySelector'
-import useLazyStore from '../../src/react-storefront/hooks/useLazyStore'
+import Lazy from 'react-storefront/Lazy'
+import ButtonSelector from 'react-storefront/ButtonSelector'
+import QuantitySelector from 'react-storefront/QuantitySelector'
+import useLazyStore from 'react-storefront/hooks/useLazyStore'
 import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
-import fetchProps from '../../src/react-storefront/props/fetchProps'
-import TabPanel from '../../src/react-storefront/TabPanel'
-import CmsSlot from '../../src/react-storefront/CmsSlot'
 import Accordion from 'react-storefront/Accordion'
 import ExpandableSection from 'react-storefront/ExpandableSection'
-import ProductSkeleton from './_ProductSkeleton'
+import fetchProps from 'react-storefront/props/fetchProps'
+import TabPanel from 'react-storefront/TabPanel'
+import CmsSlot from 'react-storefront/CmsSlot'
+import ProductSkeleton from '../../src/ProductSkeleton'
 
 const Product = React.memo(lazyProps => {
   const store = useLazyStore(lazyProps, { quantity: 1 })
 
   return useObserver(() => {
-    const { loading, product } = store
+    const { loading, pageData: product } = store
 
     return (
       <Container maxWidth="lg">
@@ -115,8 +115,9 @@ function MediaCarousel({ product }) {
   ))
 }
 
-Product.getInitialProps = ({ query }) =>
-  fetchProps(`http://localhost:3000/api/p/${query.productId}`)
+Product.getInitialProps = fetchProps(
+  ({ query }) => `http://localhost:3000/api/p/${query.productId}`
+)
 
 export default Product
 

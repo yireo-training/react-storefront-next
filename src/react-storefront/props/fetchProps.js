@@ -1,6 +1,13 @@
 import fetch from 'isomorphic-unfetch'
 
-export default async function fetchProps(url) {
+export default function fetchProps(createAPIURL) {
+  return options => {
+    const apiURL = createAPIURL(options)
+    return createLazyProps(options.asPath, apiURL)
+  }
+}
+
+async function createLazyProps(as, apiURL) {
   const doFetch = (onlyHit = false) => {
     const headers = {
       'x-rsf-api-version': '1'
@@ -10,32 +17,36 @@ export default async function fetchProps(url) {
       headers['x-rsf-client-if'] = 'cache-hit'
     }
 
-    return fetch(url, {
+    return fetch(apiURL, {
       cache: 'force-cache',
       headers
     })
   }
 
   if (typeof window === 'undefined') {
-    // SSR
+    // server
     return (await doFetch()).json()
-  } else if (window.history.state.rsf) {
-    // Previous props for this page were recorded in history.state
-    // This means we're going back
-    console.log('restoring from history state', window.history.state.rsf.props.subcategory.id)
-    return { key: url, ...window.history.state.rsf.props }
   } else {
-    // normal client side navigation, fetch from network
-    return { key: url, url, lazy: doFetch().then(res => res.json()) }
+    // client
+    const { rsf } = window.history.state
 
-    // const res = await doFetch(true)
+    if (rsf && rsf[as]) {
+      // going back or forward
+      console.log('restoring state', as)
+      return { key: as, pageData: rsf[as] }
+    } else {
+      // normal client side navigation, fetch from network
+      return { key: as, lazy: doFetch().then(res => res.json()) }
 
-    // if (res.status === 204) {
-    //   // response not found in browser cache, fetch from the network and return lazy props
-    //   return { lazy: doFetch().then(res => res.json()) }
-    // } else {
-    //   // response was found in the cache, return immediately
-    //   return res.json()
-    // }
+      // const res = await doFetch(true)
+
+      // if (res.status === 204) {
+      //   // response not found in browser cache, fetch from the network and return lazy props
+      //   return { lazy: doFetch().then(res => res.json()) }
+      // } else {
+      //   // response was found in the cache, return immediately
+      //   return res.json()
+      // }
+    }
   }
 }

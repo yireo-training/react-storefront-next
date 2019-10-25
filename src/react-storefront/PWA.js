@@ -8,6 +8,7 @@ import Router from 'next/router'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
 import useSimpleNavigation from './router/useSimpleNavigation'
+import './profile'
 
 const ampContextValue = { ampStateId: 'rsf' }
 

@@ -1,8 +1,8 @@
 import { Typography, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import AppBar from '../src/react-storefront/AppBar'
-import Spacer from '../src/react-storefront/Spacer'
-import CartButton from '../src/react-storefront/CartButton'
+import AppBar from './react-storefront/AppBar'
+import Spacer from './react-storefront/Spacer'
+import CartButton from './react-storefront/CartButton'
 
 const useStyles = makeStyles(theme => ({
   menuButton: {
