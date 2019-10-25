@@ -17,9 +17,16 @@ export default async function fetchProps(url) {
   }
 
   if (typeof window === 'undefined') {
+    // SSR
     return (await doFetch()).json()
+  } else if (window.history.state.rsf) {
+    // Previous props for this page were recorded in history.state
+    // This means we're going back
+    console.log('restoring from history state', window.history.state.rsf.props.subcategory.id)
+    return { key: url, ...window.history.state.rsf.props }
   } else {
-    return { url, lazy: doFetch().then(res => res.json()) }
+    // normal client side navigation, fetch from network
+    return { key: url, url, lazy: doFetch().then(res => res.json()) }
 
     // const res = await doFetch(true)
 

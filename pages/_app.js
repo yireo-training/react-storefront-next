@@ -67,8 +67,6 @@ export default function MyApp({ Component, pageProps }) {
 }
 
 MyApp.getInitialProps = async function({ Component, ctx }) {
-  console.log(Router)
-
   let pageProps = {}
 
   if (Component.getInitialProps) {

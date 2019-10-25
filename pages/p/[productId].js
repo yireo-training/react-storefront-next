@@ -14,8 +14,10 @@ import CmsSlot from '../../src/react-storefront/CmsSlot'
 import ProductSkeleton from './_ProductSkeleton'
 
 const Product = React.memo(lazyProps => {
+  const store = useLazyStore(lazyProps, { quantity: 1 })
+
   return useObserver(() => {
-    const { loading, product } = useLazyStore(lazyProps, { quantity: 1 })
+    const { loading, product } = store
 
     return (
       <Container maxWidth="lg">

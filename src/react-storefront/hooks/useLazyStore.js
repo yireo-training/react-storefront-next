@@ -1,26 +1,37 @@
 import useLazyProps from './useLazyProps'
 import { useLocalStore } from 'mobx-react'
-import { useEffect } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import merge from 'lodash/merge'
 import { toJS, runInAction } from 'mobx'
 import Router from 'next/router'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
-  const { props, loading } = useLazyProps(lazyProps)
+  const { lazy, ...props } = lazyProps
 
   const store = useLocalStore(() => ({
-    loading,
     ...props,
-    ...additionalData
+    ...additionalData,
+    loading: lazyProps.lazy
   }))
 
-  useEffect(() => {
-    runInAction(() => merge(store, props, { loading }))
-  }, [loading, props])
+  const updateState = useCallback(state => {
+    runInAction(() => merge(store, state, state.props))
+  })
+
+  useLazyProps(lazyProps, updateState)
+
+  const goingBack = useRef(false)
 
   // save the page state in history.state before navigation
-  const onChange = () => {
+  const onHistoryChange = (...args) => {
+    if (goingBack.current) {
+      goingBack.current = false
+      return
+    }
+
     const { loading, app, ...state } = toJS(store)
+
+    console.log('storing history state', location.pathname + location.search, state.subcategory.id)
 
     history.replaceState(
       {
@@ -33,8 +44,13 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   }
 
   useEffect(() => {
-    Router.events.on('beforeHistoryChange', onChange)
-    return () => Router.events.off('beforeHistoryChange', onChange)
+    Router.beforePopState(({ url, as, options }) => {
+      goingBack.current = true
+      return true
+    })
+
+    Router.events.on('beforeHistoryChange', onHistoryChange)
+    return () => Router.events.off('beforeHistoryChange', onHistoryChange)
   }, [])
 
   return store
