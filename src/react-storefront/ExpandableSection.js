@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
@@ -150,7 +150,7 @@ export default function ExpandableSection(props) {
     >
       <ExpansionPanelSummary
         expandIcon={
-          expanded ? (
+          expandedState ? (
             <CollapseIcon className={classes.collapseIcon} />
           ) : (
             <ExpandIcon className={classes.expandIcon} />
@@ -164,7 +164,7 @@ export default function ExpandableSection(props) {
             variant="caption"
             className={clsx({
               [classes.caption]: true,
-              [classes.expandedCaption]: expanded
+              [classes.expandedCaption]: expandedState
             })}
           >
             {caption}

@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'
 import { useObserver } from 'mobx-react'
 import { Container, Grid, Typography, Paper } from '@material-ui/core'
 import Link from '../../src/Link'
@@ -11,6 +10,8 @@ import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 import fetchProps from '../../src/react-storefront/props/fetchProps'
 import TabPanel from '../../src/react-storefront/TabPanel'
 import CmsSlot from '../../src/react-storefront/CmsSlot'
+import Accordion from 'react-storefront/Accordion'
+import ExpandableSection from 'react-storefront/ExpandableSection'
 import ProductSkeleton from './_ProductSkeleton'
 
 const Product = React.memo(lazyProps => {
@@ -64,6 +65,27 @@ const Product = React.memo(lazyProps => {
                   ))}
                 </div>
               </TabPanel>
+            </Grid>
+            <Grid item xs={12}>
+              <Accordion>
+                <ExpandableSection expanded title="First">
+                  <div>The first section</div>
+                </ExpandableSection>
+                <ExpandableSection title="Second">
+                  <div>The second section</div>
+                </ExpandableSection>
+                <ExpandableSection title="Third">
+                  <div>The third section</div>
+                </ExpandableSection>
+              </Accordion>
+            </Grid>
+            <Grid item xs={12}>
+              <ExpandableSection expanded title="First">
+                <div>The first no accordion section</div>
+              </ExpandableSection>
+              <ExpandableSection title="Second">
+                <div>The second no accordion section</div>
+              </ExpandableSection>
             </Grid>
             <div style={{ height: 500 }}></div>
             <Grid item xs={12}>

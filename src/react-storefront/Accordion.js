@@ -26,10 +26,10 @@ export const AccordionContext = createContext()
  * ```
  */
 export default function Accordion({ children, ...otherProps }) {
-  const [expanded, setExpanded] = useState(null)
+  const [expanded, setExpanded] = useState(() => children.findIndex(child => child.props.expanded))
 
   if (useAmp()) {
-    return <AmpAccordion {...otherProps}>{items}</AmpAccordion>
+    return <AmpAccordion {...otherProps}>{children}</AmpAccordion>
   } else {
     return React.Children.map(children, (child, i) => {
       return React.cloneElement(child, {
