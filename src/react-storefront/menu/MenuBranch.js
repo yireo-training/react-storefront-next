@@ -10,7 +10,8 @@ function MenuBranch(props) {
   const { depth, index, item, defaultExpanded, ...others } = props
   const amp = useAmp()
   const { onItemClick, classes, useExpanders } = useContext(MenuContext)
-  const showExpander = depth > 0 && useExpanders
+  const hasSubBranches = item.items.some(child => child.items != null)
+  const showExpander = !hasSubBranches && useExpanders
   const [expanded, setExpanded] = useState(showExpander && defaultExpanded)
 
   const interactionProps = {

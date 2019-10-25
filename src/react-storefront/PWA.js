@@ -24,7 +24,7 @@ export default function PWA({ children, menu, errorReporter }) {
   }))
 
   // enable client-side navigation when the user clicks a simple HTML anchor element
-  useSimpleNavigation()
+  // useSimpleNavigation()
 
   useEffect(() => {
     app.hydrating = false

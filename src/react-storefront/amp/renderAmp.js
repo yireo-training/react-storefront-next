@@ -1,7 +1,6 @@
 import cheerio from 'cheerio'
-import ReactDOMServer from 'react-dom/server'
 
-export default async function renderAmp(document) {
+export default async function renderAmp(document, sheets) {
   // $('img').attr({ height: '64', width: '64' })
   // document.html = $('body').html()
 
@@ -72,6 +71,7 @@ export default async function renderAmp(document) {
 
   let styleId = 0
   const inlineStyles = new Map()
+  const styles = []
 
   // move all inline styles to classes in the main style tag
   $('*[style]').each((i, el) => {
@@ -82,7 +82,7 @@ export default async function renderAmp(document) {
     if (!className) {
       className = `mi${styleId++}`
       inlineStyles.set(style, className)
-      //styles.push(`.${className} {${style}}`)
+      styles.push(`.${className} {${style}}`)
     }
     $el.removeAttr('style')
     $el.addClass(className)
@@ -97,9 +97,17 @@ export default async function renderAmp(document) {
       content="googleanalytics"
     />,
     <script
+      key={'amp-analytics'}
       async
       custom-element="amp-analytics"
       src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"
+    />,
+    <style
+      amp-custom={sheets
+        .toString()
+        .replace(/\!important/g, '')
+        .concat(styles.join(''))}
+      key={'amp-custom'}
     />
   )
 

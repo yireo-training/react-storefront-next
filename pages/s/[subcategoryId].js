@@ -1,3 +1,4 @@
+import React from 'react'
 import { Typography, Grid, Container } from '@material-ui/core'
 import ResponsiveTiles from '../../src/react-storefront/ResponsiveTiles'
 import ProductItem from './_ProductItem'
@@ -10,11 +11,12 @@ import useLazyStore from 'react-storefront/hooks/useLazyStore'
 import withHistoryCache from 'react-storefront/router/withHistoryCache'
 import { useObserver } from 'mobx-react'
 import Skeleton from 'react-storefront/Skeleton'
+import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 
 const Subcategory = lazyProps => {
-  return useObserver(() => {
-    const { loading, subcategory, page } = useLazyStore(lazyProps, { page: 0 })
+  const store = useLazyStore(lazyProps, { page: 0 })
 
+  return useObserver(() => {
     async function fetchMore() {
       const more = await fetch(`/api/s/${subcategory.id}?page=${page + 1}`).then(res => res.json())
 
@@ -23,6 +25,10 @@ const Subcategory = lazyProps => {
         products: subcategory.products.concat(more.products)
       })
     }
+
+    const { subcategory, loading } = store
+
+    console.log('render subcategory', subcategory && subcategory.id)
 
     return (
       <Container maxWidth="lg">
@@ -69,9 +75,9 @@ const Subcategory = lazyProps => {
   })
 }
 
-Subcategory.getInitialProps = withHistoryCache(({ query }) =>
-  fetchProps(`http://localhost:3000/api/s/${query.subcategoryId}`)
-)
+Subcategory.getInitialProps = ({ query }) => {
+  return fetchProps(`http://localhost:3000/api/s/${query.subcategoryId}`)
+}
 
 export const config = { amp: 'hybrid' }
 export default Subcategory

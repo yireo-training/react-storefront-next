@@ -45,7 +45,7 @@ export default function MyApp({ Component, pageProps }) {
           useExpanders
           root={menu}
           open={menuOpen}
-          // expandFirstItem
+          expandFirstItem
           // itemContentRenderer={() => <div>content</div>}
           // itemRenderer={() => <div>sdfsd</div>}
           // renderLeafHeader={() => <div>leaf header</div>}
@@ -67,8 +67,6 @@ export default function MyApp({ Component, pageProps }) {
 }
 
 MyApp.getInitialProps = async function({ Component, ctx }) {
-  console.log(Router)
-
   let pageProps = {}
 
   if (Component.getInitialProps) {
