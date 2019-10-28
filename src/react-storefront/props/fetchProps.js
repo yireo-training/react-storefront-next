@@ -2,6 +2,7 @@ import fetch from 'isomorphic-unfetch'
 
 export default function fetchProps(createAPIURL) {
   return options => {
+    console.log('options', options)
     const apiURL = createAPIURL(options)
     return createLazyProps(options.asPath, apiURL)
   }

@@ -22,13 +22,22 @@ export const styles = theme => ({
 
 const useStyles = makeStyles(styles, 'RSFBox')
 
-export default function Box({ className, classes, split = false, children, style, ...other }) {
+export default function Box({
+  className,
+  classes,
+  split = false,
+  children,
+  style,
+  align,
+  justify,
+  ...other
+}) {
   classes = useStyles({ classes })
 
   return (
     <div
       className={clsx(classes.root, className, { [classes.split]: split })}
-      style={{ ...other, ...style }}
+      style={{ alignItems: align, justifyContent: justify, ...other, ...style }}
     >
       {children}
     </div>
@@ -44,7 +53,32 @@ Box.propTypes = {
   /**
    * True to split items on opposite sides of the box by applying justify-content: 'space-between'
    */
-  split: PropTypes.bool
+  split: PropTypes.bool,
+
+  /**
+   * CSS value for align-items
+   */
+  align: PropTypes.oneOf(['flex-start', 'flex-end', 'center', 'stretch', 'baseline']),
+
+  /**
+   * CSS value for justify-content
+   */
+  justify: PropTypes.oneOf([
+    'flex-start',
+    'flex-end',
+    'center',
+    'space-around',
+    'space-between',
+    'initial',
+    'inherit',
+    'stretch',
+    'baseline'
+  ])
+}
+
+Box.defaultProps = {
+  align: 'center',
+  justify: 'flex-start'
 }
 
 /**
@@ -53,7 +87,7 @@ Box.propTypes = {
  */
 export function Hbox(props) {
   props = { ...props, flexDirection: 'row' }
-  return <Box alignItems="center" {...props} />
+  return <Box {...props} />
 }
 
 Hbox.propTypes = {
@@ -65,7 +99,32 @@ Hbox.propTypes = {
   /**
    * True to split items on opposite sides of the box by applying justify-content: 'space-between'
    */
-  split: PropTypes.bool
+  split: PropTypes.bool,
+
+  /**
+   * CSS value for align-items
+   */
+  align: PropTypes.oneOf(['flex-start', 'flex-end', 'center', 'stretch', 'baseline']),
+
+  /**
+   * CSS value for justify-content
+   */
+  justify: PropTypes.oneOf([
+    'flex-start',
+    'flex-end',
+    'center',
+    'space-around',
+    'space-between',
+    'initial',
+    'inherit',
+    'stretch',
+    'baseline'
+  ])
+}
+
+Vbox.defaultProps = {
+  align: 'center',
+  justify: 'flex-start'
 }
 
 /**
@@ -86,5 +145,30 @@ Vbox.propTypes = {
   /**
    * True to split items on opposite sides of the box by applying justify-content: 'space-between'
    */
-  split: PropTypes.bool
+  split: PropTypes.bool,
+
+  /**
+   * CSS value for align-items
+   */
+  align: PropTypes.oneOf(['flex-start', 'flex-end', 'center', 'stretch', 'baseline']),
+
+  /**
+   * CSS value for justify-content
+   */
+  justify: PropTypes.oneOf([
+    'flex-start',
+    'flex-end',
+    'center',
+    'space-around',
+    'space-between',
+    'initial',
+    'inherit',
+    'stretch',
+    'baseline'
+  ])
+}
+
+Vbox.defaultProps = {
+  align: 'center',
+  justify: 'flex-start'
 }

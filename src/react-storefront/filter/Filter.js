@@ -49,9 +49,9 @@ const useStyles = makeStyles(styles, { name: 'RSFFilter' })
 function Filter({
   expandAll,
   store,
-  loading,
   queryParam,
   submitOnChange,
+  style,
   classes,
   title,
   onViewResultsClick
@@ -60,21 +60,20 @@ function Filter({
     classes = useStyles({ classes })
 
     const {
-      pageData: { facets, filters, filtersChanged }
+      pageData: { facets, filters, filtersChanged, loading }
     } = store
 
     return (
-      <div className={classes.root}>
+      <div style={style} className={classes.root}>
         {title ? <div className={classes.title}>{title}</div> : null}
         <div className={classes.facetGroups}>
-          <LoadMask show={loading} transparent align="top" />
           {facets &&
             facets.map((group, i) => (
               <FacetGroup
                 group={group}
                 key={i}
                 store={store}
-                expandAll={expandAll}
+                defaultExpanded={expandAll}
                 submitOnChange={submitOnChange}
               />
             ))}

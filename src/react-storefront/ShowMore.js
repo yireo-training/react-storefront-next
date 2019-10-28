@@ -8,7 +8,14 @@ import Button from '@material-ui/core/Button'
 export const styles = theme => ({
   root: {
     margin: '15px 0',
-    width: '100%'
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  button: {
+    [theme.breakpoints.down('xs')]: {
+      flex: 1
+    }
   },
   loading: {
     display: 'flex',
@@ -36,22 +43,24 @@ export default function ShowMore({ loadMore, className, children, renderLoadingI
     }
   }
 
-  if (loading) {
-    return <div className={clsx(classes.loading, classes.root)}>{renderLoadingIcon()}</div>
-  } else {
-    return (
-      <Button
-        variant="contained"
-        color="primary"
-        href={amp ? createPWAURL() : null}
-        className={clsx(classes.root, className)}
-        onClick={handleClick}
-        {...others}
-      >
-        {children || 'Show More'}
-      </Button>
-    )
-  }
+  return (
+    <div className={clsx(classes.root, className)}>
+      {loading ? (
+        <div className={classes.loading}>{renderLoadingIcon()}</div>
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          href={amp ? createPWAURL() : null}
+          className={classes.button}
+          onClick={handleClick}
+          {...others}
+        >
+          {children || 'Show More'}
+        </Button>
+      )}
+    </div>
+  )
 }
 
 function createPWAURL() {

@@ -20,7 +20,7 @@ const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFFacetGroup' })
 
-function FacetGroup({ store, group, submitOnChange }) {
+function FacetGroup({ store, group, submitOnChange, defaultExpanded }) {
   return useObserver(() => {
     const selection = []
     const classes = useStyles()
@@ -73,7 +73,7 @@ function FacetGroup({ store, group, submitOnChange }) {
     }
 
     return (
-      <ExpandableSection title={group.name} caption={caption}>
+      <ExpandableSection title={group.name} caption={caption} defaultExpanded={defaultExpanded}>
         {formGroup}
       </ExpandableSection>
     )

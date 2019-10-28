@@ -27,6 +27,7 @@ export default function getSubcategory(req, res) {
               title: `Subcategory ${subcategoryId}`,
               total: 100,
               filters,
+              appliedFilters: filters,
               facets: createFacets(),
               products: createProducts(20)
             }

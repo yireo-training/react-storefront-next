@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import useLazyStore from './useLazyStore'
-import { runInAction, toJS } from 'mobx'
+import { runInAction } from 'mobx'
 import qs from 'qs'
 
 export default function useSearchResultsStore(lazyProps) {
@@ -36,9 +36,6 @@ export default function useSearchResultsStore(lazyProps) {
       JSON.stringify(filters.map(v => v.toLowerCase()).sort()) !==
       JSON.stringify(appliedFilters.map(v => v.toLowerCase()).sort())
 
-    console.log(filters.map(v => v.toLowerCase()).sort())
-    console.log(appliedFilters.map(v => v.toLowerCase()).sort())
-
     runInAction(() => {
       Object.assign(store.pageData, {
         filters,
@@ -59,7 +56,7 @@ export default function useSearchResultsStore(lazyProps) {
     const query = qs.parse(search, { ignoreQueryPrefix: true })
 
     if (filters.length) {
-      query.filters = JSON.stringify(toJS(filters))
+      query.filters = JSON.stringify(filters)
     } else {
       delete query.filters
     }
@@ -84,13 +81,13 @@ export default function useSearchResultsStore(lazyProps) {
     const url = `/api/s/${encodeURIComponent(id)}?${qs.stringify(query)}`
 
     runInAction(() => {
-      store.loading = loading
+      store.reloading = loading
     })
 
     const result = await fetch(url).then(res => res.json())
 
     runInAction(() => {
-      store.loading = false
+      store.reloading = false
       store.pageData.appliedFilters = filters
       store.pageData.filtersChanged = false
       store.pageData.products =
@@ -99,6 +96,7 @@ export default function useSearchResultsStore(lazyProps) {
   })
 
   const store = useLazyStore(lazyProps, {
+    reloading: false,
     pageData: {
       page: 0,
       filters: [],
