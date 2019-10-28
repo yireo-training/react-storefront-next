@@ -32,7 +32,12 @@ export default function useSearchResultsStore(lazyProps) {
 
   const setFilters = useCallback((filters, submit) => {
     const { appliedFilters } = store.pageData
-    const filtersChanged = JSON.stringify(toJS(filters)) !== JSON.stringify(toJS(appliedFilters))
+    const filtersChanged =
+      JSON.stringify(filters.map(v => v.toLowerCase()).sort()) !==
+      JSON.stringify(appliedFilters.map(v => v.toLowerCase()).sort())
+
+    console.log(filters.map(v => v.toLowerCase()).sort())
+    console.log(appliedFilters.map(v => v.toLowerCase()).sort())
 
     runInAction(() => {
       Object.assign(store.pageData, {
