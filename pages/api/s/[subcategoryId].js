@@ -6,6 +6,8 @@ export default function getSubcategory(req, res) {
     query: { subcategoryId, page, filters }
   } = req
 
+  res.setHeader('cache-control', 'no-cache, no-store, max-age: 0')
+
   if (filters) {
     filters = JSON.parse(filters)
   }

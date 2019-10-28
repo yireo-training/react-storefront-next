@@ -56,14 +56,17 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  checked: {
+  selected: {
     opacity: 1
   },
-  checkedBackground: {
+  selectedBackground: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     height: 24,
     width: 24,
     borderRadius: '50%'
+  },
+  selectedLabel: {
+    fontWeight: 'bold'
   }
 })
 
@@ -105,9 +108,9 @@ export default function ButtonFilterGroup({ store, group, submitOnChange }) {
                 {image ? (
                   <>
                     <div
-                      className={clsx({ [classes.checkMark]: true, [classes.checked]: selected })}
+                      className={clsx({ [classes.checkMark]: true, [classes.selected]: selected })}
                     >
-                      <div className={classes.checkedBackground}>
+                      <div className={classes.selectedBackground}>
                         <CheckedIcon />
                       </div>
                     </div>
@@ -117,7 +120,14 @@ export default function ButtonFilterGroup({ store, group, submitOnChange }) {
                   facet.name
                 )}
               </Button>
-              {facet.image ? <Typography variant="caption">{facet.name}</Typography> : null}
+              {facet.image ? (
+                <Typography
+                  variant="caption"
+                  className={clsx({ [classes.selectedLabel]: selected })}
+                >
+                  {facet.name}
+                </Typography>
+              ) : null}
             </Vbox>
           )
         })}

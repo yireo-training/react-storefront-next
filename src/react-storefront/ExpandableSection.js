@@ -72,6 +72,7 @@ export const styles = theme => ({
     }
   },
 
+  title: {},
   expandIcon: {},
   collapseIcon: {}
 })
@@ -158,7 +159,9 @@ export default function ExpandableSection(props) {
         }
         classes={getSummaryClasses()}
       >
-        <Typography variant="subtitle1">{title}</Typography>
+        <Typography variant="subtitle1" className={classes.title}>
+          {title}
+        </Typography>
         {caption && (
           <Typography
             variant="caption"

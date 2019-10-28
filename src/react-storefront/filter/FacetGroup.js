@@ -13,6 +13,11 @@ const styles = theme => ({
   groupLabel: {
     display: 'flex',
     alignItems: 'center'
+  },
+  groupTitle: {
+    [theme.breakpoints.up('sm')]: {
+      fontWeight: 'bold'
+    }
   }
 })
 
@@ -54,7 +59,7 @@ function FacetGroup({ store, group, submitOnChange, defaultExpanded }) {
         title={group.name}
         caption={caption}
         defaultExpanded={defaultExpanded}
-        classes={{ margins: classes.margins }}
+        classes={{ margins: classes.margins, title: classes.groupTitle }}
       >
         <Controls store={store} group={group} submitOnChange={submitOnChange} />
       </ExpandableSection>

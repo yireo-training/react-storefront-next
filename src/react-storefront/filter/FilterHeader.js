@@ -11,7 +11,7 @@ const styles = theme => ({
       padding: `${theme.spacing(2)}px ${theme.spacing(4)}px`
     },
     [theme.breakpoints.up('sm')]: {
-      paddingBottom: theme.spacing(2)
+      padding: theme.spacing(1, 2, 2, 2)
     }
   },
   title: {
@@ -21,7 +21,6 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       flex: 1,
       textTransform: 'uppercase',
-      padding: `0 ${theme.spacing(2)}px`,
       fontWeight: 'bold'
     }
   },

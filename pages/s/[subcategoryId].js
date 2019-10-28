@@ -21,7 +21,7 @@ import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 
 const useStyles = makeStyles(theme => ({
   sideBar: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(4)}px 0 0`,
+    margin: theme.spacing(0, 4, 0, 0),
     width: 300
   }
 }))
