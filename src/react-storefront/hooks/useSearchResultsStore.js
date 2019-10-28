@@ -11,8 +11,8 @@ export default function useSearchResultsStore(lazyProps) {
     return refresh({ loading: false })
   })
 
-  const clearFilters = useCallback(() => {
-    setFilters([])
+  const clearFilters = useCallback(submit => {
+    setFilters([], submit)
   })
 
   const toggleFilter = useCallback((facet, submit) => {

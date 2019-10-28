@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import LoadMask from '../LoadMask'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
@@ -7,6 +6,7 @@ import { Hbox } from '../Box'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import FacetGroup from './FacetGroup'
 import { useObserver } from 'mobx-react'
+import FilterHeader from './FilterHeader'
 
 /**
  * UI for filtering an instance of SearchResultModelBase.  This component can be used on its own, or you can use
@@ -50,6 +50,8 @@ function Filter({
   expandAll,
   store,
   queryParam,
+  hideClearLink,
+  clearLinkText,
   submitOnChange,
   style,
   classes,
@@ -60,12 +62,18 @@ function Filter({
     classes = useStyles({ classes })
 
     const {
-      pageData: { facets, filters, filtersChanged, loading }
+      pageData: { facets, filters, filtersChanged }
     } = store
 
     return (
       <div style={style} className={classes.root}>
-        {title ? <div className={classes.title}>{title}</div> : null}
+        <FilterHeader
+          store={store}
+          hideClearLink={hideClearLink}
+          clearLinkText={clearLinkText}
+          title={title}
+          submitOnChange={submitOnChange}
+        />
         <div className={classes.facetGroups}>
           {facets &&
             facets.map((group, i) => (
@@ -79,7 +87,7 @@ function Filter({
             ))}
         </div>
         {filtersChanged && !submitOnChange && (
-          <Hbox className={classes.footer} split>
+          <Hbox className={classes.footer} justify="space-between">
             <Typography variant="subtitle1" className={classes.itemsFound}>
               {filters.length || 'No'} filter
               {filters.length === 1 ? '' : 's'} selected

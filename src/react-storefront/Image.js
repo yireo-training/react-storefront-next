@@ -47,7 +47,8 @@ export const styles = theme => ({
       width: '100%',
       height: '100%'
     }
-  }
+  },
+  image: {}
 })
 
 const useStyles = makeStyles(styles, { name: 'RSFImage' })
@@ -152,6 +153,7 @@ export default function Image({
             ref={ref}
             {...assignedAttributes}
             {...imgAttributes}
+            className={classes.image}
             onError={() => setPrimaryNotFound(true)}
           />
         )

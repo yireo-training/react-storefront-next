@@ -1,11 +1,9 @@
 import React, { memo } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import ExpandableSection from '../ExpandableSection'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Typography from '@material-ui/core/Typography'
 import { useObserver } from 'mobx-react'
+import CheckboxFilterGroup from './CheckboxFilterGroup'
+import ButtonFilterGroup from './ButtonFilterGroup'
 
 const styles = theme => ({
   matches: {
@@ -26,43 +24,22 @@ function FacetGroup({ store, group, submitOnChange, defaultExpanded }) {
     const classes = useStyles()
 
     const {
-      pageData: { filters },
-      actions: { toggleFilter }
+      pageData: { filters }
     } = store
 
-    const formGroup = (
-      <FormGroup>
-        {group.facets.map((facet, i) => {
-          let checked = false
+    for (let facet of group.facets) {
+      if (filters.indexOf(facet.code) !== -1) {
+        selection.push(facet)
+      }
+    }
 
-          if (filters.indexOf(facet.code) !== -1) {
-            selection.push(facet)
-            checked = true
-          }
+    let Controls
 
-          return (
-            <FormControlLabel
-              key={i}
-              label={
-                <div className={classes.groupLabel}>
-                  <span>{facet.name}</span>
-                  <Typography variant="caption" className={classes.matches} component="span">
-                    ({facet.matches})
-                  </Typography>
-                </div>
-              }
-              control={
-                <Checkbox
-                  checked={checked}
-                  color="primary"
-                  onChange={() => toggleFilter(facet, submitOnChange)}
-                />
-              }
-            />
-          )
-        })}
-      </FormGroup>
-    )
+    if (group.ui === 'buttons') {
+      Controls = ButtonFilterGroup
+    } else {
+      Controls = CheckboxFilterGroup
+    }
 
     let caption = null
 
@@ -73,8 +50,13 @@ function FacetGroup({ store, group, submitOnChange, defaultExpanded }) {
     }
 
     return (
-      <ExpandableSection title={group.name} caption={caption} defaultExpanded={defaultExpanded}>
-        {formGroup}
+      <ExpandableSection
+        title={group.name}
+        caption={caption}
+        defaultExpanded={defaultExpanded}
+        classes={{ margins: classes.margins }}
+      >
+        <Controls store={store} group={group} submitOnChange={submitOnChange} />
       </ExpandableSection>
     )
   })

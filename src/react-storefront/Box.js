@@ -143,11 +143,6 @@ Vbox.propTypes = {
   classes: PropTypes.object,
 
   /**
-   * True to split items on opposite sides of the box by applying justify-content: 'space-between'
-   */
-  split: PropTypes.bool,
-
-  /**
    * CSS value for align-items
    */
   align: PropTypes.oneOf(['flex-start', 'flex-end', 'center', 'stretch', 'baseline']),
