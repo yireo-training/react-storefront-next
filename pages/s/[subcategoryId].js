@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Typography, Grid, Container } from '@material-ui/core'
 import ResponsiveTiles from 'react-storefront/ResponsiveTiles'
 import ProductItem from '../../src/ProductItem'
-import fetch from 'cross-fetch'
 import ShowMore from 'react-storefront/ShowMore'
 import Head from 'next/head'
 import BackToTop from 'react-storefront/BackToTop'
@@ -11,11 +10,10 @@ import useSearchResultsStore from 'react-storefront/hooks/useSearchResultsStore'
 import { useObserver } from 'mobx-react'
 import Skeleton from 'react-storefront/Skeleton'
 import FilterButton from 'react-storefront/filter/FilterButton'
-import qs from 'qs'
-import Router from 'next/router'
-import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTheme from '@material-ui/core/styles/useTheme'
+
+import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 
 const useStyles = makeStyles(theme => ({}))
 

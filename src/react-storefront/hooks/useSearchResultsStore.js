@@ -54,7 +54,7 @@ export default function useSearchResultsStore(lazyProps) {
     const query = qs.parse(search, { ignoreQueryPrefix: true })
 
     if (filters.length) {
-      query.filters = filters
+      query.filters = JSON.stringify(toJS(filters))
     } else {
       delete query.filters
     }
@@ -65,7 +65,7 @@ export default function useSearchResultsStore(lazyProps) {
       pathname + qs.stringify(query, { addQueryPrefix: true }) + hash
     )
 
-    refresh()
+    refresh({ loading: true })
   })
 
   const refresh = useCallback(async ({ loading } = {}) => {

@@ -2,9 +2,13 @@ import createProducts from '../../../src/mocks/createProducts'
 import createFacets from '../../../src/mocks/createFacets'
 
 export default function getSubcategory(req, res) {
-  const {
-    query: { subcategoryId, page }
+  let {
+    query: { subcategoryId, page, filters }
   } = req
+
+  if (filters) {
+    filters = JSON.parse(filters)
+  }
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -21,10 +25,10 @@ export default function getSubcategory(req, res) {
               id: subcategoryId,
               name: `Subcategory ${subcategoryId}`,
               title: `Subcategory ${subcategoryId}`,
-              products: createProducts(20),
-              facets: createFacets(),
               total: 100,
-              filters: []
+              filters,
+              facets: createFacets(),
+              products: createProducts(20)
             }
           })
         )
