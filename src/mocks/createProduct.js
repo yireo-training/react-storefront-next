@@ -8,41 +8,66 @@ export default function createProduct(id) {
       src: `https://via.placeholder.com/600x600/cccccc?text=${encodeURIComponent('Product ' + id)}`,
       alt: `Product ${id}`
     },
-    images: [
+    media: [
       {
         src: `https://via.placeholder.com/600x600/cccccc?text=${encodeURIComponent(
           'Product ' + id
         )}`,
-        alt: `Product ${id}`
+        alt: `Product ${id}`,
+        magnify: {
+          height: 1200,
+          width: 1200,
+          src: `https://via.placeholder.com/1200x1200/cccccc?text=${encodeURIComponent(
+            'Product ' + id
+          )}`
+        }
       },
       {
         src: `https://via.placeholder.com/600x600/ff0000?text=${encodeURIComponent(
           'Product ' + id
         )}`,
-        alt: `Product ${id}`
+        alt: `Product ${id}`,
+        magnify: {
+          height: 1200,
+          width: 1200,
+          src: `https://via.placeholder.com/1200x1200/ff0000?text=${encodeURIComponent(
+            'Product ' + id
+          )}`
+        }
       },
       {
         src: `https://via.placeholder.com/600x600/00ff00?text=${encodeURIComponent(
           'Product ' + id
         )}`,
-        alt: `Product ${id}`
+        alt: `Product ${id}`,
+        magnify: {
+          height: 1200,
+          width: 1200,
+          src: `https://via.placeholder.com/1200x1200/00ff00?text=${encodeURIComponent(
+            'Product ' + id
+          )}`
+        }
       }
     ],
     colors: {
       options: [
         {
           id: 'red',
-          text: 'red'
+          text: 'RED'
         },
         {
           id: 'blue',
-          text: 'blue'
+          text: 'BLUE'
         },
         {
           id: 'green',
-          text: 'green'
+          text: 'GREEN'
         }
-      ]
+      ],
+      selected: {
+        id: 'red',
+        text: 'RED'
+      }
     }
   }
 }

@@ -1,24 +1,44 @@
+import { useContext } from 'react'
 import { useObserver } from 'mobx-react'
-import { Container, Grid, Typography, Paper } from '@material-ui/core'
+import { Container, Grid, Typography, Paper, Divider } from '@material-ui/core'
 import Link from 'react-storefront/Link'
-import { Button } from '@material-ui/core'
 import Lazy from 'react-storefront/Lazy'
 import ButtonSelector from 'react-storefront/ButtonSelector'
 import QuantitySelector from 'react-storefront/QuantitySelector'
 import useLazyStore from 'react-storefront/hooks/useLazyStore'
-import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
 import Accordion from 'react-storefront/Accordion'
 import ExpandableSection from 'react-storefront/ExpandableSection'
 import fetchProps from 'react-storefront/props/fetchProps'
 import TabPanel from 'react-storefront/TabPanel'
 import CmsSlot from 'react-storefront/CmsSlot'
-import ProductSkeleton from '../../src/ProductSkeleton'
+import MediaCarousel from 'react-storefront/carousel/MediaCarousel'
+import PWAContext from 'react-storefront/PWAContext'
+import Skeleton from 'react-storefront/Skeleton'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import Row from 'react-storefront/Row'
+import { Hbox } from 'react-storefront/Box'
+import Label from 'react-storefront/Label'
+
+const styles = theme => ({
+  carousel: {
+    width: '100%',
+    [theme.breakpoints.down('xs')]: {
+      margin: '0 -16px',
+      height: '100vw',
+      width: '100vw'
+    }
+  }
+})
+
+const useStyles = makeStyles(styles)
 
 const Product = React.memo(lazyProps => {
   const store = useLazyStore(lazyProps, { quantity: 1 })
 
   return useObserver(() => {
+    const classes = useStyles()
     const { loading, pageData: product } = store
+    const { thumbnail } = useContext(PWAContext)
 
     return (
       <Container maxWidth="lg">
@@ -30,32 +50,60 @@ const Product = React.memo(lazyProps => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h6" component="h1">
-              {product && product.name}
+              {product ? product.name : <Skeleton style={{ height: '1em' }} />}
             </Typography>
           </Grid>
         </Grid>
-        {loading || !product ? (
-          <ProductSkeleton />
-        ) : (
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
-              {/* {product.images && <MediaCarousel product={product} />} */}
-            </Grid>
-            <Grid item xs={12} md={8}>
-              {product.colors && (
-                <ButtonSelector
-                  options={product.colors.options}
-                  value={product.colors.selected}
-                  onSelectionChange={(_e, color) => {
-                    product.colors.selected = color
-                  }}
-                />
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={5}>
+            <MediaCarousel
+              className={classes.carousel}
+              product={product}
+              thumbnail={thumbnail.current}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={7}>
+            <Row>
+              {product ? (
+                <>
+                  <Hbox style={{ marginBottom: 10 }}>
+                    <Label>COLOR: </Label>
+                    <Typography>{product.colors.selected.text}</Typography>
+                  </Hbox>
+                  <ButtonSelector
+                    options={product.colors.options}
+                    value={product.colors.selected}
+                    onSelectionChange={(_e, color) => {
+                      product.colors.selected = color
+                    }}
+                  />
+                </>
+              ) : (
+                <div>
+                  <Skeleton style={{ height: 14 }}></Skeleton>
+                  <Hbox>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                  </Hbox>
+                </div>
               )}
-            </Grid>
-            <Grid item xs={12}>
-              <QuantitySelector value={product.quantity} onChange={q => (product.quantity = q)} />
-            </Grid>
-            <Grid item xs={12}>
+            </Row>
+            <Row>
+              <Divider />
+            </Row>
+            <Row>
+              {product && (
+                <Hbox>
+                  <Label>QTY:</Label>
+                  <QuantitySelector
+                    value={product.quantity}
+                    onChange={q => (product.quantity = q)}
+                  />
+                </Hbox>
+              )}
+            </Row>
+            <Row>
               <TabPanel>
                 <CmsSlot label="Description">Description</CmsSlot>
                 <CmsSlot label="Specs">Test</CmsSlot>
@@ -65,8 +113,8 @@ const Product = React.memo(lazyProps => {
                   ))}
                 </div>
               </TabPanel>
-            </Grid>
-            <Grid item xs={12}>
+            </Row>
+            <Row>
               <Accordion>
                 <ExpandableSection expanded title="First">
                   <div>The first section</div>
@@ -78,42 +126,27 @@ const Product = React.memo(lazyProps => {
                   <div>The third section</div>
                 </ExpandableSection>
               </Accordion>
-            </Grid>
-            <Grid item xs={12}>
+            </Row>
+            <Row>
               <ExpandableSection expanded title="First">
                 <div>The first no accordion section</div>
               </ExpandableSection>
               <ExpandableSection title="Second">
                 <div>The second no accordion section</div>
               </ExpandableSection>
-            </Grid>
-            <div style={{ height: 500 }}></div>
-            <Grid item xs={12}>
-              <Lazy style={{ minHeight: 200 }}>
-                <div>Lazy content</div>
-              </Lazy>
-            </Grid>
+            </Row>
           </Grid>
-        )}
+          <div style={{ height: 500 }}></div>
+          <Grid item xs={12}>
+            <Lazy style={{ minHeight: 200 }}>
+              <div>Lazy content</div>
+            </Lazy>
+          </Grid>
+        </Grid>
       </Container>
     )
   })
 })
-
-function MediaCarousel({ product }) {
-  return useObserver(() => (
-    <div>
-      <img src={product.images[product.selectedImage].src} width={200} height={200} />
-      <div>
-        {product.images.map((image, i) => (
-          <Button key={i} onClick={() => (product.selectedImage = i)}>
-            Image {i}
-          </Button>
-        ))}
-      </div>
-    </div>
-  ))
-}
 
 Product.getInitialProps = fetchProps(
   ({ query }) => `http://localhost:3000/api/p/${query.productId}`

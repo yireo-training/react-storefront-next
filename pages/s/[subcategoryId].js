@@ -7,38 +7,25 @@ import ShowMore from 'react-storefront/ShowMore'
 import Head from 'next/head'
 import BackToTop from 'react-storefront/BackToTop'
 import fetchProps from 'react-storefront/props/fetchProps'
-import useLazyStore from 'react-storefront/hooks/useLazyStore'
+import useSearchResultsStore from 'react-storefront/hooks/useSearchResultsStore'
 import { useObserver } from 'mobx-react'
 import Skeleton from 'react-storefront/Skeleton'
-import { runInAction } from 'mobx'
-
+import FilterButton from 'react-storefront/filter/FilterButton'
+import qs from 'qs'
+import Router from 'next/router'
 import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
+import makeStyles from '@material-ui/core/styles/makeStyles'
+import useTheme from '@material-ui/core/styles/useTheme'
+
+const useStyles = makeStyles(theme => ({}))
 
 const Subcategory = lazyProps => {
-  const store = useLazyStore(lazyProps, { page: 0 })
+  const store = useSearchResultsStore(lazyProps)
 
   return useObserver(() => {
+    const classes = useStyles()
+    const theme = useTheme()
     const { pageData, loading } = store
-
-    const fetchMore = useCallback(async () => {
-      const { pageData, page } = store
-
-      const more = await fetch(`/api/s/${pageData.id}?page=${store.page + 1}`).then(res =>
-        res.json()
-      )
-
-      runInAction(() => {
-        Object.assign(store, {
-          page: page + 1,
-          pageData: {
-            ...pageData,
-            products: pageData.products.concat(more.products)
-          }
-        })
-      })
-    })
-
-    console.log('render subcategory', pageData && pageData.id)
 
     return (
       <Container maxWidth="lg">
@@ -46,8 +33,17 @@ const Subcategory = lazyProps => {
         <BackToTop />
         <Grid container>
           <Grid item xs={12}>
-            <Typography component="h1" variant="h6">
-              {!loading ? pageData.name : <Skeleton style={{ height: 16 }} />}
+            <Typography component="h1" variant="h6" gutterBottom>
+              {pageData.name || <Skeleton style={{ height: 16 }} />}
+            </Typography>
+          </Grid>
+          <Grid item xs={6} style={{ paddingRight: theme.spacing(1) }}>
+            <FilterButton style={{ width: '100%' }} store={store} />
+          </Grid>
+          <Grid item xs={6}></Grid>
+          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Typography variant="caption">
+              {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -77,7 +73,7 @@ const Subcategory = lazyProps => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <ShowMore loadMore={fetchMore} />
+            <ShowMore loadMore={store.actions.fetchMore} />
           </Grid>
         </Grid>
       </Container>

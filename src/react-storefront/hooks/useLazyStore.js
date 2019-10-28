@@ -8,11 +8,9 @@ import Router from 'next/router'
 export default function useLazyStore(lazyProps, additionalData = {}) {
   const { lazy, url, ...props } = lazyProps
 
-  const store = useLocalStore(() => ({
-    ...props,
-    ...additionalData,
-    loading: lazyProps.lazy != null
-  }))
+  const store = useLocalStore(() =>
+    merge(props, additionalData, { loading: lazyProps.lazy != null })
+  )
 
   const updateState = useCallback(state => {
     runInAction(() => merge(store, { loading: false, ...state.props }))

@@ -7,8 +7,26 @@ import ExpandableSection from 'react-storefront/ExpandableSection'
 import ActionButton from 'react-storefront/ActionButton'
 import Accordion from 'react-storefront/Accordion'
 import Link from 'react-storefront/Link'
+import Carousel from 'react-storefront/carousel/Carousel'
+import MediaCarousel from 'react-storefront/carousel/MediaCarousel'
+import clsx from 'clsx'
 
-const useStyles = makeStyles(theme => ({}))
+const useStyles = makeStyles(theme => ({
+  slide: {
+    padding: 15,
+    minHeight: 300,
+    color: '#fff'
+  },
+  slide1: {
+    background: '#FEA900'
+  },
+  slide2: {
+    background: '#B3DC4A'
+  },
+  slide3: {
+    background: '#6AC0FF'
+  }
+}))
 
 function ThrowError() {
   const [error, setError] = useState(false)
@@ -45,6 +63,13 @@ export default function Index() {
 
   return (
     <Container maxWidth="lg">
+      <Row>
+        <Carousel swipeStyle={{ padding: '0 30px' }} style={{ height: 300, width: 300 }}>
+          <div className={clsx(classes.slide, classes.slide1)}>Slide 1</div>
+          <div className={clsx(classes.slide, classes.slide2)}>Slide 2</div>
+          <div className={clsx(classes.slide, classes.slide3)}>Slide 3</div>
+        </Carousel>
+      </Row>
       <Row>
         <ThrowError />
       </Row>

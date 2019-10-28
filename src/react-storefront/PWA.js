@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import PWAContext from './PWAContext'
 import { useLocalStore } from 'mobx-react'
 import AMPContext from './AMPContext'
@@ -12,17 +12,20 @@ import './profile'
 
 const ampContextValue = { ampStateId: 'rsf' }
 
-export default function PWA({ children, menu, errorReporter }) {
-  const amp = useAmp()
+export default function PWA({ children, errorReporter }) {
+  const thumbnail = useRef(null)
+  const skeletonProps = useRef(null)
 
-  const app = useLocalStore(() => ({
-    amp,
-    offline: false,
-    loading: false,
-    hydrating: true,
-    menu: { open: false, ...menu },
-    skeletonProps: null
-  }))
+  const app = useMemo(
+    () => ({
+      thumbnail,
+      skeletonProps,
+      menu: {
+        open: false
+      }
+    }),
+    []
+  )
 
   // enable client-side navigation when the user clicks a simple HTML anchor element
   // useSimpleNavigation()

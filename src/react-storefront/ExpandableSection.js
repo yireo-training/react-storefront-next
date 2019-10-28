@@ -28,7 +28,7 @@ export const styles = theme => ({
   },
 
   margins: {
-    padding: `0 ${theme.spacing(4)}px`
+    padding: `0 ${theme.spacing(2)}px`
   },
 
   caption: {
@@ -63,7 +63,7 @@ export const styles = theme => ({
   },
 
   summaryIconWrap: {
-    right: `-${theme.spacing(3)}px`
+    right: 0
   },
 
   expandedPanel: {

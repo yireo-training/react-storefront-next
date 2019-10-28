@@ -1,4 +1,5 @@
 import createProducts from '../../../src/mocks/createProducts'
+import createFacets from '../../../src/mocks/createFacets'
 
 export default function getSubcategory(req, res) {
   const {
@@ -20,7 +21,10 @@ export default function getSubcategory(req, res) {
               id: subcategoryId,
               name: `Subcategory ${subcategoryId}`,
               title: `Subcategory ${subcategoryId}`,
-              products: createProducts(20)
+              products: createProducts(20),
+              facets: createFacets(),
+              total: 100,
+              filters: []
             }
           })
         )

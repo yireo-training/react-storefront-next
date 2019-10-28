@@ -171,7 +171,7 @@ Menu.propTypes = {
   /**
    * Set level at which menu items will be expandable
    */
-  useExpanders: PropTypes.number,
+  useExpanders: PropTypes.bool,
 
   /**
    * Set to true to expand first item for not root items

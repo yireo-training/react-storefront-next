@@ -32,7 +32,6 @@ async function createLazyProps(as, apiURL) {
 
     if (rsf && rsf[as]) {
       // going back or forward
-      console.log('restoring state', as)
       return { key: as, pageData: rsf[as] }
     } else {
       // normal client side navigation, fetch from network

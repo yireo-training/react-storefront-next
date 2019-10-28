@@ -3,7 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: `${theme.spacing(2)}px 0`
+    margin: `0 0 ${theme.spacing(2)}px 0`
   }
 }))
 

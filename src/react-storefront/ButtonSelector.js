@@ -162,7 +162,7 @@ function Option({
   onSelectionChange,
   name
 }) {
-  const selected = value === option
+  const selected = value.id === option.id
   let children = option.text
 
   if (option.image) {

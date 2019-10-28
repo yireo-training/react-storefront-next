@@ -5,6 +5,7 @@ import Image from 'react-storefront/Image'
 import { makeStyles, Typography } from '@material-ui/core'
 import { price } from 'react-storefront/format'
 import Rating from 'react-storefront/Rating'
+import ForwardThumbnail from 'react-storefront/ForwardThumbnail'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,31 +42,33 @@ export default function Product({ product, index }) {
 
   return (
     <div className={classes.root}>
-      <Link
-        as={`/p/${product.id}`}
-        href="/p/[productId]"
-        className={classes.link}
-        skeletonProps={{ product }}
-      >
-        <Vbox alignItems="stretch">
-          <div className={classes.thumb}>
-            <Image
-              optimize={{ maxWidth: 200 }}
-              lazy={index >= 4 && index < 20 ? 'ssr' : false}
-              aspectRatio={100}
-              alt={product.thumbnail.alt}
-              src={product.thumbnail.src}
-            />
-          </div>
-          <div className={classes.info}>
-            <Typography variant="subtitle1" className={classes.name}>
-              {product.name}
-            </Typography>
-            <Rating product={product} className={classes.rating} />
-            <Typography className={classes.price}>{price(product.price)}</Typography>
-          </div>
-        </Vbox>
-      </Link>
+      <ForwardThumbnail>
+        <Link
+          as={`/p/${product.id}`}
+          href="/p/[productId]"
+          className={classes.link}
+          skeletonProps={{ product }}
+        >
+          <Vbox alignItems="stretch">
+            <div className={classes.thumb}>
+              <Image
+                optimize={{ maxWidth: 200 }}
+                lazy={index >= 4 && index < 20 ? 'ssr' : false}
+                aspectRatio={100}
+                alt={product.thumbnail.alt}
+                src={product.thumbnail.src}
+              />
+            </div>
+            <div className={classes.info}>
+              <Typography variant="subtitle1" className={classes.name}>
+                {product.name}
+              </Typography>
+              <Rating product={product} className={classes.rating} />
+              <Typography className={classes.price}>{price(product.price)}</Typography>
+            </div>
+          </Vbox>
+        </Link>
+      </ForwardThumbnail>
     </div>
   )
 }
