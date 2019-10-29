@@ -9,7 +9,10 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   const goingBack = useRef(false)
 
   let [state, setState] = useState(() =>
-    merge(additionalData, skeletonProps, props, { loading: lazyProps.lazy != null, pageData: {} })
+    merge(additionalData, { pageData: skeletonProps }, props, {
+      loading: lazyProps.lazy != null,
+      pageData: {}
+    })
   )
 
   const stateRef = useRef(state)

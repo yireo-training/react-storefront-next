@@ -17,13 +17,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import Row from 'react-storefront/Row'
 import { Hbox } from 'react-storefront/Box'
 import Label from 'react-storefront/Label'
+import Fill from 'react-storefront/Fill'
+import { useTheme } from '@material-ui/styles'
 
 const styles = theme => ({
-  carousel: {
-    width: '100%',
+  carouselWrap: {
     [theme.breakpoints.down('xs')]: {
-      margin: '0 -16px',
-      height: '100vw',
+      margin: theme.spacing(0, -2),
       width: '100vw'
     }
   }
@@ -32,11 +32,14 @@ const styles = theme => ({
 const useStyles = makeStyles(styles)
 
 const Product = React.memo(lazyProps => {
+  const theme = useTheme()
   const [store, updateStore] = useLazyStore(lazyProps, { pageData: { quantity: 1 } })
   const classes = useStyles()
   const { pageData } = store
   const { thumbnail } = useContext(PWAContext)
   const { product } = pageData
+
+  console.log('product', product)
 
   return (
     <Container maxWidth="lg">
@@ -54,15 +57,17 @@ const Product = React.memo(lazyProps => {
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={5}>
-          <MediaCarousel
-            className={classes.carousel}
-            product={product}
-            thumbnail={thumbnail.current}
-          />
+          <Fill aspectRatio={1} className={classes.carouselWrap}>
+            <MediaCarousel
+              className={classes.carousel}
+              product={product}
+              thumbnail={thumbnail.current}
+            />
+          </Fill>
         </Grid>
         <Grid item xs={12} sm={6} md={7}>
           <Row>
-            {product ? (
+            {product && pageData.color ? (
               <>
                 <Hbox style={{ marginBottom: 10 }}>
                   <Label>COLOR: </Label>
@@ -84,7 +89,7 @@ const Product = React.memo(lazyProps => {
               </>
             ) : (
               <div>
-                <Skeleton style={{ height: 14 }}></Skeleton>
+                <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
                 <Hbox>
                   <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
                   <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
@@ -97,23 +102,21 @@ const Product = React.memo(lazyProps => {
             <Divider />
           </Row>
           <Row>
-            {product && (
-              <Hbox>
-                <Label>QTY:</Label>
-                <QuantitySelector
-                  value={pageData.quantity}
-                  onChange={quantity =>
-                    updateStore({
-                      ...store,
-                      pageData: {
-                        ...pageData,
-                        quantity
-                      }
-                    })
-                  }
-                />
-              </Hbox>
-            )}
+            <Hbox>
+              <Label>QTY:</Label>
+              <QuantitySelector
+                value={pageData.quantity || 1}
+                onChange={quantity =>
+                  updateStore({
+                    ...store,
+                    pageData: {
+                      ...pageData,
+                      quantity
+                    }
+                  })
+                }
+              />
+            </Hbox>
           </Row>
           <Row>
             <TabPanel>

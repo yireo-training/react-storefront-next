@@ -15,6 +15,7 @@ import LoadMask from 'react-storefront/LoadMask'
 import useSearchResultsStore from 'react-storefront/search/useSearchResultsStore'
 import FilterButton from 'react-storefront/search/FilterButton'
 import Filter from 'react-storefront/search/Filter'
+import Fill from 'react-storefront/Fill'
 import SearchResultsProvider from 'react-storefront/search/SearchResultsProvider'
 
 const useStyles = makeStyles(theme => ({
@@ -43,7 +44,7 @@ const Subcategory = lazyProps => {
             <LoadMask show={store.reloading} transparent align="top" />
             <Grid item xs={12}>
               <Typography component="h1" variant="h6" gutterBottom>
-                {pageData.name || <Skeleton style={{ height: 16 }} />}
+                {pageData.name || <Skeleton style={{ height: 24 }} />}
               </Typography>
             </Grid>
             <Grid item xs={6} style={{ paddingRight: theme.spacing(1) }}>
@@ -69,13 +70,15 @@ const Subcategory = lazyProps => {
                   ))}
                 </ResponsiveTiles>
               ) : (
-                <ResponsiveTiles>
+                <ResponsiveTiles style={{ marginTop: 0 }}>
                   {(() => {
                     const tiles = []
                     for (let i = 0; i < 10; i++) {
                       tiles.push(
-                        <div key={i}>
-                          <Skeleton style={{ height: 200 }} />
+                        <div key={i} style={{ marginBottom: theme.spacing(3) }}>
+                          <Fill style={{ marginBottom: '1em' }}>
+                            <Skeleton style={{ height: '100%' }} />
+                          </Fill>
                           <Skeleton style={{ height: 16 }} />
                           <Skeleton style={{ height: 16 }} />
                           <Skeleton style={{ height: 16 }} />

@@ -59,6 +59,7 @@ function MenuBranch(props) {
   if (showExpander) {
     elements.push(
       <MenuExpander
+        key="expander"
         sublist={sublist}
         item={item}
         depth={depth}

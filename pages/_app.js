@@ -3,7 +3,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../src/theme'
 import Header from '../src/Header'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core'
 import storeInitialPropsInHistory from '../src/react-storefront/router/storeInitialPropsInHistory'
 import PWA from '../src/react-storefront/PWA'
 import Nav from '../src/Nav'
@@ -38,7 +38,11 @@ export default function MyApp({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header>
-          <MenuButton open={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
+          <MenuButton
+            open={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{ marginRight: theme.spacing(-1) }}
+          />
         </Header>
         <Menu
           align="right"

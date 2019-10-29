@@ -16,5 +16,5 @@ LeafFooter.propTypes = {
   /**
    * The menu item being rendered
    */
-  item: PropTypes.Object
+  item: PropTypes.object
 }
