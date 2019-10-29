@@ -23,13 +23,18 @@ import qs from 'qs'
  * ```
  */
 export default function SearchResultsProvider({ store, updateStore, children }) {
+  const setState = state => {
+    store = { ...store, ...state }
+    updateStore(store)
+  }
+
   const fetchMore = () => {
-    updateStore(store => ({
+    setState({
       pageData: {
         ...store.pageData,
         page: store.pageData.page + 1
       }
-    }))
+    })
 
     return refresh({ loading: false })
   }
@@ -59,14 +64,13 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
       JSON.stringify(filters.map(v => v.toLowerCase()).sort()) !==
       JSON.stringify(appliedFilters.map(v => v.toLowerCase()).sort())
 
-    updateStore(store => ({
-      ...store,
+    setState({
       pageData: {
         ...store.pageData,
         filters,
         filtersChanged
       }
-    }))
+    })
 
     if (submit) {
       applyFilters()
@@ -74,17 +78,18 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
   }
 
   const applyFilters = () => {
-    updateStore(state => {
-      return {
-        ...state,
-        pageData: {
-          ...state.pageData,
-          page: 0
-        }
+    setState({
+      pageData: {
+        ...store.pageData,
+        page: 0
       }
     })
 
-    const { filters } = store.pageData
+    refresh({ loading: true })
+  }
+
+  const getURLForState = () => {
+    const { filters, page, sort } = store.pageData
     const { pathname, search, hash } = window.location
     const query = qs.parse(search, { ignoreQueryPrefix: true })
 
@@ -94,42 +99,41 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
       delete query.filters
     }
 
-    history.replaceState(
-      history.state,
-      document.title,
-      pathname + qs.stringify(query, { addQueryPrefix: true }) + hash
-    )
+    if (page > 0) {
+      query.page = page
+    } else {
+      delete query.page
+    }
 
-    refresh({ loading: true })
+    if (sort) {
+      query.sort = sort
+    } else {
+      delete query.sort
+    }
+
+    return pathname + qs.stringify(query, { addQueryPrefix: true }) + hash
   }
 
   const refresh = async ({ loading } = {}) => {
-    const { page, filters, id } = store.pageData
-    const query = { page }
+    const url = getURLForState()
 
-    if (filters.length) {
-      query.filters = JSON.stringify(filters)
-    }
+    history.replaceState(history.state, document.title, url)
 
-    const url = `/api/s/${encodeURIComponent(id)}?${qs.stringify(query)}`
-
-    updateStore(store => ({
-      ...store,
+    setState({
       reloading: loading
-    }))
+    })
 
-    const result = await fetch(url).then(res => res.json())
+    const {
+      pageData: { products }
+    } = await fetch(`/api${url}`).then(res => res.json())
 
-    updateStore(store => ({
-      ...store,
+    setState({
       reloading: false,
       pageData: {
         ...store.pageData,
-        appliedFilters: filters,
-        filtersChanged: false,
-        products: page === 0 ? result.products : store.pageData.products.concat(result.products)
+        products: store.pageData.page === 0 ? products : store.pageData.products.concat(products)
       }
-    }))
+    })
   }
 
   const context = {
