@@ -8,21 +8,16 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   const { lazy, url, ...props } = lazyProps
   const goingBack = useRef(false)
 
-  let [store, setStore] = useState(() =>
+  let [state, setState] = useState(() =>
     merge(props, { loading: lazyProps.lazy != null, pageData: {} }, additionalData, skeletonProps)
   )
-
-  const updateStore = state => {
-    setStore(state)
-    return state
-  }
 
   const isLazy = lazyProps.lazy && lazyProps.lazy.then ? true : false
 
   useEffect(() => {
     if (isLazy) {
       lazyProps.lazy.then(props => {
-        setStore(merge({}, store, props, { loading: false }))
+        setState(state => merge({}, state, props, { loading: false }))
       })
     }
   }, [])
@@ -32,7 +27,7 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
 
     const historyState = {
       ...history.state,
-      rsf: { [uri]: store.pageData }
+      rsf: { [uri]: state.pageData }
     }
 
     history.replaceState(historyState, document.title, uri)
@@ -56,5 +51,5 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
     return () => Router.events.off('beforeHistoryChange', onHistoryChange)
   }, [])
 
-  return [store, updateStore]
+  return [state, setState]
 }

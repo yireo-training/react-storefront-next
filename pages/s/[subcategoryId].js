@@ -29,7 +29,6 @@ const Subcategory = lazyProps => {
   const classes = useStyles()
   const theme = useTheme()
   const { pageData, loading } = store
-  console.log('store', store)
 
   return (
     <SearchResultsProvider store={store} updateStore={updateStore}>

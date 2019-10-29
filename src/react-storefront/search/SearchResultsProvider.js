@@ -24,12 +24,12 @@ import qs from 'qs'
  */
 export default function SearchResultsProvider({ store, updateStore, children }) {
   const fetchMore = () => {
-    store = updateStore({
+    updateStore(store => ({
       pageData: {
         ...store.pageData,
         page: store.pageData.page + 1
       }
-    })
+    }))
 
     return refresh({ loading: false })
   }
@@ -59,14 +59,14 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
       JSON.stringify(filters.map(v => v.toLowerCase()).sort()) !==
       JSON.stringify(appliedFilters.map(v => v.toLowerCase()).sort())
 
-    store = updateStore({
+    updateStore(store => ({
       ...store,
       pageData: {
         ...store.pageData,
         filters,
         filtersChanged
       }
-    })
+    }))
 
     if (submit) {
       applyFilters()
@@ -74,11 +74,13 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
   }
 
   const applyFilters = () => {
-    store = updateStore({
-      ...store,
-      pageData: {
-        ...store.pageData,
-        page: 0
+    updateStore(state => {
+      return {
+        ...state,
+        pageData: {
+          ...state.pageData,
+          page: 0
+        }
       }
     })
 
@@ -111,14 +113,14 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
 
     const url = `/api/s/${encodeURIComponent(id)}?${qs.stringify(query)}`
 
-    store = updateStore({
+    updateStore(store => ({
       ...store,
       reloading: loading
-    })
+    }))
 
     const result = await fetch(url).then(res => res.json())
 
-    store = updateStore({
+    updateStore(store => ({
       ...store,
       reloading: false,
       pageData: {
@@ -127,7 +129,7 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
         filtersChanged: false,
         products: page === 0 ? result.products : store.pageData.products.concat(result.products)
       }
-    })
+    }))
   }
 
   const context = {
