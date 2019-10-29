@@ -2,7 +2,6 @@ import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import FacetGroup from './FacetGroup'
-import { useObserver } from 'mobx-react'
 import FilterHeader from './FilterHeader'
 import FilterFooter from './FilterFooter'
 
@@ -27,7 +26,7 @@ export const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFFilter' })
 
-function Filter({
+export default function Filter({
   expandAll,
   store,
   hideClearLink,
@@ -38,41 +37,34 @@ function Filter({
   title,
   onViewResultsClick
 }) {
-  return useObserver(() => {
-    classes = useStyles({ classes })
+  classes = useStyles({ classes })
 
-    const {
-      pageData: { facets }
-    } = store
+  const {
+    pageData: { facets }
+  } = store
 
-    return (
-      <div style={style} className={classes.root}>
-        <FilterHeader
-          store={store}
-          hideClearLink={hideClearLink}
-          clearLinkText={clearLinkText}
-          title={title}
-          submitOnChange={submitOnChange}
-        />
-        <div className={classes.facetGroups}>
-          {facets.map((group, i) => (
+  return (
+    <div style={style} className={classes.root}>
+      <FilterHeader
+        hideClearLink={hideClearLink}
+        clearLinkText={clearLinkText}
+        title={title}
+        submitOnChange={submitOnChange}
+      />
+      <div className={classes.facetGroups}>
+        {facets &&
+          facets.map((group, i) => (
             <FacetGroup
               group={group}
               key={i}
-              store={store}
               defaultExpanded={expandAll}
               submitOnChange={submitOnChange}
             />
           ))}
-        </div>
-        <FilterFooter
-          store={store}
-          onViewResultsClick={onViewResultsClick}
-          submitOnChange={submitOnChange}
-        />
       </div>
-    )
-  })
+      <FilterFooter onViewResultsClick={onViewResultsClick} submitOnChange={submitOnChange} />
+    </div>
+  )
 }
 
 Filter.propTypes = {
@@ -118,5 +110,3 @@ Filter.defaultProps = {
   onViewResultsClick: Function.prototype,
   submitOnChange: false
 }
-
-export default memo(Filter)

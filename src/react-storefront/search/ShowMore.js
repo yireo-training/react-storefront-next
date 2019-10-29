@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import clsx from 'clsx'
 import Button from '@material-ui/core/Button'
+import SearchResultsContext from './SearchResultsContext'
 
 export const styles = theme => ({
   root: {
@@ -26,20 +27,19 @@ export const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFShowMore' })
 
-export default function ShowMore({ loadMore, className, children, renderLoadingIcon, ...others }) {
+export default function ShowMore({ className, children, renderLoadingIcon, ...others }) {
   const amp = false
   const classes = useStyles(others)
   const [loading, setLoading] = useState(false)
+  const { actions } = useContext(SearchResultsContext)
 
   async function handleClick() {
-    if (loadMore) {
-      setLoading(true)
+    setLoading(true)
 
-      try {
-        await loadMore()
-      } finally {
-        setLoading(false)
-      }
+    try {
+      await actions.fetchMore()
+    } finally {
+      setLoading(false)
     }
   }
 

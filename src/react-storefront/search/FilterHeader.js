@@ -1,8 +1,9 @@
+import React, { useMemo, useContext } from 'react'
 import { Hbox } from '../Box'
 import clsx from 'clsx'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { useObserver } from 'mobx-react'
 import PropTypes from 'prop-types'
+import SearchResultsContext from './SearchResultsContext'
 
 const styles = theme => ({
   header: {
@@ -32,41 +33,37 @@ const styles = theme => ({
     marginLeft: '10px',
     textDecoration: 'underline',
     backgroundColor: 'transparent'
-  },
-  clearDisabled: {
-    color: theme.palette.grey[400]
   }
 })
 
 const useStyles = makeStyles(styles, { name: 'RSFFilterHeader' })
 
-export default function FilterHeader({
-  title,
-  store,
-  clearLinkText,
-  hideClearLink,
-  submitOnChange
-}) {
-  return useObserver(() => {
-    const classes = useStyles()
+export default function FilterHeader(props) {
+  const { title, clearLinkText, hideClearLink, submitOnChange } = props
+  const classes = useStyles()
+  const {
+    actions,
+    pageData: { filters }
+  } = useContext(SearchResultsContext)
 
-    return (
+  return useMemo(
+    () => (
       <Hbox justify="center" className={classes.header}>
         <div className={classes.title}>{title}</div>
-        {hideClearLink || store.pageData.filters.length === 0 ? null : (
+        {hideClearLink || !filters || filters.length === 0 ? null : (
           <button
-            onClick={() => store.actions.clearFilters(submitOnChange)}
+            onClick={() => actions.clearFilters(submitOnChange)}
             className={clsx({
-              [classes.clear]: true,
-              [classes.clearDisabled]: store.reloading
+              [classes.clear]: true
             })}
           >
             {clearLinkText}
           </button>
         )}
       </Hbox>
-    )
-  })
+    ),
+    [filters, ...Object.values(props)]
+  )
 }
 
 FilterHeader.propTypes = {

@@ -20,3 +20,7 @@ export default function useTraceUpdate(props) {
     prev.current = props
   })
 }
+
+if (process.env.NODE_ENV !== 'production') {
+  global.useTraceUpdate = useTraceUpdate
+}

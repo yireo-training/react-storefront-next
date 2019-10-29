@@ -1,32 +1,38 @@
-import useLazyProps from './useLazyProps'
-import { useLocalStore } from 'mobx-react'
-import { useEffect, useCallback, useRef } from 'react'
-import merge from 'lodash/merge'
-import { toJS, runInAction } from 'mobx'
+import { useEffect, useRef, useState, useContext } from 'react'
 import Router from 'next/router'
+import merge from 'lodash/merge'
+import PWAContext from '../PWAContext'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
+  const { skeletonProps } = useContext(PWAContext)
   const { lazy, url, ...props } = lazyProps
+  const goingBack = useRef(false)
 
-  const store = useLocalStore(() =>
-    merge(props, additionalData, { loading: lazyProps.lazy != null })
+  let [store, setStore] = useState(() =>
+    merge(props, { loading: lazyProps.lazy != null, pageData: {} }, additionalData, skeletonProps)
   )
 
-  const updateState = useCallback(state => {
-    runInAction(() => merge(store, { loading: false, ...state.props }))
-  })
+  const updateStore = state => {
+    setStore(state)
+    return state
+  }
 
-  useLazyProps(lazyProps, updateState)
+  const isLazy = lazyProps.lazy && lazyProps.lazy.then ? true : false
 
-  const goingBack = useRef(false)
+  useEffect(() => {
+    if (isLazy) {
+      lazyProps.lazy.then(props => {
+        setStore(merge({}, store, props, { loading: false }))
+      })
+    }
+  }, [])
 
   const recordState = () => {
     const uri = location.pathname + location.search + location.hash
-    const snapshot = toJS(store.pageData, { detectCycles: false })
 
     const historyState = {
       ...history.state,
-      rsf: { [uri]: snapshot }
+      rsf: { [uri]: store.pageData }
     }
 
     history.replaceState(historyState, document.title, uri)
@@ -41,7 +47,7 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   }
 
   useEffect(() => {
-    Router.beforePopState(({ url, as, options }) => {
+    Router.beforePopState(() => {
       goingBack.current = true
       return true
     })
@@ -50,5 +56,5 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
     return () => Router.events.off('beforeHistoryChange', onHistoryChange)
   }, [])
 
-  return store
+  return [store, updateStore]
 }

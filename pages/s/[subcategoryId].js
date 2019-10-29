@@ -2,22 +2,20 @@ import React from 'react'
 import { Typography, Grid, Container, Hidden } from '@material-ui/core'
 import ResponsiveTiles from 'react-storefront/ResponsiveTiles'
 import ProductItem from '../../src/ProductItem'
-import ShowMore from 'react-storefront/ShowMore'
+import ShowMore from 'react-storefront/search/ShowMore'
 import Head from 'next/head'
 import BackToTop from 'react-storefront/BackToTop'
 import fetchProps from 'react-storefront/props/fetchProps'
-import useSearchResultsStore from 'react-storefront/hooks/useSearchResultsStore'
-import { useObserver } from 'mobx-react'
 import Skeleton from 'react-storefront/Skeleton'
-import FilterButton from 'react-storefront/filter/FilterButton'
-import Filter from 'react-storefront/filter/Filter'
 import { Hbox } from 'react-storefront/Box'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTheme from '@material-ui/core/styles/useTheme'
 import qs from 'qs'
 import LoadMask from 'react-storefront/LoadMask'
-
-import useTraceUpdate from 'react-storefront/hooks/useTraceUpdate'
+import useSearchResultsStore from 'react-storefront/search/useSearchResultsStore'
+import FilterButton from 'react-storefront/search/FilterButton'
+import Filter from 'react-storefront/search/Filter'
+import SearchResultsProvider from 'react-storefront/search/SearchResultsProvider'
 
 const useStyles = makeStyles(theme => ({
   sideBar: {
@@ -27,14 +25,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Subcategory = lazyProps => {
-  const store = useSearchResultsStore(lazyProps)
+  const [store, updateStore] = useSearchResultsStore(lazyProps)
+  const classes = useStyles()
+  const theme = useTheme()
+  const { pageData, loading } = store
+  console.log('store', store)
 
-  return useObserver(() => {
-    const classes = useStyles()
-    const theme = useTheme()
-    const { pageData, loading } = store
-
-    return (
+  return (
+    <SearchResultsProvider store={store} updateStore={updateStore}>
       <Container maxWidth="lg">
         <Head>{loading ? null : <title>{pageData.title}</title>}</Head>
         <BackToTop />
@@ -87,13 +85,13 @@ const Subcategory = lazyProps => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <ShowMore loadMore={store.actions.fetchMore} />
+              <ShowMore />
             </Grid>
           </Grid>
         </Hbox>
       </Container>
-    )
-  })
+    </SearchResultsProvider>
+  )
 }
 
 Subcategory.getInitialProps = fetchProps(

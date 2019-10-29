@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useMemo, useContext } from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormGroup from '@material-ui/core/FormGroup'
 import Typography from '@material-ui/core/Typography'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { useObserver } from 'mobx-react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import SearchResultsContext from './SearchResultsContext'
 
 const styles = theme => ({
   matches: {
@@ -19,16 +19,17 @@ const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFCheckboxFilterGroup' })
 
-export default function CheckboxFilterGroup({ store, group, submitOnChange }) {
-  return useObserver(() => {
-    const {
-      pageData: { filters },
-      actions: { toggleFilter }
-    } = store
+export default function CheckboxFilterGroup(props) {
+  const { group, submitOnChange } = props
+  const {
+    pageData: { filters },
+    actions: { toggleFilter }
+  } = useContext(SearchResultsContext)
 
-    const classes = useStyles()
+  const classes = useStyles()
 
-    return (
+  return useMemo(
+    () => (
       <FormGroup>
         {group.facets.map((facet, i) => (
           <FormControlLabel
@@ -51,6 +52,7 @@ export default function CheckboxFilterGroup({ store, group, submitOnChange }) {
           />
         ))}
       </FormGroup>
-    )
-  })
+    ),
+    [...Object.values(props), filters]
+  )
 }

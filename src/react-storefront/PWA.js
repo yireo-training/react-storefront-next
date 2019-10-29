@@ -1,14 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import PWAContext from './PWAContext'
-import { useLocalStore } from 'mobx-react'
 import AMPContext from './AMPContext'
-import { useAmp } from 'next/amp'
 import { useObserver } from 'mobx-react'
 import Router from 'next/router'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
-import useSimpleNavigation from './router/useSimpleNavigation'
 import './profile'
+import './hooks/useTraceUpdate'
 
 const ampContextValue = { ampStateId: 'rsf' }
 

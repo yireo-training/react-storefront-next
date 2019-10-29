@@ -1,7 +1,7 @@
-import React, { memo } from 'react'
+import React, { useMemo, useContext } from 'react'
+import SearchResultsContext from './SearchResultsContext'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import ExpandableSection from '../ExpandableSection'
-import { useObserver } from 'mobx-react'
 import CheckboxFilterGroup from './CheckboxFilterGroup'
 import ButtonFilterGroup from './ButtonFilterGroup'
 
@@ -23,14 +23,17 @@ const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFFacetGroup' })
 
-function FacetGroup({ store, group, submitOnChange, defaultExpanded }) {
-  return useObserver(() => {
-    const selection = []
-    const classes = useStyles()
+export default function FacetGroup(props) {
+  const { group, submitOnChange, defaultExpanded } = props
+  const classes = useStyles()
+  const {
+    pageData: { filters }
+  } = useContext(SearchResultsContext)
 
-    const {
-      pageData: { filters }
-    } = store
+  return useMemo(() => {
+    if (!filters) return null
+
+    const selection = []
 
     for (let facet of group.facets) {
       if (filters.indexOf(facet.code) !== -1) {
@@ -61,10 +64,8 @@ function FacetGroup({ store, group, submitOnChange, defaultExpanded }) {
         defaultExpanded={defaultExpanded}
         classes={{ margins: classes.margins, title: classes.groupTitle }}
       >
-        <Controls store={store} group={group} submitOnChange={submitOnChange} />
+        <Controls group={group} submitOnChange={submitOnChange} />
       </ExpandableSection>
     )
-  })
+  }, [...Object.values(props), filters])
 }
-
-export default memo(FacetGroup)

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useMemo, useContext } from 'react'
+import SearchResultsContext from './SearchResultsContext'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { useObserver } from 'mobx-react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Vbox } from '../Box'
 import Image from '../Image'
@@ -79,16 +79,17 @@ const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFButtonFilterGroup' })
 
-export default function ButtonFilterGroup({ store, group, submitOnChange }) {
-  return useObserver(() => {
-    const {
-      pageData: { filters },
-      actions: { toggleFilter }
-    } = store
+export default function ButtonFilterGroup(props) {
+  const { group, submitOnChange } = props
+  const {
+    pageData: { filters },
+    actions: { toggleFilter }
+  } = useContext(SearchResultsContext)
 
-    const classes = useStyles()
+  const classes = useStyles()
 
-    return (
+  return useMemo(
+    () => (
       <div className={classes.root}>
         {group.facets.map((facet, i) => {
           let selected = filters.indexOf(facet.code) !== -1
@@ -139,6 +140,7 @@ export default function ButtonFilterGroup({ store, group, submitOnChange }) {
           )
         })}
       </div>
-    )
-  })
+    ),
+    [filters, ...Object.values(props)]
+  )
 }

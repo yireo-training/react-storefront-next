@@ -1,21 +1,23 @@
-import { useCallback } from 'react'
-import useLazyStore from './useLazyStore'
-import { runInAction } from 'mobx'
+import useLazyStore from '../hooks/useLazyStore2'
 import qs from 'qs'
 
 export default function useSearchResultsStore(lazyProps) {
-  const fetchMore = useCallback(() => {
-    runInAction(() => {
-      store.pageData.page++
+  const fetchMore = () => {
+    store = updateStore({
+      pageData: {
+        ...store.pageData,
+        page: store.pageData.page + 1
+      }
     })
+
     return refresh({ loading: false })
-  })
+  }
 
-  const clearFilters = useCallback(submit => {
+  const clearFilters = submit => {
     setFilters([], submit)
-  })
+  }
 
-  const toggleFilter = useCallback((facet, submit) => {
+  const toggleFilter = (facet, submit) => {
     const { code } = facet
     const { filters } = store.pageData
     const nextFilters = [...filters]
@@ -28,28 +30,36 @@ export default function useSearchResultsStore(lazyProps) {
     }
 
     setFilters(nextFilters, submit)
-  })
+  }
 
-  const setFilters = useCallback((filters, submit) => {
+  const setFilters = (filters, submit) => {
     const { appliedFilters } = store.pageData
     const filtersChanged =
       JSON.stringify(filters.map(v => v.toLowerCase()).sort()) !==
       JSON.stringify(appliedFilters.map(v => v.toLowerCase()).sort())
 
-    runInAction(() => {
-      Object.assign(store.pageData, {
+    store = updateStore({
+      ...store,
+      pageData: {
+        ...store.pageData,
         filters,
         filtersChanged
-      })
-
-      if (submit) {
-        applyFilters()
       }
     })
-  })
 
-  const applyFilters = useCallback(() => {
-    store.pageData.page = 0
+    if (submit) {
+      applyFilters()
+    }
+  }
+
+  const applyFilters = () => {
+    store = updateStore({
+      ...store,
+      pageData: {
+        ...store.pageData,
+        page: 0
+      }
+    })
 
     const { filters } = store.pageData
     const { pathname, search, hash } = window.location
@@ -68,9 +78,9 @@ export default function useSearchResultsStore(lazyProps) {
     )
 
     refresh({ loading: true })
-  })
+  }
 
-  const refresh = useCallback(async ({ loading } = {}) => {
+  const refresh = async ({ loading } = {}) => {
     const { page, filters, id } = store.pageData
     const query = { page }
 
@@ -80,22 +90,30 @@ export default function useSearchResultsStore(lazyProps) {
 
     const url = `/api/s/${encodeURIComponent(id)}?${qs.stringify(query)}`
 
-    runInAction(() => {
-      store.reloading = loading
+    console.log('before refresh', store)
+
+    store = updateStore({
+      ...store,
+      reloading: loading
     })
+
+    console.log('after refresh', store)
 
     const result = await fetch(url).then(res => res.json())
 
-    runInAction(() => {
-      store.reloading = false
-      store.pageData.appliedFilters = filters
-      store.pageData.filtersChanged = false
-      store.pageData.products =
-        page === 0 ? result.products : store.pageData.products.concat(result.products)
+    store = updateStore({
+      ...store,
+      reloading: false,
+      pageData: {
+        ...store.pageData,
+        appliedFilters: filters,
+        filtersChanged: false,
+        products: page === 0 ? result.products : store.pageData.products.concat(result.products)
+      }
     })
-  })
+  }
 
-  const store = useLazyStore(lazyProps, {
+  let [store, updateStore] = useLazyStore(lazyProps, {
     reloading: false,
     pageData: {
       page: 0,
@@ -111,5 +129,5 @@ export default function useSearchResultsStore(lazyProps) {
     }
   })
 
-  return store
+  return [store, updateStore]
 }

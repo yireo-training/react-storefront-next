@@ -4,7 +4,7 @@ import Link from 'react-storefront/Link'
 import Lazy from 'react-storefront/Lazy'
 import ButtonSelector from 'react-storefront/ButtonSelector'
 import QuantitySelector from 'react-storefront/QuantitySelector'
-import useLazyStore2 from 'react-storefront/hooks/useLazyStore2'
+import useLazyStore from 'react-storefront/hooks/useLazyStore'
 import Accordion from 'react-storefront/Accordion'
 import ExpandableSection from 'react-storefront/ExpandableSection'
 import fetchProps from 'react-storefront/props/fetchProps'
@@ -32,11 +32,11 @@ const styles = theme => ({
 const useStyles = makeStyles(styles)
 
 const Product = React.memo(lazyProps => {
-  const [store, updateStore] = useLazyStore2(lazyProps, { quantity: 1 })
+  const [store, updateStore] = useLazyStore(lazyProps, { pageData: { quantity: 1 } })
   const classes = useStyles()
-  const { loading, pageData } = store
-  const { product } = pageData
+  const { pageData } = store
   const { thumbnail } = useContext(PWAContext)
+  const { product } = pageData
 
   return (
     <Container maxWidth="lg">
@@ -73,8 +73,9 @@ const Product = React.memo(lazyProps => {
                   value={pageData.color}
                   onSelectionChange={(_e, color) => {
                     updateStore({
+                      ...store,
                       pageData: {
-                        ...store.pageData,
+                        ...pageData,
                         color
                       }
                     })
@@ -101,7 +102,15 @@ const Product = React.memo(lazyProps => {
                 <Label>QTY:</Label>
                 <QuantitySelector
                   value={pageData.quantity}
-                  onChange={quantity => updateStore({ pageData: { ...store.pageData, quantity } })}
+                  onChange={quantity =>
+                    updateStore({
+                      ...store,
+                      pageData: {
+                        ...pageData,
+                        quantity
+                      }
+                    })
+                  }
                 />
               </Hbox>
             )}

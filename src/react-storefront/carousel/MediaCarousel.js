@@ -72,10 +72,6 @@ function MediaCarousel(props) {
   const ref = useRef(null)
   const [over, setOver] = useState(false)
 
-  require('../hooks/useTraceUpdate').default(props)
-
-  console.log('render media')
-
   if (product) {
     media = product.media
   }
