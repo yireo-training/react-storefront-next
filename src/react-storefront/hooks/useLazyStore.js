@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext } from 'react'
+import { useEffect, useRef, useState, useContext, useCallback } from 'react'
 import Router from 'next/router'
 import merge from 'lodash/merge'
 import PWAContext from '../PWAContext'
@@ -12,7 +12,12 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
     merge(additionalData, skeletonProps, props, { loading: lazyProps.lazy != null, pageData: {} })
   )
 
+  const stateRef = useRef(state)
   const isLazy = lazyProps.lazy && lazyProps.lazy.then ? true : false
+
+  useEffect(() => {
+    stateRef.current = state
+  }, [state])
 
   useEffect(() => {
     if (isLazy) {
@@ -22,24 +27,15 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
     }
   }, [])
 
-  const recordState = () => {
-    const uri = location.pathname + location.search + location.hash
-
-    const historyState = {
-      ...history.state,
-      rsf: { [uri]: state.pageData }
-    }
-
-    history.replaceState(historyState, document.title, uri)
-  }
-
   // save the page state in history.state before navigation
-  const onHistoryChange = (...args) => {
+  const onHistoryChange = useCallback(() => {
     if (!goingBack.current) {
-      recordState()
+      const uri = location.pathname + location.search + location.hash
+      const historyState = { ...history.state, rsf: { [uri]: stateRef.current.pageData } }
+      history.replaceState(historyState, document.title, uri)
       goingBack.current = false
     }
-  }
+  })
 
   useEffect(() => {
     Router.beforePopState(() => {

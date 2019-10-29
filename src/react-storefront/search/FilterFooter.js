@@ -21,7 +21,7 @@ export const styles = theme => ({
 const useStyles = makeStyles(styles, { name: 'RSFFilterFooter' })
 
 export default function FilterFooter(props) {
-  let { classes, store, submitOnChange, onViewResultsClick } = props
+  let { classes, submitOnChange, onViewResultsClick } = props
   classes = useStyles({ classes })
 
   const {

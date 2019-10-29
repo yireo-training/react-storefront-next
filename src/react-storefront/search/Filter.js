@@ -1,9 +1,10 @@
-import React, { memo } from 'react'
+import React, { useContext, memo } from 'react'
 import PropTypes from 'prop-types'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import FacetGroup from './FacetGroup'
 import FilterHeader from './FilterHeader'
 import FilterFooter from './FilterFooter'
+import SearchResultsContext from './SearchResultsContext'
 
 /**
  * UI for filtering an instance of SearchResultModelBase.  This component can be used on its own, or you can use
@@ -26,9 +27,8 @@ export const styles = theme => ({
 
 const useStyles = makeStyles(styles, { name: 'RSFFilter' })
 
-export default function Filter({
+function Filter({
   expandAll,
-  store,
   hideClearLink,
   clearLinkText,
   submitOnChange,
@@ -41,7 +41,7 @@ export default function Filter({
 
   const {
     pageData: { facets }
-  } = store
+  } = useContext(SearchResultsContext)
 
   return (
     <div style={style} className={classes.root}>
@@ -68,11 +68,6 @@ export default function Filter({
 }
 
 Filter.propTypes = {
-  /**
-   * A store returned from `react-storefront/hooks/useSearchResultsStore`
-   */
-  store: PropTypes.object.isRequired,
-
   /**
    * CSS classes
    */
@@ -110,3 +105,5 @@ Filter.defaultProps = {
   onViewResultsClick: Function.prototype,
   submitOnChange: false
 }
+
+export default memo(Filter)

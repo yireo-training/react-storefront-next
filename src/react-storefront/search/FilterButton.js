@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, memo } from 'react'
+import React, { useEffect, useState, useCallback, memo, useContext } from 'react'
 import ActionButton from '../ActionButton'
 import Filter from './Filter'
 import PropTypes from 'prop-types'
@@ -7,6 +7,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useRouter } from 'next/router'
 import qs from 'qs'
 import { useAmp } from 'next/amp'
+import SearchResultsContext from './SearchResultsContext'
 
 export const styles = theme => ({
   drawer: {
@@ -22,7 +23,6 @@ const useStyles = makeStyles(styles, { name: 'RSFFilterButton' })
  */
 function FilterButton({
   classes,
-  store,
   title,
   drawerProps,
   hideClearLink,
@@ -32,8 +32,12 @@ function FilterButton({
 }) {
   classes = useStyles({ classes })
 
+  const {
+    pageData: { filters, facets },
+    actions
+  } = useContext(SearchResultsContext)
+
   const [state, setState] = useState({ open: false, loading: false, mountDrawer: false })
-  const { filters, facets } = store.pageData
   const { open, mountDrawer, loading } = state
   const { clear, clearDisabled, drawer, ...buttonClasses } = useStyles(classes)
   const router = useRouter()
@@ -62,7 +66,7 @@ function FilterButton({
 
   const handleViewResultsClick = useCallback(() => {
     toggleOpen(false)
-    store.actions.applyFilters()
+    actions.applyFilters()
   })
 
   const getFilterList = () => {
@@ -109,7 +113,6 @@ function FilterButton({
         >
           {mountDrawer && (
             <Filter
-              store={store}
               loading={loading}
               setLoading={() => setState({ ...state, loading })}
               onViewResultsClick={handleViewResultsClick}

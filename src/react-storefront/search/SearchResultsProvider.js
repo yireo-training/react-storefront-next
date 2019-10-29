@@ -28,6 +28,9 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     updateStore(store)
   }
 
+  /**
+   * Fetches the next page of results
+   */
   const fetchMore = () => {
     setState({
       pageData: {
@@ -36,13 +39,22 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
       }
     })
 
-    return refresh({ loading: false })
+    return refresh()
   }
 
+  /**
+   * Removes all filters
+   * @param {Boolean} submit If true, fetches new results from the server
+   */
   const clearFilters = submit => {
     setFilters([], submit)
   }
 
+  /**
+   * Switches the state of a filter
+   * @param {Object} facet
+   * @param {Boolean} submit If true, fetches new results from the server
+   */
   const toggleFilter = (facet, submit) => {
     const { code } = facet
     const { filters } = store.pageData
@@ -58,6 +70,11 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     setFilters(nextFilters, submit)
   }
 
+  /**
+   * Updates the set of selected filters
+   * @param {Object[]} filters
+   * @param {Boolean} submit If true, fetches new results from the server
+   */
   const setFilters = (filters, submit) => {
     const { appliedFilters } = store.pageData
     const filtersChanged =
@@ -77,6 +94,9 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     }
   }
 
+  /**
+   * Applies the selected filters, resets the page to 0 and fetches new results from the server.
+   */
   const applyFilters = () => {
     setState({
       pageData: {
@@ -85,9 +105,12 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
       }
     })
 
-    refresh({ loading: true })
+    refresh()
   }
 
+  /**
+   * Computes the URL for the current state of the search controls
+   */
   const getURLForState = () => {
     const { filters, page, sort } = store.pageData
     const { pathname, search, hash } = window.location
@@ -114,14 +137,18 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     return pathname + qs.stringify(query, { addQueryPrefix: true }) + hash
   }
 
-  const refresh = async ({ loading } = {}) => {
+  /**
+   * Fetches new results from the server
+   * @param {Object} options
+   */
+  const refresh = async () => {
     const url = getURLForState()
 
     history.replaceState(history.state, document.title, url)
 
-    setState({
-      reloading: loading
-    })
+    if (store.pageData.page === 0) {
+      setState({ reloading: true })
+    }
 
     const {
       pageData: { products }
@@ -136,22 +163,31 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     })
   }
 
-  const context = {
-    ...store,
-    actions: {
-      fetchMore,
-      toggleFilter,
-      clearFilters,
-      applyFilters
-    }
-  }
-
-  return <SearchResultsContext.Provider value={context}>{children}</SearchResultsContext.Provider>
+  return (
+    <SearchResultsContext.Provider
+      value={{
+        ...store,
+        actions: {
+          fetchMore,
+          toggleFilter,
+          clearFilters,
+          applyFilters
+        }
+      }}
+    >
+      {children}
+    </SearchResultsContext.Provider>
+  )
 }
 
 SearchResultsProvider.propTypes = {
   /**
    * A store returned from `react-storefront/search/useSearchResultsStore`.
    */
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired,
+
+  /**
+   * The update function returned from `react-storefront/search/useSearchResultsStore`.
+   */
+  updateStore: PropTypes.func.isRequired
 }
