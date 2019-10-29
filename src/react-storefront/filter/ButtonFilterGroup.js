@@ -42,6 +42,13 @@ const styles = theme => ({
     backgroundColor: 'rgba(0, 0, 0, 0.08)',
     minWidth: 0
   },
+  '@media (hover: none)': {
+    imageButton: {
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)'
+      }
+    }
+  },
   checkMark: {
     transition: 'opacity 0.1s linear',
     opacity: 0,

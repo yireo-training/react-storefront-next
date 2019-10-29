@@ -29,7 +29,7 @@ export const styles = theme => ({
     padding: 0
   },
   input: {
-    color: theme.typography.body1.color,
+    color: theme.palette.text.primary,
     textAlign: 'center',
     padding: 0
   },

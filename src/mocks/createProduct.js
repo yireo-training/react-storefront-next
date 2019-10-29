@@ -49,25 +49,19 @@ export default function createProduct(id) {
         }
       }
     ],
-    colors: {
-      options: [
-        {
-          id: 'red',
-          text: 'RED'
-        },
-        {
-          id: 'blue',
-          text: 'BLUE'
-        },
-        {
-          id: 'green',
-          text: 'GREEN'
-        }
-      ],
-      selected: {
+    colors: [
+      {
         id: 'red',
         text: 'RED'
+      },
+      {
+        id: 'blue',
+        text: 'BLUE'
+      },
+      {
+        id: 'green',
+        text: 'GREEN'
       }
-    }
+    ]
   }
 }

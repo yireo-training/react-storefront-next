@@ -104,8 +104,8 @@ Carousel.propTypes = {
    * on non-touch devices, 'all' to always show arrows.
    */
   arrows: PropTypes.oneOf([false, 'desktop', 'all']),
-  aboveAdornments: PropTypes.arrayOf([PropTypes.element]),
-  belowAdornments: PropTypes.arrayOf([PropTypes.element])
+  aboveAdornments: PropTypes.arrayOf(PropTypes.element),
+  belowAdornments: PropTypes.arrayOf(PropTypes.element)
 }
 
 Carousel.defaultProps = {

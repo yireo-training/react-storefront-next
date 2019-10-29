@@ -1,11 +1,10 @@
 import { useContext } from 'react'
-import { useObserver } from 'mobx-react'
 import { Container, Grid, Typography, Paper, Divider } from '@material-ui/core'
 import Link from 'react-storefront/Link'
 import Lazy from 'react-storefront/Lazy'
 import ButtonSelector from 'react-storefront/ButtonSelector'
 import QuantitySelector from 'react-storefront/QuantitySelector'
-import useLazyStore from 'react-storefront/hooks/useLazyStore'
+import useLazyStore2 from 'react-storefront/hooks/useLazyStore2'
 import Accordion from 'react-storefront/Accordion'
 import ExpandableSection from 'react-storefront/ExpandableSection'
 import fetchProps from 'react-storefront/props/fetchProps'
@@ -33,119 +32,122 @@ const styles = theme => ({
 const useStyles = makeStyles(styles)
 
 const Product = React.memo(lazyProps => {
-  const store = useLazyStore(lazyProps, { quantity: 1 })
+  const [store, updateStore] = useLazyStore2(lazyProps, { quantity: 1 })
+  const classes = useStyles()
+  const { loading, pageData } = store
+  const { product } = pageData
+  const { thumbnail } = useContext(PWAContext)
 
-  return useObserver(() => {
-    const classes = useStyles()
-    const { loading, pageData: product } = store
-    const { thumbnail } = useContext(PWAContext)
-
-    return (
-      <Container maxWidth="lg">
-        <Grid spacing={2} container>
-          <Grid item xs={12}>
-            <Link href="/s/[subcategoryId]" as="/s/1">
-              Subcategory 1
-            </Link>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6" component="h1">
-              {product ? product.name : <Skeleton style={{ height: '1em' }} />}
-            </Typography>
-          </Grid>
+  return (
+    <Container maxWidth="lg">
+      <Grid spacing={2} container>
+        <Grid item xs={12}>
+          <Link href="/s/[subcategoryId]" as="/s/1">
+            Subcategory 1
+          </Link>
         </Grid>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={5}>
-            <MediaCarousel
-              className={classes.carousel}
-              product={product}
-              thumbnail={thumbnail.current}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={7}>
-            <Row>
-              {product ? (
-                <>
-                  <Hbox style={{ marginBottom: 10 }}>
-                    <Label>COLOR: </Label>
-                    <Typography>{product.colors.selected.text}</Typography>
-                  </Hbox>
-                  <ButtonSelector
-                    options={product.colors.options}
-                    value={product.colors.selected}
-                    onSelectionChange={(_e, color) => {
-                      product.colors.selected = color
-                    }}
-                  />
-                </>
-              ) : (
-                <div>
-                  <Skeleton style={{ height: 14 }}></Skeleton>
-                  <Hbox>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                  </Hbox>
-                </div>
-              )}
-            </Row>
-            <Row>
-              <Divider />
-            </Row>
-            <Row>
-              {product && (
-                <Hbox>
-                  <Label>QTY:</Label>
-                  <QuantitySelector
-                    value={product.quantity}
-                    onChange={q => (product.quantity = q)}
-                  />
+        <Grid item xs={12}>
+          <Typography variant="h6" component="h1">
+            {product ? product.name : <Skeleton style={{ height: '1em' }} />}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={5}>
+          <MediaCarousel
+            className={classes.carousel}
+            product={product}
+            thumbnail={thumbnail.current}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={7}>
+          <Row>
+            {product ? (
+              <>
+                <Hbox style={{ marginBottom: 10 }}>
+                  <Label>COLOR: </Label>
+                  <Typography>{pageData.color.text}</Typography>
                 </Hbox>
-              )}
-            </Row>
-            <Row>
-              <TabPanel>
-                <CmsSlot label="Description">Description</CmsSlot>
-                <CmsSlot label="Specs">Test</CmsSlot>
-                <div label="Reviews">
-                  {['here', 'here2', 'here3'].map((review, i) => (
-                    <Paper key={i}>{review}</Paper>
-                  ))}
-                </div>
-              </TabPanel>
-            </Row>
-            <Row>
-              <Accordion>
-                <ExpandableSection expanded title="First">
-                  <div>The first section</div>
-                </ExpandableSection>
-                <ExpandableSection title="Second">
-                  <div>The second section</div>
-                </ExpandableSection>
-                <ExpandableSection title="Third">
-                  <div>The third section</div>
-                </ExpandableSection>
-              </Accordion>
-            </Row>
-            <Row>
+                <ButtonSelector
+                  options={product.colors}
+                  value={pageData.color}
+                  onSelectionChange={(_e, color) => {
+                    updateStore({
+                      pageData: {
+                        ...store.pageData,
+                        color
+                      }
+                    })
+                  }}
+                />
+              </>
+            ) : (
+              <div>
+                <Skeleton style={{ height: 14 }}></Skeleton>
+                <Hbox>
+                  <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                  <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                  <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                </Hbox>
+              </div>
+            )}
+          </Row>
+          <Row>
+            <Divider />
+          </Row>
+          <Row>
+            {product && (
+              <Hbox>
+                <Label>QTY:</Label>
+                <QuantitySelector
+                  value={pageData.quantity}
+                  onChange={quantity => updateStore({ pageData: { ...store.pageData, quantity } })}
+                />
+              </Hbox>
+            )}
+          </Row>
+          <Row>
+            <TabPanel>
+              <CmsSlot label="Description">Description</CmsSlot>
+              <CmsSlot label="Specs">Test</CmsSlot>
+              <div label="Reviews">
+                {['here', 'here2', 'here3'].map((review, i) => (
+                  <Paper key={i}>{review}</Paper>
+                ))}
+              </div>
+            </TabPanel>
+          </Row>
+          <Row>
+            <Accordion>
               <ExpandableSection expanded title="First">
-                <div>The first no accordion section</div>
+                <div>The first section</div>
               </ExpandableSection>
               <ExpandableSection title="Second">
-                <div>The second no accordion section</div>
+                <div>The second section</div>
               </ExpandableSection>
-            </Row>
-          </Grid>
-          <div style={{ height: 500 }}></div>
-          <Grid item xs={12}>
-            <Lazy style={{ minHeight: 200 }}>
-              <div>Lazy content</div>
-            </Lazy>
-          </Grid>
+              <ExpandableSection title="Third">
+                <div>The third section</div>
+              </ExpandableSection>
+            </Accordion>
+          </Row>
+          <Row>
+            <ExpandableSection expanded title="First">
+              <div>The first no accordion section</div>
+            </ExpandableSection>
+            <ExpandableSection title="Second">
+              <div>The second no accordion section</div>
+            </ExpandableSection>
+          </Row>
         </Grid>
-      </Container>
-    )
-  })
+        <div style={{ height: 500 }}></div>
+        <Grid item xs={12}>
+          <Lazy style={{ minHeight: 200 }}>
+            <div>Lazy content</div>
+          </Lazy>
+        </Grid>
+      </Grid>
+    </Container>
+  )
 })
 
 Product.getInitialProps = fetchProps(

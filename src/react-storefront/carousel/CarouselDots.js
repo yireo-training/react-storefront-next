@@ -37,8 +37,6 @@ export default function CarouselDots({ count, selected, classes }) {
   const dots = []
   classes = useStyles({ classes })
 
-  console.log('selected', selected)
-
   for (let i = 0; i < count; i++) {
     dots.push(
       <div

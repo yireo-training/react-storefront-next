@@ -65,19 +65,16 @@ const useStyles = makeStyles(styles, { name: 'RSFMediaCarousel' })
  *  />
  * ```
  */
-export default function MediaCarousel({
-  product,
-  thumbnail,
-  media,
-  imageProps,
-  classes,
-  magifyProps,
-  ...others
-}) {
+function MediaCarousel(props) {
+  let { product, thumbnail, media, imageProps, classes, magifyProps, ...others } = props
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const styles = useStyles({ classes })
   const ref = useRef(null)
   const [over, setOver] = useState(false)
+
+  require('../hooks/useTraceUpdate').default(props)
+
+  console.log('render media')
 
   if (product) {
     media = product.media
@@ -113,16 +110,16 @@ export default function MediaCarousel({
       firstImage.addEventListener('load', onFullSizeImagesLoaded)
       return () => firstImage.removeEventListener('load', onFullSizeImagesLoaded)
     }
-  }, media && media[0])
+  }, [(media && media[0]) || {}])
 
   const belowAdornments = []
 
   if (thumbnail && !imagesLoaded) {
-    belowAdornments.push(<Image className={styles.thumbnail} fill {...thumbnail} />)
+    belowAdornments.push(<Image key="thumbnail" className={styles.thumbnail} fill {...thumbnail} />)
   }
 
   if (media && media.some(item => item.magnify)) {
-    belowAdornments.push(<MagnifyHint over={over} />)
+    belowAdornments.push(<MagnifyHint key="magnify-hint" over={over} />)
   }
 
   return (
@@ -137,6 +134,7 @@ export default function MediaCarousel({
       {media &&
         media.map((item, i) => (
           <Media
+            key={i}
             onLoad={i === 0 ? onFullSizeImagesLoaded : null}
             magifyProps={magifyProps}
             {...item}
@@ -170,3 +168,5 @@ function Media({ magifyProps, imageProps, src, alt, magnify, type = 'image' }) {
 MediaCarousel.defaultProps = {
   magifyProps: {}
 }
+
+export default React.memo(MediaCarousel)

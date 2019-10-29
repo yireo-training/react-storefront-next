@@ -44,7 +44,7 @@ export default function useLazyProps(props, updateState) {
       const { lazy } = props
 
       lazy.then(props => {
-        updateState({ loading: false, props })
+        updateState({ ...props, loading: false })
       })
     }
   }, [props])

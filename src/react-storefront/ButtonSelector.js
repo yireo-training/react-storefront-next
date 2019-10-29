@@ -162,6 +162,8 @@ function Option({
   onSelectionChange,
   name
 }) {
+  if (!value) value = {}
+
   const selected = value.id === option.id
   let children = option.text
 
