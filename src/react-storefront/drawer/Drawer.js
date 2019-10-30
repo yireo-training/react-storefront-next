@@ -7,22 +7,23 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import clsx from 'clsx'
 import makeStyles from '@material-ui/core/styles/makeStyles'
+import useTheme from '@material-ui/core/styles/useTheme'
 import { useAmp } from 'next/amp'
-import AMPContext from './AMPContext'
+import AMPContext from '../AMPContext'
+import DrawerCloseButton from './DrawerCloseButton'
 
 /**
  * A slide-in drawer with fab close button.
  */
 export const styles = theme => ({
-  root: {
-    zIndex: theme.zIndex.modal + 10
+  root: {},
+
+  fullscreen: {
+    height: '100vh'
   },
 
-  closeButton: {
-    position: 'absolute',
-    right: '10px',
-    top: '-28px',
-    zIndex: 1
+  header: {
+    position: 'relative'
   },
 
   container: {
@@ -69,13 +70,16 @@ export default function Drawer({
   onRequestClose,
   title,
   children,
+  className,
   classes,
   autoAdjustBodyPadding,
   anchor,
+  fullscreen,
   ...rest
 }) {
   classes = useStyles({ classes })
 
+  const theme = useTheme()
   const amp = useAmp()
   const { ampStateId } = useContext(AMPContext)
   const drawer = useRef(null)
@@ -114,19 +118,27 @@ export default function Drawer({
     }
   }, [])
 
-  useEffect(() => {
-    if (open) {
-      setPadding()
-    } else {
-      closeDrawer()
-    }
-  }, [open])
+  // useEffect(() => {
+  //   if (open) {
+  //     setPadding()
+  //   } else {
+  //     closeDrawer()
+  //   }
+  // }, [open])
 
   return (
     <MUIDrawer
+      elevation={2}
       anchor={anchor}
+      style={{
+        zIndex: theme.zIndex.modal + 20
+      }}
       classes={{
-        root: classes.root,
+        root: clsx({
+          className,
+          [classes.root]: true,
+          [classes.fullscreen]: fullscreen
+        }),
         paper: clsx({
           [classes.paper]: true,
           [classes.ampClosed]: amp && !open
@@ -139,33 +151,20 @@ export default function Drawer({
       }
       open={(amp && variant === 'temporary') || open}
       variant={variant}
-      onClose={onRequestClose && onRequestClose}
+      onClose={onRequestClose}
       {...rest}
     >
       <div className={classes.container} ref={drawer}>
-        {title && (
-          <Typography className={classes.title} variant="h6" component="div">
-            {title}
-          </Typography>
-        )}
-
-        {showCloseButton && anchor === 'bottom' && (
-          <Fab
-            color="primary"
-            className={classes.closeButton}
-            onClick={closeDrawer}
-            style={{ display: open ? '' : 'none' }}
-            on={
-              ampBindClosed
-                ? `tap:AMP.setState({ ${ampStateId}: { ${ampBindClosed}: true }})`
-                : null
-            }
-            {...closeButtonProps}
-          >
-            <Close />
-          </Fab>
-        )}
-
+        <div className={classes.header}>
+          {title && (
+            <Typography className={classes.title} variant="h6" component="div">
+              {title}
+            </Typography>
+          )}
+          {showCloseButton && anchor === 'bottom' && (
+            <DrawerCloseButton onClick={closeDrawer} fullscreen={fullscreen} />
+          )}
+        </div>
         <div className={classes.content}>{children}</div>
       </div>
     </MUIDrawer>

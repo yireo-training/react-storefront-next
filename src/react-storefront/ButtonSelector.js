@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
-import Image from './Image'
 import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import clsx from 'clsx'
 import { useAmp } from 'next/amp'
 import SwatchButton from './SwatchButton'
+import withDefaultHandler from './utils/withDefaultHandler'
 
 export const styles = theme => ({
   buttons: {
@@ -118,31 +118,19 @@ function Option({
 }) {
   if (!value) value = {}
 
-  if (!onSelectionChange) {
-    onSelectionChange = (_e, value) => {
-      if (updateStore && name) {
-        updateStore(store => ({
-          ...store,
-          pageData: {
-            ...store.pageData,
-            [name]: value
-          }
-        }))
-      }
-    }
-  }
-
   const selected = value.id === option.id
 
-  function handleClick(e, item) {
-    if (onSelectionChange) {
-      onSelectionChange(e, item, index)
-
-      if (e.isDefaultPrevented()) {
-        return
-      }
+  const handleClick = withDefaultHandler(onSelectionChange, (_e, value) => {
+    if (updateStore && name) {
+      updateStore(store => ({
+        ...store,
+        pageData: {
+          ...store.pageData,
+          [name]: value
+        }
+      }))
     }
-  }
+  })
 
   const props = {
     onClick: e => handleClick(e, option),

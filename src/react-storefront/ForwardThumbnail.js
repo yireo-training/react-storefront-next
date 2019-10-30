@@ -9,7 +9,6 @@ export default function ForwardThumbnail({ children }) {
 
   const handleClick = useCallback(() => {
     const src = ref.current.querySelector('img').getAttribute('src')
-    console.log('thumbnail', src)
     context.thumbnail.current = { src }
   })
 

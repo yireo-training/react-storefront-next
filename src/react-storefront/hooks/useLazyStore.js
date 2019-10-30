@@ -5,6 +5,8 @@ import PWAContext from '../PWAContext'
 import fetch from 'isomorphic-unfetch'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
+  const { skeletonProps } = useContext(PWAContext)
+
   const createInitialState = () => {
     return merge(additionalData, { pageData: skeletonProps }, props, {
       loading: lazyProps.lazy != null,
@@ -12,7 +14,6 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
     })
   }
 
-  const { skeletonProps } = useContext(PWAContext)
   const { lazy, url, ...props } = lazyProps
   const goingBack = useRef(false)
   const [state, setState] = useState(createInitialState)
@@ -36,9 +37,7 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   // save the page state in history.state before navigation
   const onHistoryChange = useCallback(() => {
     if (!goingBack.current) {
-      const uri = location.pathname + location.search + location.hash
-      const historyState = { ...history.state, rsf: { [uri]: stateRef.current.pageData } }
-      history.replaceState(historyState, document.title, uri)
+      recordState(stateRef.current.pageData)
       goingBack.current = false
     }
   })
@@ -54,4 +53,14 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   }, [])
 
   return [state, setState]
+}
+
+/**
+ * Records the page state in history.state.rsf[uri]
+ * @param {Object} state The page state
+ */
+function recordState(state) {
+  const as = location.pathname + location.search + location.hash
+  const historyState = { ...history.state, as, rsf: { [as]: state } }
+  history.replaceState(historyState, document.title, as)
 }

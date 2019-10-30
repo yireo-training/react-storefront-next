@@ -28,22 +28,17 @@ export default function FilterFooter(props) {
     pageData: { filters, filtersChanged }
   } = useContext(SearchResultsContext)
 
-  if (!filters) return null
+  if (!filters || !filtersChanged || submitOnChange) return null
 
-  return useMemo(
-    () =>
-      filtersChanged &&
-      !submitOnChange && (
-        <Hbox className={classes.root} justify="space-between">
-          <Typography variant="subtitle1" className={classes.itemsFound}>
-            {filters.length || 'No'} filter
-            {filters.length === 1 ? '' : 's'} selected
-          </Typography>
-          <Button variant="contained" size="large" color="default" onClick={onViewResultsClick}>
-            View Results
-          </Button>
-        </Hbox>
-      ),
-    [...Object.values(props), filters, filtersChanged]
+  return (
+    <Hbox className={classes.root} justify="space-between">
+      <Typography variant="subtitle1" className={classes.itemsFound}>
+        {filters.length || 'No'} filter
+        {filters.length === 1 ? '' : 's'} selected
+      </Typography>
+      <Button variant="contained" size="large" color="default" onClick={onViewResultsClick}>
+        View Results
+      </Button>
+    </Hbox>
   )
 }
