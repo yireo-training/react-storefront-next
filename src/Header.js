@@ -4,7 +4,7 @@ import AppBar from 'react-storefront/AppBar'
 import Spacer from 'react-storefront/Spacer'
 import CartButton from 'react-storefront/CartButton'
 import Logo from '../src/assets/react-storefront-logo.svg'
-import SearchButton from 'react-storefront/search/SearchButton'
+import SearchButton from 'react-storefront/plp/SearchButton'
 import Hidden from '@material-ui/core/Hidden'
 
 const useStyles = makeStyles(theme => ({

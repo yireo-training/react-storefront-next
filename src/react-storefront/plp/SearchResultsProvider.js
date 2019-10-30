@@ -7,9 +7,9 @@ import qs from 'qs'
  * Provides context to filter, sorting, and pagination components.
  *
  * ```js
- *  import useSearchResultsStore from 'react-storefront/search/useSearchResultsStore'
- *  import SearchResultsProvider from 'react-storefront/search/SearchResultsProvider'
- *  import FilterButton from 'react-storefront/search/FilterButton'
+ *  import useSearchResultsStore from 'react-storefront/plp/useSearchResultsStore'
+ *  import SearchResultsProvider from 'react-storefront/plp/SearchResultsProvider'
+ *  import FilterButton from 'react-storefront/plp/FilterButton'
  *
  *  function Subcategory(lazyProps) {
  *    const [store, updateStore] = useSearchResultsStore(lazyProps)
@@ -184,12 +184,12 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
 
 SearchResultsProvider.propTypes = {
   /**
-   * A store returned from `react-storefront/search/useSearchResultsStore`.
+   * A store returned from `react-storefront/plp/useSearchResultsStore`.
    */
   store: PropTypes.object.isRequired,
 
   /**
-   * The update function returned from `react-storefront/search/useSearchResultsStore`.
+   * The update function returned from `react-storefront/plp/useSearchResultsStore`.
    */
   updateStore: PropTypes.func.isRequired
 }
