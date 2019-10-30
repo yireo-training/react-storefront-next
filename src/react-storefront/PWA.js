@@ -1,16 +1,27 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import PWAContext from './PWAContext'
 import AMPContext from './AMPContext'
-import { useObserver } from 'mobx-react'
 import Router from 'next/router'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
 import './profile'
 import './hooks/useTraceUpdate'
+import makeStyles from '@material-ui/core/styles/makeStyles'
 
 const ampContextValue = { ampStateId: 'rsf' }
 
+export const styles = theme => ({
+  '@global': {
+    body: {
+      '-webkit-tap-highlight-color': 'transparent'
+    }
+  }
+})
+
+const useStyles = makeStyles(styles, { name: 'RSFPWA' })
+
 export default function PWA({ children, errorReporter }) {
+  const classes = useStyles()
   const thumbnail = useRef(null)
   const skeletonProps = useRef(null)
 
@@ -48,15 +59,13 @@ export default function PWA({ children, errorReporter }) {
     }
   }, [])
 
-  return useObserver(() => {
-    return (
-      <PWAContext.Provider value={app}>
-        <AMPContext.Provider value={ampContextValue}>
-          <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
-        </AMPContext.Provider>
-      </PWAContext.Provider>
-    )
-  })
+  return (
+    <PWAContext.Provider value={app}>
+      <AMPContext.Provider value={ampContextValue}>
+        <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
+      </AMPContext.Provider>
+    </PWAContext.Provider>
+  )
 }
 
 PWA.propTypes = {

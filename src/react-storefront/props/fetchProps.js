@@ -10,7 +10,7 @@ export default function fetchProps(createAPIURL) {
 async function createLazyProps(as, apiURL) {
   const doFetch = (onlyHit = false) => {
     const headers = {
-      'x-rsf-api-version': '1'
+      'x-rsf-api-version': process.env.RSF_API_VERSION
     }
 
     if (onlyHit) {
@@ -34,18 +34,15 @@ async function createLazyProps(as, apiURL) {
       // going back or forward
       return { key: as, pageData: rsf[as] }
     } else {
-      // normal client side navigation, fetch from network
-      return { key: as, lazy: doFetch().then(res => res.json()) }
+      const res = await doFetch(true)
 
-      // const res = await doFetch(true)
-
-      // if (res.status === 204) {
-      //   // response not found in browser cache, fetch from the network and return lazy props
-      //   return { lazy: doFetch().then(res => res.json()) }
-      // } else {
-      //   // response was found in the cache, return immediately
-      //   return res.json()
-      // }
+      if (res.status === 204) {
+        // normal client side navigation, fetch from network
+        return { key: as, lazy: doFetch().then(res => res.json()) }
+      } else {
+        // response was found in the cache, return immediately
+        return res.json()
+      }
     }
   }
 }

@@ -50,6 +50,7 @@ function NavTab({ classes, href, as, children, ...props }) {
         as={as}
         onMouseEnter={showMenu}
         onMouseLeave={hideMenu}
+        prefetch="visible"
       >
         <Tab className={classes.tab} {...props} />
       </Link>

@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import clsx from 'clsx'
 import { useAmp } from 'next/amp'
+import SwatchButton from './SwatchButton'
 
 export const styles = theme => ({
   buttons: {
@@ -13,56 +14,9 @@ export const styles = theme => ({
     flexWrap: 'wrap',
     margin: '-4px'
   },
-  button: {
+  wrap: {
     position: 'relative',
-    '& button': {
-      border: `1px solid ${theme.palette.divider}`,
-      padding: 0,
-      margin: '4px',
-      width: '60px',
-      minWidth: '60px',
-      height: '40px',
-      minHeight: '40px',
-      boxShadow: 'none'
-    }
-  },
-  buttonWithImage: {
-    '& button': {
-      width: '50px',
-      minWidth: '50px',
-      height: '50px',
-      minHeight: '50px'
-    }
-  },
-  selectedImage: {
-    '& button': {
-      borderWidth: '2px',
-      borderColor: theme.typography.body1.color
-    }
-  },
-  selected: {
-    '& button': {
-      borderColor: theme.palette.primary.main,
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      '&:hover': {
-        borderColor: theme.palette.primary.main,
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText
-      }
-    }
-  },
-  imageLabel: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    padding: '5px'
-  },
-  image: {
-    height: '100%',
-    width: '100%'
+    margin: theme.spacing(0, 0.5, 0.5, 0)
   },
   disabled: {
     backgroundColor: '#f2f2f2',
@@ -156,7 +110,6 @@ function Option({
   classes,
   strikeThroughDisabled,
   strikeThroughAngle,
-  imageProps,
   buttonProps,
   ampStateId,
   onSelectionChange,
@@ -165,21 +118,6 @@ function Option({
   if (!value) value = {}
 
   const selected = value.id === option.id
-  let children = option.text
-
-  if (option.image) {
-    children = (
-      <Image
-        src={option.image}
-        className={classes.image}
-        fill
-        {...imageProps}
-        alt={option.alt || option.text}
-      />
-    )
-  } else if (option.color) {
-    children = <div className={classes.image} style={{ backgroundColor: option.color }} />
-  }
 
   function handleClick(e, item) {
     if (onSelectionChange) {
@@ -191,43 +129,42 @@ function Option({
     }
   }
 
-  function createButtonClass(isSelected, { image, color }) {
-    const { button, buttonWithImage, selectedImage, selected } = classes
-    const swatch = (image || color) != null
+  const props = {
+    onClick: e => handleClick(e, option),
+    'aria-label': option.text,
+    href: option.url,
+    disabled: option.disabled,
+    on: `tap:AMP.setState({ ${ampStateId}: { ${name}: { selected: ${JSON.stringify(
+      option
+    )} }, ${name}Interacted: true }})`,
+    ...buttonProps
+  }
 
+  function createButtonClass(selected) {
     return clsx({
-      [button]: true,
-      [buttonWithImage]: swatch,
-      [selectedImage]: isSelected && swatch,
-      [selected]: isSelected && !swatch
+      [classes.button]: true,
+      [classes.selected]: selected
     })
   }
 
   return (
-    <div
-      key={option.id}
-      className={createButtonClass(selected, option)}
-      amp-bind={`class=>${ampStateId}.${name}.selected.id=="${option.id}" ? "${createButtonClass(
-        true,
-        option
-      )}" : "${createButtonClass(false, option)}"`}
-    >
-      <Button
-        onClick={e => handleClick(e, option)}
-        aria-label={option.text}
-        href={option.url}
-        disabled={option.disabled}
-        on={`tap:AMP.setState({ ${ampStateId}: { ${name}: { selected: ${JSON.stringify(
-          option
-        )} }, ${name}Interacted: true }})`}
-        classes={{
-          label: option.image || option.color ? classes.imageLabel : null,
-          disabled: classes.disabled
-        }}
-        {...buttonProps}
-      >
-        {children}
-      </Button>
+    <div key={option.id} className={classes.wrap}>
+      {option.image || option.color ? (
+        <SwatchButton
+          selected={selected}
+          {...(option.image || {})}
+          color={option.color}
+          {...props}
+        />
+      ) : (
+        <Button
+          variant={selected ? 'contained' : 'outlined'}
+          color={selected ? 'primary' : 'default'}
+          {...props}
+        >
+          {option.text}
+        </Button>
+      )}
       {option.disabled && strikeThroughDisabled && (
         <div
           className={classes.strikeThrough}

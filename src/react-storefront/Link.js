@@ -1,7 +1,9 @@
-import React, { forwardRef, useContext } from 'react'
+import React, { forwardRef, useContext, useEffect, useRef } from 'react'
 import NextLink from 'next/link'
 import PWAContext from './PWAContext'
 import PropTypes from 'prop-types'
+import useIntersectionObserver from './hooks/useIntersectionObserver'
+import { prefetch as doPrefetch } from './serviceWorker'
 
 /**
  * Use this component for all Links in your React Storefront app.  You can
@@ -28,8 +30,10 @@ import PropTypes from 'prop-types'
  */
 const Link = forwardRef(function(props, ref) {
   const { as, href, prefetch, skeletonProps, onClick, anchorProps, ...other } = props
-
+  const internalRef = useRef(null)
   const app = useContext(PWAContext)
+
+  ref = ref || internalRef
 
   function handleClick(...args) {
     if (onClick) {
@@ -37,6 +41,17 @@ const Link = forwardRef(function(props, ref) {
     }
     app.skeletonProps = skeletonProps
   }
+
+  useIntersectionObserver(
+    () => (as && prefetch === 'visible' ? ref : null),
+    (visible, disconnect) => {
+      if (visible) {
+        disconnect()
+        doPrefetch(`/api${as}`)
+      }
+    },
+    [as, prefetch]
+  )
 
   return (
     <NextLink href={href} prefetch={false} as={as}>

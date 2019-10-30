@@ -8,7 +8,6 @@ import storeInitialPropsInHistory from '../src/react-storefront/router/storeInit
 import PWA from '../src/react-storefront/PWA'
 import Nav from '../src/Nav'
 import Menu from 'react-storefront/menu/Menu'
-import { registerSW } from 'react-storefront/serviceWorker'
 import createMenu from '../src/mocks/createMenu'
 import reportError from '../src/reportError'
 import MenuButton from '../src/react-storefront/menu/MenuButton'
@@ -17,7 +16,6 @@ import Router from 'next/router'
 
 const menu = createMenu()
 
-// registerSW()
 storeInitialPropsInHistory()
 
 const styles = theme => ({
@@ -58,12 +56,7 @@ export default function MyApp({ Component, pageProps }) {
         />
         <Nav />
         <main className={classes.main}>
-          {useMemo(
-            () => (
-              <Component {...pageProps} />
-            ),
-            [pageProps]
-          )}
+          <Component {...pageProps} />
         </main>
       </ThemeProvider>
     </PWA>

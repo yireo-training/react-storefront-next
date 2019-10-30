@@ -1,13 +1,9 @@
 import React, { useMemo, useContext } from 'react'
 import SearchResultsContext from './SearchResultsContext'
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Vbox } from '../Box'
-import Image from '../Image'
-import clsx from 'clsx'
-import CheckedIcon from '@material-ui/icons/CheckCircle'
-
+import SwatchButton from '../SwatchButton'
+import { Hbox } from '../Box'
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -17,63 +13,14 @@ const styles = theme => ({
     margin: theme.spacing(0, 1, 1, 0)
   },
   matches: {
-    marginLeft: '5px',
-    display: 'inline'
+    display: 'inline',
+    ...theme.typography.caption,
+    marginLeft: 2,
+    color: theme.palette.grey[700]
   },
   button: {
     fontWeight: 'normal',
-    marginBottom: theme.spacing(0.5)
-  },
-  image: {
-    height: '100%',
-    width: '100%',
-    borderRadius: '50%'
-  },
-  imageButtonLabel: {
-    height: 48,
-    width: 48,
-    display: 'block',
-    position: 'relative',
-    borderRadius: '50%'
-  },
-  imageButton: {
-    padding: 3,
-    borderRadius: '50%',
-    backgroundColor: 'rgba(0, 0, 0, 0.08)',
-    minWidth: 0
-  },
-  '@media (hover: none)': {
-    imageButton: {
-      '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.08)'
-      }
-    }
-  },
-  checkMark: {
-    transition: 'opacity 0.1s linear',
-    opacity: 0,
-    position: 'absolute',
-    zIndex: 1,
-    color: 'white',
-    top: 0,
-    left: 0,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  selected: {
-    opacity: 1
-  },
-  selectedBackground: {
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    height: 24,
-    width: 24,
-    borderRadius: '50%'
-  },
-  selectedLabel: {
-    fontWeight: 'bold'
+    margin: theme.spacing(0.5, 0.5)
   }
 })
 
@@ -92,52 +39,41 @@ export default function ButtonFilterGroup(props) {
     () => (
       <div className={classes.root}>
         {group.facets.map((facet, i) => {
-          let selected = filters.indexOf(facet.code) !== -1
-          const image = facet.image
+          const selected = filters.indexOf(facet.code) !== -1
+          const { image, matches, name } = facet
+          const handleClick = () => toggleFilter(facet, submitOnChange)
 
-          return (
-            <Vbox className={classes.wrap} key={i}>
-              <Button
-                classes={{
-                  root: clsx({
-                    [classes.button]: true,
-                    [classes.imageButton]: facet.image != null
-                  }),
-                  label: clsx({
-                    [classes.imageButtonLabel]: facet.image != null
-                  })
-                }}
-                disableRipple={image != null}
-                className={classes.button}
-                variant={selected ? (image ? 'text' : 'contained') : image ? 'text' : 'outlined'}
-                color={selected ? 'primary' : 'default'}
-                onClick={() => toggleFilter(facet, submitOnChange)}
-              >
-                {image ? (
-                  <>
-                    <div
-                      className={clsx({ [classes.checkMark]: true, [classes.selected]: selected })}
-                    >
-                      <div className={classes.selectedBackground}>
-                        <CheckedIcon />
-                      </div>
-                    </div>
-                    <Image classes={{ image: classes.image }} fill {...image} />
-                  </>
-                ) : (
-                  facet.name
-                )}
-              </Button>
-              {facet.image ? (
-                <Typography
-                  variant="caption"
-                  className={clsx({ [classes.selectedLabel]: selected })}
-                >
-                  {facet.name}
-                </Typography>
-              ) : null}
-            </Vbox>
+          const label = (
+            <Hbox>
+              <span>{name}</span>
+              {matches ? <span className={classes.matches}>({matches})</span> : null}
+            </Hbox>
           )
+
+          if (image) {
+            return (
+              <SwatchButton
+                key={i}
+                classes={{ root: classes.button }}
+                {...facet.image}
+                selected={selected}
+                onClick={handleClick}
+                label={label}
+              />
+            )
+          } else {
+            return (
+              <Button
+                key={i}
+                classes={{ root: classes.button }}
+                onClick={handleClick}
+                variant={selected ? 'contained' : 'outlined'}
+                color={selected ? 'primary' : 'default'}
+              >
+                {label}
+              </Button>
+            )
+          }
         })}
       </div>
     ),

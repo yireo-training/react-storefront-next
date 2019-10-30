@@ -48,6 +48,7 @@ export default function Product({ product, index }) {
           href="/p/[productId]"
           className={classes.link}
           skeletonProps={{ product }}
+          prefetch="visible"
         >
           <Vbox alignItems="stretch">
             <div className={classes.thumb}>
@@ -64,7 +65,7 @@ export default function Product({ product, index }) {
                 {product.name}
               </Typography>
               <Rating product={product} className={classes.rating} />
-              <Typography className={classes.price}>{price(product.price)}</Typography>
+              <Typography className={classes.price}>{product.price}</Typography>
             </div>
           </Vbox>
         </Link>

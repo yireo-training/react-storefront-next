@@ -2,7 +2,7 @@ export default function createProduct(id) {
   return {
     id,
     name: `Product ${id}`,
-    price: (id % 10) * 10 + 0.99,
+    price: `$${(id % 10) * 10 + 0.99}`,
     rating: (10 - (id % 10)) / 2.0,
     thumbnail: {
       src: `https://via.placeholder.com/600x600/cccccc?text=${encodeURIComponent('Product ' + id)}`,
@@ -49,18 +49,37 @@ export default function createProduct(id) {
         }
       }
     ],
+    sizes: [
+      { id: 'sm', text: 'SM' },
+      { id: 'md', text: 'MD' },
+      { id: 'lg', text: 'LG' },
+      { id: 'xl', text: 'XL', disabled: true },
+      { id: 'xxl', text: 'XXL' }
+    ],
     colors: [
       {
         id: 'red',
-        text: 'RED'
+        text: 'RED',
+        image: {
+          src: `https://via.placeholder.com/1200x1200/ff0000?text=${encodeURIComponent(' ')}`,
+          alt: 'red'
+        }
       },
       {
         id: 'blue',
-        text: 'BLUE'
+        text: 'BLUE',
+        image: {
+          src: `https://via.placeholder.com/1200x1200/0000ff?text=${encodeURIComponent(' ')}`,
+          alt: 'blue'
+        }
       },
       {
         id: 'green',
-        text: 'GREEN'
+        text: 'GREEN',
+        image: {
+          src: `https://via.placeholder.com/1200x1200/00ff00?text=${encodeURIComponent(' ')}`,
+          alt: 'green'
+        }
       }
     ]
   }

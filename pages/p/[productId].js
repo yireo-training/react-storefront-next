@@ -18,7 +18,9 @@ import Row from 'react-storefront/Row'
 import { Hbox } from 'react-storefront/Box'
 import Label from 'react-storefront/Label'
 import Fill from 'react-storefront/Fill'
+import Rating from 'react-storefront/Rating'
 import { useTheme } from '@material-ui/styles'
+import Hidden from '@material-ui/core/Hidden'
 
 const styles = theme => ({
   carouselWrap: {
@@ -39,24 +41,25 @@ const Product = React.memo(lazyProps => {
   const { thumbnail } = useContext(PWAContext)
   const { product } = pageData
 
-  console.log('product', product)
+  const header = (
+    <Row>
+      <Typography variant="h6" component="h1" gutterBottom>
+        {product ? product.name : <Skeleton style={{ height: '1em' }} />}
+      </Typography>
+      <Hbox>
+        <Typography style={{ marginRight: theme.spacing(2) }}>{product.price}</Typography>
+        <Rating value={product.rating} reviewCount={10} />
+      </Hbox>
+    </Row>
+  )
 
   return (
     <Container maxWidth="lg">
-      <Grid spacing={2} container>
-        <Grid item xs={12}>
-          <Link href="/s/[subcategoryId]" as="/s/1">
-            Subcategory 1
-          </Link>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6" component="h1">
-            {product ? product.name : <Skeleton style={{ height: '1em' }} />}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2}>
+      <Grid container spacing={4}>
         <Grid item xs={12} sm={6} md={5}>
+          <Hidden implementation="css" smUp>
+            {header}
+          </Hidden>
           <Fill aspectRatio={1} className={classes.carouselWrap}>
             <MediaCarousel
               className={classes.carousel}
@@ -66,69 +69,105 @@ const Product = React.memo(lazyProps => {
           </Fill>
         </Grid>
         <Grid item xs={12} sm={6} md={7}>
-          <Row>
-            {product && pageData.color ? (
-              <>
-                <Hbox style={{ marginBottom: 10 }}>
-                  <Label>COLOR: </Label>
-                  <Typography>{pageData.color.text}</Typography>
-                </Hbox>
-                <ButtonSelector
-                  options={product.colors}
-                  value={pageData.color}
-                  onSelectionChange={(_e, color) => {
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <Hidden implementation="css" xsDown>
+                <div style={{ paddingBottom: theme.spacing(1) }}>{header}</div>
+              </Hidden>
+              {product ? (
+                <>
+                  <Hbox style={{ marginBottom: 10 }}>
+                    <Label>COLOR: </Label>
+                    <Typography>{pageData.color && pageData.color.text}</Typography>
+                  </Hbox>
+                  <ButtonSelector
+                    options={product.colors}
+                    value={pageData.color}
+                    onSelectionChange={(_e, color) => {
+                      updateStore({
+                        ...store,
+                        pageData: {
+                          ...pageData,
+                          color
+                        }
+                      })
+                    }}
+                  />
+                </>
+              ) : (
+                <div>
+                  <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
+                  <Hbox>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                  </Hbox>
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              {product ? (
+                <>
+                  <Hbox style={{ marginBottom: 10 }}>
+                    <Label>SIZE: </Label>
+                    <Typography>{pageData.size && pageData.size.text}</Typography>
+                  </Hbox>
+                  <ButtonSelector
+                    options={product.sizes}
+                    value={pageData.size}
+                    onSelectionChange={(_e, size) => {
+                      updateStore({
+                        ...store,
+                        pageData: {
+                          ...pageData,
+                          size
+                        }
+                      })
+                    }}
+                  />
+                </>
+              ) : (
+                <div>
+                  <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
+                  <Hbox>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                  </Hbox>
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <Hbox>
+                <Label>QTY:</Label>
+                <QuantitySelector
+                  value={pageData.quantity || 1}
+                  onChange={quantity =>
                     updateStore({
                       ...store,
                       pageData: {
                         ...pageData,
-                        color
+                        quantity
                       }
                     })
-                  }}
+                  }
                 />
-              </>
-            ) : (
-              <div>
-                <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
-                <Hbox>
-                  <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                  <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                  <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                </Hbox>
-              </div>
-            )}
-          </Row>
-          <Row>
-            <Divider />
-          </Row>
-          <Row>
-            <Hbox>
-              <Label>QTY:</Label>
-              <QuantitySelector
-                value={pageData.quantity || 1}
-                onChange={quantity =>
-                  updateStore({
-                    ...store,
-                    pageData: {
-                      ...pageData,
-                      quantity
-                    }
-                  })
-                }
-              />
-            </Hbox>
-          </Row>
-          <Row>
-            <TabPanel>
-              <CmsSlot label="Description">Description</CmsSlot>
-              <CmsSlot label="Specs">Test</CmsSlot>
-              <div label="Reviews">
-                {['here', 'here2', 'here3'].map((review, i) => (
-                  <Paper key={i}>{review}</Paper>
-                ))}
-              </div>
-            </TabPanel>
-          </Row>
+              </Hbox>
+            </Grid>
+            <Grid item xs={12}>
+              <TabPanel>
+                <CmsSlot label="Description">Description</CmsSlot>
+                <CmsSlot label="Specs">Test</CmsSlot>
+                <div label="Reviews">
+                  {['here', 'here2', 'here3'].map((review, i) => (
+                    <Paper key={i}>{review}</Paper>
+                  ))}
+                </div>
+              </TabPanel>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
           <Row>
             <Accordion>
               <ExpandableSection expanded title="First">

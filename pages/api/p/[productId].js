@@ -17,7 +17,6 @@ export default function fetchProduct(req, res) {
         },
         pageData: {
           product,
-          color: product.colors[0],
           quantity: 1
         }
       })

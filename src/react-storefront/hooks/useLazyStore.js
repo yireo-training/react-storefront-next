@@ -4,17 +4,17 @@ import merge from 'lodash/merge'
 import PWAContext from '../PWAContext'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
-  const { skeletonProps } = useContext(PWAContext)
-  const { lazy, url, ...props } = lazyProps
-  const goingBack = useRef(false)
-
-  let [state, setState] = useState(() =>
-    merge(additionalData, { pageData: skeletonProps }, props, {
+  const createInitialState = () => {
+    return merge(additionalData, { pageData: skeletonProps }, props, {
       loading: lazyProps.lazy != null,
       pageData: {}
     })
-  )
+  }
 
+  const { skeletonProps } = useContext(PWAContext)
+  const { lazy, url, ...props } = lazyProps
+  const goingBack = useRef(false)
+  const [state, setState] = useState(createInitialState)
   const stateRef = useRef(state)
   const isLazy = lazyProps.lazy && lazyProps.lazy.then ? true : false
 
@@ -27,8 +27,10 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
       lazyProps.lazy.then(props => {
         setState(state => merge({}, state, props, { loading: false }))
       })
+    } else {
+      setState(createInitialState)
     }
-  }, [])
+  }, [lazyProps])
 
   // save the page state in history.state before navigation
   const onHistoryChange = useCallback(() => {

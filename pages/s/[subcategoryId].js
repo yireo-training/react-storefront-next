@@ -21,7 +21,7 @@ import SearchResultsProvider from 'react-storefront/search/SearchResultsProvider
 const useStyles = makeStyles(theme => ({
   sideBar: {
     margin: theme.spacing(0, 4, 0, 0),
-    width: 300
+    width: 275
   }
 }))
 
@@ -100,12 +100,11 @@ const Subcategory = lazyProps => {
   )
 }
 
-Subcategory.getInitialProps = fetchProps(
-  ({ query }) =>
-    `http://localhost:3000/api/s/${query.subcategoryId}${qs.stringify(query, {
-      addQueryPrefix: true
-    })}`
-)
+Subcategory.getInitialProps = fetchProps(({ query: { subcategoryId, ...search } }) => {
+  return `http://localhost:3000/api/s/${subcategoryId}${qs.stringify(search, {
+    addQueryPrefix: true
+  })}`
+})
 
 export const config = { amp: 'hybrid' }
 export default Subcategory
