@@ -113,9 +113,24 @@ function Option({
   buttonProps,
   ampStateId,
   onSelectionChange,
+  updateStore,
   name
 }) {
   if (!value) value = {}
+
+  if (!onSelectionChange) {
+    onSelectionChange = (_e, value) => {
+      if (updateStore && name) {
+        updateStore(store => ({
+          ...store,
+          pageData: {
+            ...store.pageData,
+            [name]: value
+          }
+        }))
+      }
+    }
+  }
 
   const selected = value.id === option.id
 

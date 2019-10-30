@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import Carousel from './Carousel'
 import Image from '../Image'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -97,7 +97,7 @@ function MediaCarousel(props) {
     setImagesLoaded(true)
   })
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setImagesLoaded(false)
 
     const firstImage = ref.current.querySelector('img')

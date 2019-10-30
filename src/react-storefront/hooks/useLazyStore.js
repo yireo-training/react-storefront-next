@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useContext, useCallback } from 'react'
 import Router from 'next/router'
 import merge from 'lodash/merge'
 import PWAContext from '../PWAContext'
+import fetch from 'isomorphic-unfetch'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
   const createInitialState = () => {
@@ -16,7 +17,7 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   const goingBack = useRef(false)
   const [state, setState] = useState(createInitialState)
   const stateRef = useRef(state)
-  const isLazy = lazyProps.lazy && lazyProps.lazy.then ? true : false
+  const isLazy = lazyProps.lazy ? true : false
 
   useEffect(() => {
     stateRef.current = state
@@ -24,9 +25,9 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
 
   useEffect(() => {
     if (isLazy) {
-      lazyProps.lazy.then(props => {
-        setState(state => merge({}, state, props, { loading: false }))
-      })
+      fetch(lazyProps.lazy)
+        .then(res => res.json())
+        .then(props => setState(state => merge({}, state, props, { loading: false })))
     } else {
       setState(createInitialState)
     }

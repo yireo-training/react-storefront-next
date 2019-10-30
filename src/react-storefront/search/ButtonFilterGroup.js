@@ -20,7 +20,7 @@ const styles = theme => ({
   },
   button: {
     fontWeight: 'normal',
-    margin: theme.spacing(0.5, 0.5)
+    margin: theme.spacing(0, 0.5, 0.5, 0)
   }
 })
 

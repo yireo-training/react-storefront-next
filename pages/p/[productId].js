@@ -115,15 +115,8 @@ const Product = React.memo(lazyProps => {
                   <ButtonSelector
                     options={product.sizes}
                     value={pageData.size}
-                    onSelectionChange={(_e, size) => {
-                      updateStore({
-                        ...store,
-                        pageData: {
-                          ...pageData,
-                          size
-                        }
-                      })
-                    }}
+                    name="size"
+                    updateStore={updateStore}
                   />
                 </>
               ) : (

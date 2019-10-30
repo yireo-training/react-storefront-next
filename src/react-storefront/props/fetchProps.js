@@ -3,11 +3,11 @@ import fetch from 'isomorphic-unfetch'
 export default function fetchProps(createAPIURL) {
   return options => {
     const apiURL = createAPIURL(options)
-    return createLazyProps(options.asPath, apiURL)
+    return createLazyProps(options.asPath, apiURL, options.rsf_app_shell === '1')
   }
 }
 
-async function createLazyProps(as, apiURL) {
+async function createLazyProps(as, apiURL, shell) {
   const doFetch = (onlyHit = false) => {
     const headers = {
       'x-rsf-api-version': process.env.RSF_API_VERSION
@@ -25,7 +25,11 @@ async function createLazyProps(as, apiURL) {
 
   if (typeof window === 'undefined') {
     // server
-    return (await doFetch()).json()
+    if (shell) {
+      return { key: as, lazy: apiURL }
+    } else {
+      return (await doFetch()).json()
+    }
   } else {
     // client
     const { rsf } = window.history.state
@@ -38,7 +42,7 @@ async function createLazyProps(as, apiURL) {
 
       if (res.status === 204) {
         // normal client side navigation, fetch from network
-        return { key: as, lazy: doFetch().then(res => res.json()) }
+        return { key: as, lazy: apiURL }
       } else {
         // response was found in the cache, return immediately
         return res.json()

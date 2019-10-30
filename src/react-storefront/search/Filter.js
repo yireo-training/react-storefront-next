@@ -62,7 +62,7 @@ function Filter({
             />
           ))}
       </div>
-      {/* <FilterFooter onViewResultsClick={onViewResultsClick} submitOnChange={submitOnChange} /> */}
+      <FilterFooter onViewResultsClick={onViewResultsClick} submitOnChange={submitOnChange} />
     </div>
   )
 }
