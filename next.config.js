@@ -14,6 +14,11 @@ module.exports = withServiceWorker({
       })
     )
 
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack']
+    })
+
     // if (!options.isServer) {
     //   config.plugins.push(generateServiceWorker(options.config))
     // }

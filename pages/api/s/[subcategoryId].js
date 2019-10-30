@@ -1,5 +1,7 @@
 import createProducts from '../../../src/mocks/createProducts'
 import createFacets from '../../../src/mocks/createFacets'
+import createProduct from '../../../src/mocks/createProduct'
+import colors, { indexForColor } from '../../../src/mocks/colors'
 
 export default function getSubcategory(req, res) {
   let {
@@ -10,6 +12,8 @@ export default function getSubcategory(req, res) {
 
   if (filters) {
     filters = JSON.parse(filters)
+  } else {
+    filters = []
   }
 
   return new Promise((resolve, reject) => {
@@ -25,7 +29,7 @@ export default function getSubcategory(req, res) {
             filters,
             appliedFilters: filters,
             facets: createFacets(),
-            products: createProducts(20, page)
+            products: filterProducts(page, filters)
           }
         })
       )
@@ -33,4 +37,25 @@ export default function getSubcategory(req, res) {
       resolve()
     }, 1)
   })
+}
+
+function filterProducts(page, filters) {
+  const products = []
+  const filteredColors = filters
+    ? filters.filter(f => f.startsWith('color')).map(f => f.replace(/^color:/, ''))
+    : []
+
+  while (products.length < 20) {
+    if (filteredColors && filteredColors.length) {
+      for (let color of filteredColors) {
+        const index = indexForColor(color)
+        const id = page * 20 + products.length * Object.keys(colors).length + index
+        products.push(createProduct(id))
+      }
+    } else {
+      products.push(createProduct(page * 20 + products.length + 1))
+    }
+  }
+
+  return products
 }
