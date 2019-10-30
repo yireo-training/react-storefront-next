@@ -101,6 +101,8 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     setState({
       pageData: {
         ...store.pageData,
+        filtersChanged: false,
+        appliedFilters: [...store.pageData.filters],
         page: 0
       }
     })

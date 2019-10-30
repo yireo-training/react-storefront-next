@@ -12,9 +12,11 @@ export const styles = theme => ({
   }
 })
 
-const useStyles = makeStyles({ name: 'RSFSearchButton' })
+const useStyles = makeStyles(styles, { name: 'RSFSearchButton' })
 
 export default function SearchButton({ children, classes, search, ...other }) {
+  classes = useStyles({ classes })
+
   return (
     <IconButton
       aria-label="Search"

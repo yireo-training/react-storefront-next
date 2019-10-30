@@ -36,11 +36,7 @@ export default function MyApp({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header>
-          <MenuButton
-            open={menuOpen}
-            onClick={() => setMenuOpen(!menuOpen)}
-            style={{ marginRight: theme.spacing(-1) }}
-          />
+          <MenuButton open={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
         </Header>
         <Menu
           align="right"

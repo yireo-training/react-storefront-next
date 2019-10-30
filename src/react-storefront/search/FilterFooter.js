@@ -28,6 +28,8 @@ export default function FilterFooter(props) {
     pageData: { filters, filtersChanged }
   } = useContext(SearchResultsContext)
 
+  console.log('filters', filters, 'filtersChanged', filtersChanged)
+
   if (!filters) return null
 
   return useMemo(
