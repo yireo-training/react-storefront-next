@@ -106,7 +106,7 @@ function FilterButton({
           classes={{ paper: classes.drawer }}
           anchor="bottom"
           open={open}
-          onRequestClose={toggleOpen.bind(null, false)}
+          onClose={toggleOpen.bind(null, false)}
           ModalProps={{
             keepMounted: true
           }}

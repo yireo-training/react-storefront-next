@@ -8,9 +8,7 @@ import storeInitialPropsInHistory from '../src/react-storefront/router/storeInit
 import PWA from '../src/react-storefront/PWA'
 import Nav from '../src/Nav'
 import reportError from '../src/reportError'
-import SearchProvider from '../src/react-storefront/search/SearchProvider'
 import useJssStyles from 'react-storefront/hooks/useJssStyles'
-import Search from 'react-storefront/search/Search'
 
 storeInitialPropsInHistory()
 
@@ -30,15 +28,11 @@ export default function MyApp({ Component, pageProps }) {
     <PWA onError={reportError}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <SearchProvider>
-          <Header></Header>
-
-          <Nav />
-          <main className={classes.main}>
-            <Component {...pageProps} />
-            <Search />
-          </main>
-        </SearchProvider>
+        <Header />
+        <Nav />
+        <main className={classes.main}>
+          <Component {...pageProps} />
+        </main>
       </ThemeProvider>
     </PWA>
   )

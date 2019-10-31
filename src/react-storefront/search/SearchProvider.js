@@ -1,23 +1,73 @@
+import { useMemo, useState, useEffect } from 'react'
 import SearchContext from './SearchContext'
-import { useMemo, useState } from 'react'
+import _fetch from 'isomorphic-unfetch'
+import debounce from 'lodash/debounce'
+import { fetchLatest, StaleResponseError } from '../utils/fetchLatest'
+import { useRouter } from 'next/router'
+import useNavigationEvent from '../hooks/useNavigationEvent'
 
-export default function SearchProvider({ children }) {
+const fetch = fetchLatest(_fetch)
+
+export default function SearchProvider({ children, initialGroups, onClose }) {
   const [state, setState] = useState({
-    open: false,
+    groups: initialGroups,
+    loading: false,
     text: ''
   })
+
+  useEffect(() => {
+    if (state.suggestions == null) {
+      fetchSuggestions('')
+    }
+  }, [])
+
+  useNavigationEvent(onClose)
+
+  const router = useRouter()
+
+  const fetchSuggestions = debounce(async text => {
+    try {
+      setState(state => ({
+        ...state,
+        loading: true
+      }))
+
+      const url = `/api/suggestions?q=${encodeURIComponent(text.trim())}`
+      const { groups } = await fetch(url, { credentials: 'include' }).then(res => res.json())
+
+      setState(state => ({
+        ...state,
+        loading: false,
+        groups
+      }))
+    } catch (e) {
+      if (!StaleResponseError.is(e)) {
+        setState(state => ({
+          ...state,
+          loading: false
+        }))
+        throw e
+      }
+    }
+  }, 250)
+
+  const onTextChange = text => {
+    setState(state => ({ ...state, text }))
+    fetchSuggestions(text)
+  }
+
+  const submit = () => {
+    router.push(`/search?q=${encodeURIComponent(text.trim())}`)
+  }
 
   const context = useMemo(
     () => ({
       state,
       setState,
-      toggleOpen(open) {
-        console.log('open', open)
-        setState({ ...state, open })
-      },
-      onTextChange(e) {},
-      fetchSuggestions() {},
-      submit() {}
+      onTextChange,
+      fetchSuggestions,
+      onClose,
+      submit
     }),
     [state]
   )

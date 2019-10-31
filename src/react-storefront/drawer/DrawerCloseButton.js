@@ -52,13 +52,13 @@ export default function DrawerCloseButton({
   if (text) {
     ButtonElement = Button
   } else if (fullscreen) {
+    ButtonElement = IconButton
+  } else {
     ButtonElement = props => (
       <Fab color="primary" style={{ display: open ? '' : 'none' }} {...props}>
-        <Close />
+        <Icon />
       </Fab>
     )
-  } else {
-    ButtonElement = IconButton
   }
 
   return (
@@ -68,7 +68,7 @@ export default function DrawerCloseButton({
       className={clsx({
         [classes.button]: true,
         [classes.buttonText]: text != null,
-        [classes.buttonFab]: fullscreen
+        [classes.buttonFab]: text == null && !fullscreen
       })}
       onClick={onClick}
       {...others}

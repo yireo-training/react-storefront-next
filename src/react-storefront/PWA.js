@@ -14,6 +14,10 @@ export const styles = theme => ({
   '@global': {
     body: {
       '-webkit-tap-highlight-color': 'transparent'
+    },
+    a: {
+      color: theme.palette.primary.main,
+      textDecoration: 'underline'
     }
   }
 })

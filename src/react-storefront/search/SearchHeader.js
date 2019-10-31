@@ -118,9 +118,11 @@ export default function SearchHeader({
 }
 
 SearchHeader.propTypes = {
-  searchFieldName: PropTypes.string
+  searchFieldName: PropTypes.string,
+  placeholder: PropTypes.string
 }
 
 SearchHeader.defaultProps = {
-  searchFieldName: 'search'
+  searchFieldName: 'search',
+  placeholder: 'Search'
 }

@@ -67,7 +67,7 @@ export default function Drawer({
   closeButtonProps,
   showCloseButton,
   open,
-  onRequestClose,
+  onClose,
   title,
   children,
   className,
@@ -95,7 +95,7 @@ export default function Drawer({
   })
 
   const closeDrawer = useCallback(() => {
-    onRequestClose()
+    onClose()
     document.body.style.paddingBottom = 0
   })
 
@@ -136,12 +136,12 @@ export default function Drawer({
       classes={{
         root: clsx({
           className,
-          [classes.root]: true,
-          [classes.fullscreen]: fullscreen
+          [classes.root]: true
         }),
         paper: clsx({
           [classes.paper]: true,
-          [classes.ampClosed]: amp && !open
+          [classes.ampClosed]: amp && !open,
+          [classes.fullscreen]: fullscreen
         })
       }}
       amp-bind={
@@ -151,7 +151,7 @@ export default function Drawer({
       }
       open={(amp && variant === 'temporary') || open}
       variant={variant}
-      onClose={onRequestClose}
+      onClose={onClose}
       {...rest}
     >
       <div className={classes.container} ref={drawer}>
@@ -179,7 +179,7 @@ Drawer.propTypes = {
   /**
    * Called when the user closes the drawer
    */
-  onRequestClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 
   /**
    * The title to display at the top of the drawer

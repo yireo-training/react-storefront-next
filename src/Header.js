@@ -5,7 +5,7 @@ import AppBar from 'react-storefront/AppBar'
 import Spacer from 'react-storefront/Spacer'
 import CartButton from 'react-storefront/CartButton'
 import Logo from '../src/assets/react-storefront-logo.svg'
-import SearchButton from 'react-storefront/search/SearchButton'
+import Search from './Search'
 import Hidden from '@material-ui/core/Hidden'
 import Menu from 'react-storefront/menu/Menu'
 import MenuButton from '../src/react-storefront/menu/MenuButton'
@@ -42,7 +42,7 @@ export default function Header({ children }) {
         >
           <Logo style={{ width: 120 }} className={classes.logo} />
           <Hidden implementation="css" smUp>
-            <SearchButton />
+            <Search />
           </Hidden>
           <Spacer />
           <CartButton quantity={4} />
