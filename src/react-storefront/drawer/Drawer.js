@@ -95,7 +95,10 @@ export default function Drawer({
   })
 
   const closeDrawer = useCallback(() => {
-    onClose()
+    if (onClose) {
+      onClose()
+    }
+
     document.body.style.paddingBottom = 0
   })
 

@@ -7,7 +7,7 @@ import Head from 'next/head'
 import BackToTop from 'react-storefront/BackToTop'
 import Skeleton from 'react-storefront/Skeleton'
 import { Hbox } from 'react-storefront/Box'
-import SortButton from 'react-storefront/search/SortButton'
+import SortButton from 'react-storefront/plp/SortButton'
 import fetchProps from 'react-storefront/props/fetchProps'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTheme from '@material-ui/core/styles/useTheme'
@@ -59,7 +59,7 @@ const Subcategory = lazyProps => {
               </Hidden>
             </Grid>
             <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <SortButton className={classes.sortButton} variant="menu" store={store} />
+              <SortButton className={classes.sortButton} store={store} />
             </Grid>
             <Grid item xs={6}></Grid>
             <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>

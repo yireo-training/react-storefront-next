@@ -6,9 +6,10 @@ import React, { memo, useState, useContext } from 'react'
 import ActionButton from '../ActionButton'
 import Sort from './Sort'
 import PropTypes from 'prop-types'
-import Drawer from '../Drawer'
-import Hidden from '@material-ui/core/Hidden'
+import Drawer from '../drawer/Drawer'
 import Menu from '@material-ui/core/Menu'
+import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import qs from 'qs'
 import { useAmp } from 'next/amp'
 import { useRouter } from 'next/router'
@@ -18,8 +19,17 @@ import SearchResultsContext from './SearchResultsContext'
  * A button that when clicked, opens a drawer containing the `Sort` view. The name of the currently
  * selected sortOption is display in the button text.
  */
-function SortButton({ variant, title, drawerProps, onClick, sortProps, ...props }) {
+function SortButton({
+  variant,
+  title,
+  drawerProps,
+  onClick,
+  sortProps,
+  drawerBreakpoint,
+  ...props
+}) {
   const isAmp = useAmp()
+  const theme = useTheme()
   const [state, setState] = useState({
     open: false,
     loading: false,
@@ -56,6 +66,9 @@ function SortButton({ variant, title, drawerProps, onClick, sortProps, ...props 
       setState({ open: false, anchorEl: null })
     }
   }
+
+  const useDrawer = useMediaQuery(theme.breakpoints.down(drawerBreakpoint))
+
   return (
     <>
       <ActionButton
@@ -66,7 +79,7 @@ function SortButton({ variant, title, drawerProps, onClick, sortProps, ...props 
         {...props}
         onClick={e => handleClick(e)}
       />
-      {!isAmp && variant === 'drawer' && (
+      {!isAmp && useDrawer && (
         <Drawer
           ModalProps={{
             keepMounted: true
@@ -75,7 +88,7 @@ function SortButton({ variant, title, drawerProps, onClick, sortProps, ...props 
           anchor="bottom"
           title={title}
           open={open}
-          onRequestClose={close}
+          onClose={close}
           {...drawerProps}
         >
           {mountDrawer && (
@@ -88,7 +101,7 @@ function SortButton({ variant, title, drawerProps, onClick, sortProps, ...props 
           )}
         </Drawer>
       )}
-      {!isAmp && variant === 'menu' && (
+      {!isAmp && !useDrawer && (
         <Menu open={open} anchorEl={anchorEl} onClose={close}>
           <Sort variant="menu-items" onSelect={close} {...sortProps} />
         </Menu>
@@ -104,11 +117,6 @@ SortButton.propTypes = {
   classes: PropTypes.object,
 
   /**
-   * Sets the type of control displayed when the menu is clicked
-   */
-  variant: PropTypes.oneOf(['drawer', 'menu']),
-
-  /**
    * Props to pass to the underlying `Drawer` component.
    */
   drawerProps: PropTypes.object,
@@ -121,14 +129,19 @@ SortButton.propTypes = {
   /**
    * Text for the button label and the drawer header.  Defaults to "Sort".
    */
-  title: PropTypes.string
+  title: PropTypes.string,
+
+  /**
+   * The breakpoint in your theme below which a drawer UI should be used in favor of the menu UI.
+   */
+  drawerBreakpoint: PropTypes.string
 }
 
 SortButton.defaultProps = {
   title: 'Sort',
-  variant: 'drawer',
   drawerProps: {},
-  sortProps: {}
+  sortProps: {},
+  drawerBreakpoint: 'xs'
 }
 
 export default memo(SortButton)

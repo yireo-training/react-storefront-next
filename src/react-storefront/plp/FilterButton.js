@@ -8,7 +8,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { useRouter } from 'next/router'
 import qs from 'qs'
 import { useAmp } from 'next/amp'
-import SearchResultsContext from './SearchResultsContext'
 
 export const styles = theme => ({
   drawer: {
