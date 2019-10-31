@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, memo, useContext } from 'react'
 import ActionButton from '../ActionButton'
+import SearchResultsContext from './SearchResultsContext'
 import Filter from './Filter'
 import PropTypes from 'prop-types'
 import Drawer from '../drawer/Drawer'
@@ -126,11 +127,6 @@ function FilterButton({
 }
 
 FilterButton.propTypes = {
-  /**
-   * A store returned from `react-storefront/hooks/useSearchResultsStore`
-   */
-  store: PropTypes.object.isRequired,
-
   /**
    * CSS classes
    */

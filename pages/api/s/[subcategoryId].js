@@ -1,11 +1,11 @@
-import createProducts from '../../../src/mocks/createProducts'
 import createFacets from '../../../src/mocks/createFacets'
+import createSortOptions from '../../../src/mocks/createSortOptions'
 import createProduct from '../../../src/mocks/createProduct'
 import colors, { indexForColor } from '../../../src/mocks/colors'
 
 export default function getSubcategory(req, res) {
   let {
-    query: { subcategoryId, page = 0, filters }
+    query: { subcategoryId, page = 0, filters, sort }
   } = req
 
   res.setHeader('cache-control', 'no-cache, no-store, max-age: 0')
@@ -28,6 +28,8 @@ export default function getSubcategory(req, res) {
             page: parseInt(page),
             filters,
             appliedFilters: filters,
+            sort,
+            sortOptions: createSortOptions(),
             facets: createFacets(),
             products: filterProducts(page, filters)
           }

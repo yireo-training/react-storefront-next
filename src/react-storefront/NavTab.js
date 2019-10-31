@@ -3,7 +3,7 @@ import Link from './Link'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Popper from '@material-ui/core/Popper'
 import Hidden from '@material-ui/core/Hidden'
-import Fade from '@material-ui/core/Hidden'
+import Fade from '@material-ui/core/Fade'
 import Paper from '@material-ui/core/Paper'
 import { useState, useCallback } from 'react'
 
@@ -56,12 +56,7 @@ function NavTab({ classes, href, as, children, ...props }) {
       </Link>
       {!children ? null : (
         <Hidden xsDown>
-          <Popper
-            className={classes.menu}
-            open={overTab || overMenu}
-            anchorEl={anchorEl}
-            transition
-          >
+          <Popper open={overTab || overMenu} anchorEl={anchorEl} transition>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper square onMouseEnter={enterMenu} onMouseLeave={leaveMenu} onClick={leaveMenu}>

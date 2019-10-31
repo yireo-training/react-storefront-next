@@ -5,9 +5,10 @@ import ProductItem from '../../src/ProductItem'
 import ShowMore from 'react-storefront/plp/ShowMore'
 import Head from 'next/head'
 import BackToTop from 'react-storefront/BackToTop'
-import fetchProps from 'react-storefront/props/fetchProps'
 import Skeleton from 'react-storefront/Skeleton'
 import { Hbox } from 'react-storefront/Box'
+import SortButton from 'react-storefront/search/SortButton'
+import fetchProps from 'react-storefront/props/fetchProps'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTheme from '@material-ui/core/styles/useTheme'
 import qs from 'qs'
@@ -22,6 +23,11 @@ const useStyles = makeStyles(theme => ({
   sideBar: {
     margin: theme.spacing(0, 4, 0, 0),
     width: 275
+  },
+  sortButton: {
+    [theme.breakpoints.down('xs')]: {
+      flex: 1
+    }
   }
 }))
 
@@ -38,7 +44,7 @@ const Subcategory = lazyProps => {
         <BackToTop />
         <Hbox align="flex-start">
           <Hidden implementation="css" xsDown>
-            <Filter store={store} classes={{ root: classes.sideBar }} expandAll submitOnChange />
+            <Filter classes={{ root: classes.sideBar }} expandAll submitOnChange />
           </Hidden>
           <Grid container style={{ position: 'relative' }}>
             <LoadMask show={store.reloading} transparent align="top" />
@@ -49,8 +55,11 @@ const Subcategory = lazyProps => {
             </Grid>
             <Grid item xs={6} style={{ paddingRight: theme.spacing(1) }}>
               <Hidden implementation="css" smUp>
-                <FilterButton style={{ width: '100%' }} store={store} />
+                <FilterButton style={{ width: '100%' }} />
               </Hidden>
+            </Grid>
+            <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <SortButton className={classes.sortButton} variant="menu" store={store} />
             </Grid>
             <Grid item xs={6}></Grid>
             <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>

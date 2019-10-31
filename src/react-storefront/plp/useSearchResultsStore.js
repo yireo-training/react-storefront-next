@@ -6,7 +6,9 @@ export default function useSearchResultsStore(lazyProps) {
     pageData: {
       page: 0,
       filters: [],
+      sort: 'rating',
       appliedFilters: [],
+      sortOptions: [],
       filtersChanged: false
     }
   })

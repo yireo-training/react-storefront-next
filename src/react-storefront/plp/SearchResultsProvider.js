@@ -165,6 +165,17 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
     })
   }
 
+  const setSort = option => {
+    setState({
+      pageData: {
+        ...store.pageData,
+        sort: option.code
+      }
+    })
+
+    refresh({ loading: true })
+  }
+
   return (
     <SearchResultsContext.Provider
       value={{
@@ -173,7 +184,8 @@ export default function SearchResultsProvider({ store, updateStore, children }) 
           fetchMore,
           toggleFilter,
           clearFilters,
-          applyFilters
+          applyFilters,
+          setSort
         }
       }}
     >
