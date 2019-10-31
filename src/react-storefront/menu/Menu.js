@@ -7,7 +7,6 @@ import clsx from 'clsx'
 import SEOLinks from './SEOLinks'
 import MenuBody from './MenuBody'
 import PropTypes from 'prop-types'
-import { useObserver } from 'mobx-react'
 
 export const styles = menuStyles
 

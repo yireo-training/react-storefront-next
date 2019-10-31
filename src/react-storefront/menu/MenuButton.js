@@ -4,7 +4,6 @@ import ToolbarButton from '../ToolbarButton'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import MenuIcon from './MenuIcon'
 import PropTypes from 'prop-types'
-import { useObserver } from 'mobx-react'
 import clsx from 'clsx'
 
 export const styles = theme => ({
@@ -29,7 +28,7 @@ export default function MenuButton({
 }) {
   classes = useStyles({ classes })
 
-  return useObserver(() => (
+  return (
     <Hidden mdUp implementation="css" key="menuButton">
       <a
         on="tap:AMP.setState({ rsfMenu: { open: !rsfMenu.open, list: '@' } }), moov_menu.toggle"
@@ -44,7 +43,7 @@ export default function MenuButton({
         />
       </a>
     </Hidden>
-  ))
+  )
 }
 
 MenuButton.propTypes = {

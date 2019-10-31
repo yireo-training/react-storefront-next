@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import Router from 'next/router'
 import PWAContext from './PWAContext'
-import { useObserver } from 'mobx-react'
 
 export default function Page({ children }) {
   const app = useContext(PWAContext)
@@ -21,14 +20,12 @@ export default function Page({ children }) {
     })
   }, [])
 
-  return useObserver(() => {
-    const Skeleton = children.type.Skeleton
+  const Skeleton = children.type.Skeleton
 
-    return (
-      <>
-        {app.loading && Skeleton ? <Skeleton {...(app.skeletonProps || {})} /> : null}
-        {children}
-      </>
-    )
-  })
+  return (
+    <>
+      {app.loading && Skeleton ? <Skeleton {...(app.skeletonProps || {})} /> : null}
+      {children}
+    </>
+  )
 }

@@ -1,12 +1,6 @@
-/**
- * @license
- * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
- */
-import React, { Component, Fragment, useContext } from 'react'
+import React from 'react'
 import Link from '../Link'
 import NoScript from '../NoScript'
-import MenuContext from './MenuContext'
-import { useObserver } from 'mobx-react'
 
 export default function SEOLinks({ root }) {
   if (!root) return null
