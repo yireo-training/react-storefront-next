@@ -98,7 +98,7 @@ DrawerCloseButton.propTypes = {
   /**
    * Overrides the default icon
    */
-  Icon: PropTypes.func
+  Icon: PropTypes.elementType
 }
 
 DrawerCloseButton.defaultProps = {

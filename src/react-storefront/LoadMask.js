@@ -116,5 +116,6 @@ LoadMask.propTypes = {
 LoadMask.defaultProps = {
   show: null,
   fullscreen: false,
+  transparent: false,
   align: 'center'
 }

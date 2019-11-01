@@ -2,13 +2,16 @@ import React, { useState, useEffect, useContext } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import SearchSuggestionList from './SearchSuggestionList'
+import SearchSuggestionGroup from './SearchSuggestionGroup'
 import SearchContext from './SearchContext'
 import LoadMask from '../LoadMask'
 
 export const styles = theme => ({
   root: {
-    margin: theme.spacing(2)
+    padding: theme.spacing(2),
+    position: 'relative',
+    flex: 1,
+    overflowY: 'auto'
   },
   group: {
     margin: theme.spacing(0, 0, 2, 0)
@@ -21,19 +24,15 @@ export default function SearchSuggestions({ classes }) {
 
   const { state } = useContext(SearchContext)
 
-  return state.loading ? (
-    <LoadMask />
-  ) : (
+  return (
     <div className={classes.root}>
-      {state.groups.map((group, i) => (
-        <div className={classes.group}>
-          {group.ui === 'thumbnails' ? (
-            <div />
-          ) : (
-            <SearchSuggestionList links={group.links} caption={group.caption} />
-          )}
-        </div>
-      ))}
+      <LoadMask show={state.loading} transparent />
+      {state.groups &&
+        state.groups.map((group, i) => (
+          <div key={i} className={classes.group}>
+            <SearchSuggestionGroup {...group} />
+          </div>
+        ))}
     </div>
   )
 }

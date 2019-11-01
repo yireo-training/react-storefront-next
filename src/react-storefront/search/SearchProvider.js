@@ -11,8 +11,7 @@ const fetch = fetchLatest(_fetch)
 export default function SearchProvider({ children, initialGroups, onClose }) {
   const [state, setState] = useState({
     groups: initialGroups,
-    loading: false,
-    text: ''
+    loading: false
   })
 
   useEffect(() => {
@@ -51,11 +50,6 @@ export default function SearchProvider({ children, initialGroups, onClose }) {
     }
   }, 250)
 
-  const onTextChange = text => {
-    setState(state => ({ ...state, text }))
-    fetchSuggestions(text)
-  }
-
   const submit = () => {
     router.push(`/search?q=${encodeURIComponent(text.trim())}`)
   }
@@ -64,7 +58,6 @@ export default function SearchProvider({ children, initialGroups, onClose }) {
     () => ({
       state,
       setState,
-      onTextChange,
       fetchSuggestions,
       onClose,
       submit

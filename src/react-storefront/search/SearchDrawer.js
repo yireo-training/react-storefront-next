@@ -6,7 +6,11 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import SearchProvider from './SearchProvider'
 
-export const styles = theme => ({})
+export const styles = theme => ({
+  paper: {
+    display: 'flex'
+  }
+})
 
 const useStyles = makeStyles(styles, { name: 'RSFSearch' })
 

@@ -130,7 +130,7 @@ SwatchButton.propTypes = {
   /**
    * Text to display below the button
    */
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   /**
    * The image URL
    */
