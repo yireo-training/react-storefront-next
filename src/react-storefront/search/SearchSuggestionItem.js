@@ -9,21 +9,30 @@ export const styles = theme => ({
   root: {
     margin: theme.spacing(2, 0),
     listStyle: 'none',
-    padding: 0
-  },
-  thumbnailWrap: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start'
+    padding: 0,
+    '& [data-ui=thumbnails]': {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start'
+    }
   },
   thumbnail: {
-    marginBottom: '10px'
+    marginBottom: '10px',
+    display: 'none',
+    '[data-ui=thumbnails] &': {
+      display: 'block',
+      '& img': {
+        height: 120,
+        width: 120,
+        minWidth: 120
+      }
+    }
   }
 })
 
 const useStyles = makeStyles(styles, { name: 'RSFSearchSuggestionItem' })
 
-export default function SearchSuggestionItem({ classes, item, ui, children }) {
+export default function SearchSuggestionItem({ classes, item, ui, thumbnailProps, children }) {
   classes = useStyles({ classes })
 
   return (
@@ -32,8 +41,8 @@ export default function SearchSuggestionItem({ classes, item, ui, children }) {
         {children ? (
           children
         ) : (
-          <div className={ui === 'thumbnails' ? classes.thumbnailWrap : null}>
-            {item.thumbnail && <Image className={classes.thumbnail} {...item.thumbnail} />}
+          <div data-ui={ui}>
+            <Image className={classes.thumbnail} {...thumbnailProps} {...item.thumbnail} />
             <Typography>{item.text}</Typography>
           </div>
         )}

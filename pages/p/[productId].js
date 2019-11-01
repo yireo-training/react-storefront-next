@@ -80,15 +80,17 @@ const Product = React.memo(lazyProps => {
                   <ButtonSelector
                     options={product.colors}
                     value={pageData.color}
-                    onSelectionChange={(_e, color) => {
-                      updateStore({
-                        ...store,
-                        pageData: {
-                          ...pageData,
-                          color
-                        }
-                      })
-                    }}
+                    name="color"
+                    updateStore={updateStore}
+                    // onSelectionChange={(_e, color) => {
+                    //   updateStore({
+                    //     ...store,
+                    //     pageData: {
+                    //       ...pageData,
+                    //       color
+                    //     }
+                    //   })
+                    // }}
                   />
                 </>
               ) : (

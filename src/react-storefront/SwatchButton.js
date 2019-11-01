@@ -10,23 +10,23 @@ import PropTypes from 'prop-types'
 export const styles = theme => ({
   root: {},
   button: {
+    position: 'relative',
     marginBottom: theme.spacing(0.5),
     padding: 2,
     borderRadius: '50%',
     backgroundColor: 'transparent',
     minWidth: 0,
-    borderColor: theme.palette.grey[500]
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: theme.palette.grey[500],
+    cursor: 'pointer',
+    '&:focus': {
+      outline: 0
+    }
   },
   image: {
     height: '100%',
     width: '100%',
-    borderRadius: '50%'
-  },
-  SwatchButtonLabel: {
-    height: 36,
-    width: 36,
-    display: 'block',
-    position: 'relative',
     borderRadius: '50%'
   },
   '@media (hover: none)': {
@@ -42,8 +42,8 @@ export const styles = theme => ({
     position: 'absolute',
     zIndex: 1,
     color: 'white',
-    top: 0,
-    left: 0,
+    top: 2,
+    left: 2,
     height: '100%',
     width: '100%',
     display: 'flex',
@@ -56,12 +56,28 @@ export const styles = theme => ({
   selectedBackground: {
     backgroundColor: 'rgba(0,0,0,0.2)',
     padding: 2,
-    height: 28,
-    width: 28,
+    height: 'calc(100% - 4px)',
+    width: 'calc(100% - 4px)',
     borderRadius: '50%'
   },
   selectedLabel: {
     fontWeight: 'bold'
+  },
+  small: {
+    height: 32,
+    width: 32,
+    '& svg': {
+      height: 16,
+      width: 16
+    }
+  },
+  tiny: {
+    height: 24,
+    width: 24,
+    '& svg': {
+      height: 12,
+      width: 12
+    }
   }
 })
 
@@ -88,30 +104,33 @@ function SwatchButton({
   classes,
   imageProps,
   SelectedIcon,
+  variant,
   ...buttonProps
 }) {
   classes = useStyles({ classes })
 
   return (
     <Vbox className={classes.root}>
-      <Button
+      <button
         {...buttonProps}
-        classes={{
-          ...buttonProps.classes,
-          root: clsx({
-            [classes.button]: true,
-            [classes.selected]: selected
-          }),
-          label: classes.SwatchButtonLabel
-        }}
-        variant="outlined"
-        disableRipple
+        type="button"
+        className={clsx({
+          [classes.button]: true,
+          [classes.selected]: selected,
+          [classes[variant]]: true
+        })}
       >
-        <div className={clsx({ [classes.checkMark]: true, [classes.selected]: selected })}>
-          <div className={classes.selectedBackground}>{<SelectedIcon />}</div>
+        <div
+          className={clsx({
+            [classes.checkMark]: true,
+            [classes.selected]: selected,
+            [classes.selectedBackground]: true
+          })}
+        >
+          <SelectedIcon className={classes.icon} />
         </div>
         <Image classes={{ image: classes.image }} fill src={src} alt={alt} {...imageProps} />
-      </Button>
+      </button>
       {label && (
         <Typography variant="caption" className={clsx({ [classes.selectedLabel]: selected })}>
           {label}

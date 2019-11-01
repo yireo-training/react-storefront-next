@@ -7,8 +7,9 @@ import Logo from '../src/assets/react-storefront-logo.svg'
 import Search from './Search'
 import { Hidden, Container } from '@material-ui/core'
 import Menu from 'react-storefront/menu/Menu'
-import MenuButton from '../src/react-storefront/menu/MenuButton'
+import MenuButton from 'react-storefront/menu/MenuButton'
 import createMenu from '../src/mocks/createMenu'
+import Link from 'react-storefront/Link'
 
 const menu = createMenu()
 
@@ -17,6 +18,7 @@ const useStyles = makeStyles(theme => ({
   logo: {
     position: 'absolute',
     left: 10,
+    top: 0,
     [theme.breakpoints.down('xs')]: {
       left: '50%',
       marginLeft: '-60px'
@@ -39,7 +41,9 @@ export default function Header({ children }) {
           maxWidth="lg"
           style={{ display: 'flex', alignItems: 'center', position: 'relative', padding: 5 }}
         >
-          <Logo style={{ width: 120 }} className={classes.logo} />
+          <Link href="/">
+            <Logo style={{ width: 120, height: 58 }} className={classes.logo} />
+          </Link>
           <Hidden implementation="css" smUp>
             <Search />
           </Hidden>

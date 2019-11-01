@@ -1,18 +1,17 @@
 import React, { useRef, useState, useEffect, useContext } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Form from '../Form'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import qs from 'qs'
 import LoadMask from '../LoadMask'
-import { useAmp } from 'next/amp'
-import Head from 'next/head'
 
 export const styles = theme => ({
   root: {
     position: 'relative',
-    height: '100%'
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   }
 })
 const useStyles = makeStyles(styles, { name: 'RSFSearchForm' })
@@ -45,25 +44,10 @@ export default function SearchForm({ classes, children, action }) {
   }
 
   return (
-    <>
-      <Head>
-        <script
-          async
-          custom-element="amp-list"
-          src="https://cdn.ampproject.org/v0/amp-list-0.1.js"
-        />
-      </Head>
-      <form
-        ref={ref}
-        action={action}
-        onSubmit={handleSubmit}
-        className={classes.root}
-        target="_self"
-      >
-        <LoadMask show={submitting} transparent />
-        {children}
-      </form>
-    </>
+    <form ref={ref} action={action} onSubmit={handleSubmit} className={classes.root} target="_self">
+      <LoadMask show={submitting} transparent />
+      {children}
+    </form>
   )
 }
 

@@ -34,6 +34,8 @@ export default function SearchProvider({ children, initialGroups, onClose }) {
       const url = `/api/suggestions?q=${encodeURIComponent(text.trim())}`
       const { groups } = await fetch(url, { credentials: 'include' }).then(res => res.json())
 
+      console.log('setting state', groups)
+
       setState(state => ({
         ...state,
         loading: false,
@@ -54,16 +56,26 @@ export default function SearchProvider({ children, initialGroups, onClose }) {
     router.push(`/search?q=${encodeURIComponent(text.trim())}`)
   }
 
-  const context = useMemo(
-    () => ({
-      state,
-      setState,
-      fetchSuggestions,
-      onClose,
-      submit
-    }),
-    [state]
-  )
+  // const context = useMemo(
+  //   () => ({
+  //     state,
+  //     setState,
+  //     fetchSuggestions,
+  //     onClose,
+  //     submit
+  //   }),
+  //   [state]
+  // )
+
+  console.log('SearchContext.Provider')
+
+  const context = {
+    state,
+    setState,
+    fetchSuggestions,
+    onClose,
+    submit
+  }
 
   return <SearchContext.Provider value={context}>{children}</SearchContext.Provider>
 }

@@ -1,16 +1,17 @@
 import colors, { colorForId, grey } from './colors'
 import capitalize from 'lodash/capitalize'
 
-export default function createProduct(id) {
+export default function createProduct(id, numColors = 4) {
   const color = colorForId(id)
 
   return {
     id,
+    url: `/p/${id}`,
     name: `Product ${id}`,
     price: `$${(id % 10) * 10 + 0.99}`,
     rating: (10 - (id % 10)) / 2.0,
     thumbnail: {
-      src: `https://via.placeholder.com/600x600/${colors[color].background}/${
+      src: `https://via.placeholder.com/400x400/${colors[color].background}/${
         colors[color].foreground
       }?text=${encodeURIComponent('Product ' + id)}`,
       alt: `Product ${id}`
@@ -35,15 +36,23 @@ export default function createProduct(id) {
       { id: 'xl', text: 'XL', disabled: true },
       { id: 'xxl', text: 'XXL' }
     ],
-    colors: Object.keys(colors).map(name => ({
-      text: capitalize(name),
-      id: name,
-      image: {
-        src: `https://via.placeholder.com/48x48/${
-          colors[name].background
-        }?text=${encodeURIComponent(' ')}`,
-        alt: name
-      }
-    }))
+    colors: Object.keys(colors)
+      .slice(0, numColors)
+      .map(name => ({
+        text: capitalize(name),
+        id: name,
+        image: {
+          src: `https://via.placeholder.com/48x48/${
+            colors[name].background
+          }?text=${encodeURIComponent(' ')}`,
+          alt: name
+        },
+        thumbnail: {
+          src: `https://via.placeholder.com/400x400/${
+            colors[name].background
+          }?text=${encodeURIComponent(`Product ${id}`)}`,
+          alt: name
+        }
+      }))
   }
 }

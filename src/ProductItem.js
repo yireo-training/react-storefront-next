@@ -1,23 +1,17 @@
 import React from 'react'
 import Link from 'react-storefront/Link'
 import { Vbox } from 'react-storefront/Box'
-import Image from 'react-storefront/Image'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Rating from 'react-storefront/Rating'
 import ForwardThumbnail from 'react-storefront/ForwardThumbnail'
+import ProductThumbnail from './react-storefront/product-link/ProductThumbnail'
+import ProductLink from './react-storefront/product-link/ProductLink'
+import ProductColors from './react-storefront/product-link/ProductColors'
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: '10px 0'
-  },
-  thumb: {
-    flex: 2,
-    display: 'block',
-    marginBottom: '10px',
-    '& img': {
-      width: '100%'
-    }
   },
   link: {
     textDecoration: 'none',
@@ -43,32 +37,31 @@ export default function Product({ product, index }) {
   return (
     <div className={classes.root}>
       <ForwardThumbnail>
-        <Link
-          as={`/p/${product.id}`}
-          href="/p/[productId]"
-          className={classes.link}
-          skeletonProps={{ product }}
-          prefetch="visible"
-        >
+        <ProductLink product={product}>
           <Vbox alignItems="stretch">
-            <div className={classes.thumb}>
-              <Image
+            <Link
+              as={product.url}
+              href="/p/[productId]"
+              className={classes.link}
+              prefetch="visible"
+              skeletonProps={{ product }}
+            >
+              <ProductThumbnail
                 optimize={{ maxWidth: 200 }}
                 lazy={index >= 4 && index < 20 ? 'ssr' : false}
                 aspectRatio={100}
-                alt={product.thumbnail.alt}
-                src={product.thumbnail.src}
               />
-            </div>
+            </Link>
             <div className={classes.info}>
               <Typography variant="subtitle1" className={classes.name}>
                 {product.name}
               </Typography>
+              <ProductColors product={product} buttonProps={{ variant: 'small' }} />
               <Rating product={product} className={classes.rating} />
               <Typography className={classes.price}>{product.price}</Typography>
             </div>
           </Vbox>
-        </Link>
+        </ProductLink>
       </ForwardThumbnail>
     </div>
   )

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, Typography} from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { useAmp } from 'next/amp'
@@ -10,8 +10,7 @@ import withDefaultHandler from './utils/withDefaultHandler'
 export const styles = theme => ({
   buttons: {
     display: 'flex',
-    flexWrap: 'wrap',
-    margin: '-4px'
+    flexWrap: 'wrap'
   },
   wrap: {
     position: 'relative',
@@ -48,21 +47,6 @@ const useStyles = makeStyles(styles, { name: 'RSFButtonSelector' })
  * the buttons.
  *
  * This component supports AMP.
- *
- * ```js
- *  const model = useLocalStore({
- *    selected: 'md',
- *    options: [
- *      { id: 'sm', text: 'SM' }
- *      { id: 'md', text: 'MD' }
- *      { id: 'lg', text: 'LG' }
- *    ]
- *  })
- *
- *  const sizeSelector = (
- *    <ButtonSelector model={model}/>
- *  )
- * ```
  */
 export default function ButtonSelector(props) {
   let { options, ampStateId, name, showSelectedText, classes } = props
@@ -76,34 +60,25 @@ export default function ButtonSelector(props) {
   return (
     <div className={classes.root}>
       {amp && (
-        <input
-          type="hidden"
-          name={name}
-          value={model.selected ? model.selected.id : ''}
-          amp-bind={`value=>${ampStateId}.${name}.selected.id`}
-        />
+        <input type="hidden" name={name} amp-bind={`value=>${ampStateId}.${name}.selected.id`} />
       )}
       <div className={classes.buttons}>
         {options.map((option, i) => (
-          <Option {...props} key={option.id} option={option} classes={classes} index={i} />
+          <Option
+            {...props}
+            name={name}
+            key={option.id}
+            option={option}
+            classes={classes}
+            index={i}
+          />
         ))}
       </div>
-      {showSelectedText && (
-        <Typography
-          variant="caption"
-          component="div"
-          className={classes.selectedName}
-          amp-bind={`text=>${ampStateId}.${name}.selected.text`}
-        >
-          {model.selected && model.selected.text}
-        </Typography>
-      )}
     </div>
   )
 }
 
 function Option({
-  index,
   option,
   value,
   classes,
@@ -121,13 +96,15 @@ function Option({
 
   const handleClick = withDefaultHandler(onSelectionChange, (_e, value) => {
     if (updateStore && name) {
-      updateStore(store => ({
-        ...store,
-        pageData: {
-          ...store.pageData,
-          [name]: value
+      updateStore(store => {
+        return {
+          ...store,
+          pageData: {
+            ...store.pageData,
+            [name]: store.pageData[name] === value ? null : value
+          }
         }
-      }))
+      })
     }
   })
 
@@ -140,13 +117,6 @@ function Option({
       option
     )} }, ${name}Interacted: true }})`,
     ...buttonProps
-  }
-
-  function createButtonClass(selected) {
-    return clsx({
-      [classes.button]: true,
-      [classes.selected]: selected
-    })
   }
 
   return (
@@ -195,19 +165,14 @@ ButtonSelector.propTypes = {
   imageProps: PropTypes.object,
 
   /**
-   * Props for button. See <Button /> component for details
-   */
-  buttonProps: PropTypes.object,
-
-  /**
-   * Set to true to show the name of the selected option in a caption below the buttons
-   */
-  showSelectedText: PropTypes.bool,
-
-  /**
    * The name of property in amp state to bind to
    */
   name: PropTypes.string,
+
+  /**
+   * Props to apply to each `Button` element.
+   */
+  buttonProps: PropTypes.object,
 
   /**
    * Set to `true` to show a slash through the item when disabled.  Defaults to `false`
@@ -224,7 +189,6 @@ ButtonSelector.defaultProps = {
   items: [],
   buttonProps: {},
   imageProps: {},
-  showSelectedText: false,
   strikeThroughDisabled: false,
   strikeThroughAngle: 45
 }

@@ -6,11 +6,18 @@ import SearchSuggestionItem from '../../search/SearchSuggestionItem'
 import SearchSuggestionGroup from '../../search/SearchSuggestionGroup'
 import Head from 'next/head'
 import AmpContext from '../AmpContext'
-import { Typography } from '@material-ui/core'
 
 export const styles = theme => ({
-  root: {}
+  root: {},
+  thumbnailGroup: {},
+  group: {},
+  container: {
+    position: 'relative',
+    height: '100%',
+    overflowY: 'auto'
+  }
 })
+
 const useStyles = makeStyles(styles, { name: 'RSFAmpSearchSuggestions' })
 
 export default function AmpSearchSuggestions({ classes }) {
@@ -31,26 +38,39 @@ export default function AmpSearchSuggestions({ classes }) {
           src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"
         />
       </Head>
-      <amp-list
-        layout="fill"
-        amp-bind={`src=>"/api/suggestions?q=" + (${ampState}.text ? encodeURIComponent(${ampState}.text) : '')`}
-        items="groups"
-        noloading
-        reset-on-refresh
-      >
-        <template type="amp-mustache">
-          <SearchSuggestionGroup
-            caption="{{caption}}"
-            amp-bind={`class=>{{thumbnails}} ? "${classes.thumbnailGroup}" : "${classes.group}"`}
-          >
-            {'{{#links}}'}
-            <SearchSuggestionItem item={{ as: '{{as}}', href: '{{href}}' }}>
-              <Typography>{'{{text}}'}</Typography>
-            </SearchSuggestionItem>
-            {'{{/links}}'}
-          </SearchSuggestionGroup>
-        </template>
-      </amp-list>
+      <div className={classes.container}>
+        <amp-list
+          layout="fill"
+          class={classes.root}
+          amp-bind={`src=>"/api/suggestions?q=" + (${ampState}.text ? encodeURIComponent(${ampState}.text) : '')`}
+          items="groups"
+          reset-on-refresh
+        >
+          <template type="amp-mustache">
+            <SearchSuggestionGroup
+              caption="{{caption}}"
+              ui="{{ui}}"
+              amp-bind={`class=>{{thumbnails}} ? "${classes.thumbnailGroup}" : "${classes.group}"`}
+            >
+              {'{{#links}}'}
+              <SearchSuggestionItem
+                thumbnailProps={{
+                  height: 100,
+                  width: 100
+                }}
+                ui="{{ui}}"
+                item={{
+                  as: '{{as}}',
+                  href: '{{href}}',
+                  text: '{{text}}',
+                  thumbnail: { src: '{{thumbnail.src}}', alt: '{{thumbnail.alt}}' }
+                }}
+              />
+              {'{{/links}}'}
+            </SearchSuggestionGroup>
+          </template>
+        </amp-list>
+      </div>
     </>
   )
 }

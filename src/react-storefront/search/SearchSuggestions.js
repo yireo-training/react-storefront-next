@@ -10,8 +10,6 @@ import { useAmp } from 'next/amp'
 
 export const styles = theme => ({
   root: {
-    padding: theme.spacing(2),
-    position: 'relative',
     flex: 1,
     overflowY: 'auto'
   },
@@ -21,25 +19,24 @@ export const styles = theme => ({
 })
 const useStyles = makeStyles(styles, { name: 'RSFSearchSuggestions' })
 
-export default function SearchSuggestions({ classes, children }) {
+export default function SearchSuggestions({ classes }) {
   classes = useStyles({ classes })
-
   const { state } = useContext(SearchContext)
+
+  if (useAmp()) {
+    return <AmpSearchSuggestions classes={classes} />
+  }
 
   return (
     <div className={classes.root}>
       <LoadMask show={state.loading} transparent />
 
-      {useAmp() ? (
-        <AmpSearchSuggestions />
-      ) : (
-        state.groups &&
+      {state.groups &&
         state.groups.map((group, i) => (
           <div key={i} className={classes.group}>
             <SearchSuggestionGroup {...group} />
           </div>
-        ))
-      )}
+        ))}
     </div>
   )
 }
