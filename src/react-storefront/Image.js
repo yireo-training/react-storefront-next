@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import VisibilitySensor from 'react-visibility-sensor'
 import qs from 'qs'
-import makeStyles from '@material-ui/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import PWAContext from './PWAContext'
 import { useAmp } from 'next/amp'
 

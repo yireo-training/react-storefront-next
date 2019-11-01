@@ -1,9 +1,8 @@
 import React from 'react'
-import { ThemeProvider } from '@material-ui/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../src/theme'
 import Header from '../src/Header'
-import { makeStyles, useTheme } from '@material-ui/core'
+import { CssBaseline } from '@material-ui/core'
+import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles'
 import storeInitialPropsInHistory from '../src/react-storefront/router/storeInitialPropsInHistory'
 import PWA from '../src/react-storefront/PWA'
 import Nav from '../src/Nav'
@@ -27,7 +26,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <PWA onError={reportError}>
-      <ThemeProvider theme={theme}>
+      <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <Header />
         <Nav />
@@ -36,7 +35,7 @@ export default function MyApp({ Component, pageProps }) {
             <Component {...pageProps} />
           </AmpState>
         </main>
-      </ThemeProvider>
+      </MuiThemeProvider>
     </PWA>
   )
 }

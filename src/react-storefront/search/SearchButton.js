@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import IconButton from '@material-ui/core/IconButton'
-import Search from '@material-ui/icons/Search'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import React from 'react'
+import { IconButton } from '@material-ui/core'
+import { Search } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 
 export const styles = theme => ({
   icon: {

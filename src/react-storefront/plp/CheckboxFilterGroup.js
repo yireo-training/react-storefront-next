@@ -1,9 +1,6 @@
 import React, { useMemo, useContext } from 'react'
-import Checkbox from '@material-ui/core/Checkbox'
-import FormGroup from '@material-ui/core/FormGroup'
-import Typography from '@material-ui/core/Typography'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { Checkbox, FormGroup, Typography, FormControlLabel } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import SearchResultsContext from './SearchResultsContext'
 
 const styles = theme => ({

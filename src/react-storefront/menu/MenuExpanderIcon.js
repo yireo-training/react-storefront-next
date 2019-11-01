@@ -1,7 +1,5 @@
 import React, { useContext } from 'react'
-import ChevronRight from '@material-ui/icons/ChevronRight'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
+import { ChevronRight, ExpandLess, ExpandMore } from '@material-ui/icons'
 import MenuContext from './MenuContext'
 import { useAmp } from 'next/amp'
 

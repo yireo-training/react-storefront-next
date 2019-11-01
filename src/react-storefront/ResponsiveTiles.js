@@ -3,10 +3,10 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 import React, { useRef } from 'react'
-import GridListTile from '@material-ui/core/GridListTile'
+import { GridListTile } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/styles'
 
 /**
  * A responsive grid of tiles that changes the number of columns based on the viewport size.

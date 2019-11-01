@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
 import './profile'
 import './hooks/useTraceUpdate'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 
 export const styles = theme => ({
   '@global': {

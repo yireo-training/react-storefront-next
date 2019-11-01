@@ -5,10 +5,9 @@
 import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import throttle from 'lodash/throttle'
-import ArrowUpward from '@material-ui/icons/ArrowUpward'
-import Fab from '@material-ui/core/Fab'
-import Fade from '@material-ui/core/Fade'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { ArrowUpward } from '@material-ui/icons'
+import { Fab, Fade } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
 const styles = () => ({
   root: {

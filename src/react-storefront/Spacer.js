@@ -1,4 +1,4 @@
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 
 /**
  * Renders a simple div with flex: 1 to be used as a spacer.  Since this is a

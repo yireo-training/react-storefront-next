@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from 'react'
 import { Hbox } from '../Box'
 import clsx from 'clsx'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import SearchResultsContext from './SearchResultsContext'
 

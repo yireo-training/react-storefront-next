@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import Carousel from './Carousel'
 import Image from '../Image'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import ReactImageMagnify from 'react-image-magnify'
 import MagnifyHint from './MagnifyHint'
 // import Video from '../Video'

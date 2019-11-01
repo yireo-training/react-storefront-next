@@ -1,7 +1,7 @@
 import React from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import Typography from '@material-ui/core/Typography'
-import Icon from '@material-ui/icons/AddCircleOutline'
+import { makeStyles } from '@material-ui/core/styles'
+import { Typography } from '@material-ui/core'
+import { AddCircleOutline as Icon } from '@material-ui/icons'
 import clsx from 'clsx'
 
 const styles = theme => ({

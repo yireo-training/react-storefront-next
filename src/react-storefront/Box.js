@@ -5,7 +5,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
-import makeStyles from '@material-ui/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 
 /**
  * A flex container.  All additional props are spread to the style of the underlying div.

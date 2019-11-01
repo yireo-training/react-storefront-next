@@ -3,12 +3,10 @@
  * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
  */
 import React, { useContext } from 'react'
-import Add from '@material-ui/icons/Add'
-import Remove from '@material-ui/icons/Remove'
-import IconButton from '@material-ui/core/IconButton'
-import Input from '@material-ui/core/Input'
+import { Add, Remove } from '@material-ui/icons'
+import { IconButton, Input } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import makeStyles from '@material-ui/core/styles/makeStyles'
 import PWAContext from './PWAContext'
 import AmpContext from './amp/AmpContext'
 

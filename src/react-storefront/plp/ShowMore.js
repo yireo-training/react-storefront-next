@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import { makeStyles } from '@material-ui/core/styles'
+import { CircularProgress, Button } from '@material-ui/core'
 import clsx from 'clsx'
-import Button from '@material-ui/core/Button'
 import SearchResultsContext from './SearchResultsContext'
 
 export const styles = theme => ({

@@ -1,5 +1,5 @@
-import React, { useContext, useCallback } from 'react'
-import List from '@material-ui/core/List'
+import React, { useContext } from 'react'
+import { List } from '@material-ui/core'
 import MenuItem from './MenuItem'
 import MenuContext from './MenuContext'
 import LeafHeader from './LeafHeader'

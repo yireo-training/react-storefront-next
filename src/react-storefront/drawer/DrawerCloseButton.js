@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import ClearIcon from '@material-ui/icons/Clear'
-import Fab from '@material-ui/core/Fab'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
+import { Clear as ClearIcon } from '@material-ui/icons'
+import { Fab, IconButton, Button } from '@material-ui/core'
 
 export const styles = theme => ({
   button: {

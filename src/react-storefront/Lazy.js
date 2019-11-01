@@ -5,7 +5,7 @@
 import React, { useContext, useState } from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 import clsx from 'clsx'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import PWAContext from './PWAContext'
 import PropTypes from 'prop-types'
 

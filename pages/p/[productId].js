@@ -1,6 +1,4 @@
 import { useContext } from 'react'
-import { Container, Grid, Typography, Paper, Divider } from '@material-ui/core'
-import Link from 'react-storefront/Link'
 import Lazy from 'react-storefront/Lazy'
 import ButtonSelector from 'react-storefront/ButtonSelector'
 import QuantitySelector from 'react-storefront/QuantitySelector'
@@ -13,14 +11,13 @@ import CmsSlot from 'react-storefront/CmsSlot'
 import MediaCarousel from 'react-storefront/carousel/MediaCarousel'
 import PWAContext from 'react-storefront/PWAContext'
 import Skeleton from 'react-storefront/Skeleton'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { Container, Grid, Typography, Paper, Hidden } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Row from 'react-storefront/Row'
 import { Hbox } from 'react-storefront/Box'
 import Label from 'react-storefront/Label'
 import Fill from 'react-storefront/Fill'
 import Rating from 'react-storefront/Rating'
-import { useTheme } from '@material-ui/styles'
-import Hidden from '@material-ui/core/Hidden'
 
 const styles = theme => ({
   carouselWrap: {

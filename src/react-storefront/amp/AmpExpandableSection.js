@@ -3,10 +3,9 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { Typography } from '@material-ui/core'
+import { ExpandLess, ExpandMore } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import AmpAccordion from './AmpAccordion'

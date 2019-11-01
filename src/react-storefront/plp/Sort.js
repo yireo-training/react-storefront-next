@@ -3,11 +3,9 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 import React, { memo, forwardRef, useContext } from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
+import { makeStyles } from '@material-ui/core/styles'
+import { Button, MenuItem, Hidden } from '@material-ui/core'
 import PropTypes from 'prop-types'
-import Hidden from '@material-ui/core/Hidden'
 import SearchResultsContext from './SearchResultsContext'
 
 /**

@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import List from '@material-ui/core/List'
-import Collapse from '@material-ui/core/Collapse'
+import { List, Collapse } from '@material-ui/core'
 import MenuItem from './MenuItem'
 import { useAmp } from 'next/amp'
 import MenuContext from './MenuContext'

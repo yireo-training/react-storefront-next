@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from './Link'
-import Cart from '@material-ui/icons/ShoppingCart'
 import ToolbarButton from './ToolbarButton'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import Badge from '@material-ui/core/Badge'
+import { ShoppingCart as Cart } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
+import { Badge } from '@material-ui/core'
 import clsx from 'clsx'
 
 export const styles = theme => ({

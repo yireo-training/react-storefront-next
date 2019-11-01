@@ -6,8 +6,8 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import throttle from 'lodash/throttle'
-import Toolbar from '@material-ui/core/Toolbar'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { Toolbar } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import PWAContext from './PWAContext'
 
 export const styles = theme => ({

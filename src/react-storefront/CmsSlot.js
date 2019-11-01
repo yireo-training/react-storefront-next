@@ -5,7 +5,7 @@
 import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import { lazyLoadImages as doLazyLoadImages } from './utils/lazyLoadImages'
 import { prefetchJsonFor } from './router/serviceWorker'
 

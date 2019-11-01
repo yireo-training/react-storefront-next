@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import React, { useContext } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import SearchSuggestionGroup from './SearchSuggestionGroup'

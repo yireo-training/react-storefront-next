@@ -1,10 +1,8 @@
 import React, { useContext } from 'react'
 import MenuContext from './MenuContext'
 import PropTypes from 'prop-types'
-import ListItem from '@material-ui/core/ListItem'
-import ChevronLeft from '@material-ui/icons/ChevronLeft'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { ChevronLeft } from '@material-ui/icons'
 
 export default function LeafHeader({ goBack, item, parentPath }) {
   const { renderLeafHeader, classes } = useContext(MenuContext)

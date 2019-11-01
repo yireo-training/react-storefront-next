@@ -1,9 +1,7 @@
 import React, { useContext } from 'react'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
+import { ListItemText, ListItemIcon, CircularProgress } from '@material-ui/core'
 import MenuContext from './MenuContext'
 import MenuExpanderIcon from './MenuExpanderIcon'
-import CircularProgress from '@material-ui/core/CircularProgress'
 
 export default function ItemContent(props) {
   const { itemContentRenderer, classes } = useContext(MenuContext)

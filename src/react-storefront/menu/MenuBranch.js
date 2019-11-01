@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import ListItem from '@material-ui/core/ListItem'
+import { ListItem } from '@material-ui/core'
 import clsx from 'clsx'
 import MenuItemContent from './MenuItemContent'
 import MenuContext from './MenuContext'

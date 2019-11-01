@@ -1,10 +1,9 @@
 import React from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import Tabs from '@material-ui/core/Tabs'
-import { useRouter } from 'next/router'
-import Paper from '@material-ui/core/Paper'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import { makeStyles } from '@material-ui/core/styles'
+import { Tabs, Paper } from '@material-ui/core'
+import { useRouter } from 'next/router'
 
 export const styles = theme => ({
   paper: {

@@ -1,13 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
+import {
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Typography
+} from '@material-ui/core'
+import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 import AmpExpandableSection from './amp/AmpExpandableSection'
-import makeStyles from '@material-ui/core/styles/makeStyles'
 import useStateFromProp from './hooks/useStateFromProp'
 import { useAmp } from 'next/amp'
 

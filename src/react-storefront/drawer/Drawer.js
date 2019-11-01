@@ -1,11 +1,9 @@
-import React, { useContext, useRef, useEffect, useState, useCallback } from 'react'
+import React, { useContext, useRef, useEffect, useCallback } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
-import MUIDrawer from '@material-ui/core/Drawer'
+import { Drawer as MUIDrawer, Typography } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import Typography from '@material-ui/core/Typography'
 import clsx from 'clsx'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import useTheme from '@material-ui/core/styles/useTheme'
 import DrawerCloseButton from './DrawerCloseButton'
 
 /**

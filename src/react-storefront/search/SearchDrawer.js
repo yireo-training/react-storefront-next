@@ -1,7 +1,7 @@
 import SearchContext from './SearchContext'
 import Drawer from '../drawer/Drawer'
 import React, { useState, useEffect, useContext } from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import SearchProvider from './SearchProvider'

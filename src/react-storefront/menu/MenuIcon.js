@@ -2,11 +2,10 @@
  * @license
  * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
  */
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import MenuContext from './MenuContext'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import { makeStyles } from '@material-ui/core/styles'
 import { useAmp } from 'next/amp'
 
 export const styles = theme => ({

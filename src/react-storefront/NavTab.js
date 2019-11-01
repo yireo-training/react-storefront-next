@@ -1,10 +1,7 @@
 import Tab from '@material-ui/core/Tab'
 import Link from './Link'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import Popper from '@material-ui/core/Popper'
-import Hidden from '@material-ui/core/Hidden'
-import Fade from '@material-ui/core/Fade'
-import Paper from '@material-ui/core/Paper'
+import { makeStyles } from '@material-ui/core/styles'
+import { Popper, Hidden, Fade, Paper } from '@material-ui/core'
 import { useState, useCallback } from 'react'
 
 const styles = theme => ({

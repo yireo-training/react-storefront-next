@@ -3,13 +3,11 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 import React from 'react'
-import Star from '@material-ui/icons/Star'
-import StarBorder from '@material-ui/icons/StarBorder'
-import StarHalf from '@material-ui/icons/StarHalf'
+import { Star, StarBorder, StarHalf } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Hbox } from './Box'
-import makeStyles from '@material-ui/core/styles/makeStyles'
 
 /**
  * Displays a star rating corresponding to the provided value

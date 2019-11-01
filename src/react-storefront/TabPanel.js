@@ -5,7 +5,8 @@
 import React, { useState } from 'react'
 import { useAmp } from 'next/amp'
 import Head from 'next/head'
-import { Tabs, Tab, makeStyles } from '@material-ui/core'
+import { Tabs, Tab } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 

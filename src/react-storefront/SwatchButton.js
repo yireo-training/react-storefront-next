@@ -1,10 +1,9 @@
 import React, { memo } from 'react'
 import { Vbox } from './Box'
+import { Button, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { Check as CheckedIcon } from '@material-ui/icons'
 import Image from './Image'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import CheckedIcon from '@material-ui/icons/Check'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
