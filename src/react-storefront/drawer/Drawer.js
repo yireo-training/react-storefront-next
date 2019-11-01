@@ -5,6 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import DrawerCloseButton from './DrawerCloseButton'
+import { useAmp } from 'next/amp'
 
 /**
  * A slide-in drawer with fab close button.
@@ -68,6 +69,7 @@ export default function Drawer({
 }) {
   classes = useStyles({ classes })
 
+  const amp = useAmp()
   const theme = useTheme()
   const drawer = useRef(null)
   const drawerResize = useRef(null)
@@ -145,7 +147,9 @@ export default function Drawer({
               {title}
             </Typography>
           )}
-          {showCloseButton && <DrawerCloseButton onClick={closeDrawer} fullscreen={fullscreen} />}
+          {showCloseButton && (
+            <DrawerCloseButton onClick={closeDrawer} fullscreen={fullscreen} open={open || amp} />
+          )}
         </div>
         <div className={classes.content}>{children}</div>
       </div>

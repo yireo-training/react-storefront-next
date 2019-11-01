@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('xs')]: {
       flex: 1
     }
+  },
+  total: {
+    marginTop: theme.spacing(1)
   }
 }))
 
@@ -43,7 +46,11 @@ const Subcategory = lazyProps => {
         <BackToTop />
         <Hbox align="flex-start">
           <Hidden implementation="css" xsDown>
-            <Filter classes={{ root: classes.sideBar }} expandAll submitOnChange />
+            <div className={classes.sideBar}>
+              <Hidden xsDown>
+                <Filter classes={{ root: classes.sideBar }} expandAll submitOnChange />
+              </Hidden>
+            </div>
           </Hidden>
           <Grid container style={{ position: 'relative' }}>
             <LoadMask show={store.reloading} transparent align="top" />
@@ -65,7 +72,7 @@ const Subcategory = lazyProps => {
               {loading ? (
                 <Skeleton style={{ width: 100, height: 12, marginBottom: theme.spacing(1) }} />
               ) : (
-                <Typography variant="caption">
+                <Typography variant="caption" className={classes.total}>
                   {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
                 </Typography>
               )}
