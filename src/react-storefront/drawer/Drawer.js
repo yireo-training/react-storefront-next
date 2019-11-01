@@ -1,15 +1,11 @@
 import React, { useContext, useRef, useEffect, useState, useCallback } from 'react'
 import ResizeObserver from 'resize-observer-polyfill'
 import MUIDrawer from '@material-ui/core/Drawer'
-import Close from '@material-ui/icons/Close'
-import Fab from '@material-ui/core/Fab'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import clsx from 'clsx'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import useTheme from '@material-ui/core/styles/useTheme'
-import { useAmp } from 'next/amp'
-import AMPContext from '../AMPContext'
 import DrawerCloseButton from './DrawerCloseButton'
 
 /**
@@ -52,17 +48,12 @@ export const styles = theme => ({
     lineHeight: '72px',
     textAlign: 'center',
     borderBottom: `1px solid ${theme.palette.divider}`
-  },
-
-  ampClosed: {
-    display: 'none'
   }
 })
 
 const useStyles = makeStyles(styles, { name: 'RSFDrawer' })
 
 export default function Drawer({
-  ampBindClosed,
   variant,
   closeButtonProps,
   showCloseButton,
@@ -80,8 +71,6 @@ export default function Drawer({
   classes = useStyles({ classes })
 
   const theme = useTheme()
-  const amp = useAmp()
-  const { ampStateId } = useContext(AMPContext)
   const drawer = useRef(null)
   const drawerResize = useRef(null)
 
@@ -143,16 +132,10 @@ export default function Drawer({
         }),
         paper: clsx({
           [classes.paper]: true,
-          [classes.ampClosed]: amp && !open,
           [classes.fullscreen]: fullscreen
         })
       }}
-      amp-bind={
-        ampBindClosed
-          ? `class=>${ampStateId}.${ampBindClosed} ? '${classes.ampClosed}' : null`
-          : null
-      }
-      open={(amp && variant === 'temporary') || open}
+      open={open}
       variant={variant}
       onClose={onClose}
       {...rest}
@@ -164,9 +147,7 @@ export default function Drawer({
               {title}
             </Typography>
           )}
-          {showCloseButton && anchor === 'bottom' && (
-            <DrawerCloseButton onClick={closeDrawer} fullscreen={fullscreen} />
-          )}
+          {showCloseButton && <DrawerCloseButton onClick={closeDrawer} fullscreen={fullscreen} />}
         </div>
         <div className={classes.content}>{children}</div>
       </div>
@@ -200,11 +181,6 @@ Drawer.propTypes = {
    * Props to apply to the closeButton
    */
   closeButtonProps: PropTypes.object,
-
-  /**
-   * The name of a property the amp-state to bind to the closed state of the drawer.
-   */
-  ampBindClosed: PropTypes.string,
 
   /**
    * Side from which the drawer will appear (top, left, right, bottom). Defaults to 'bottom'

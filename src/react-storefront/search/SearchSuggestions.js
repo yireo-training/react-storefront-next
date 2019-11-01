@@ -5,6 +5,8 @@ import clsx from 'clsx'
 import SearchSuggestionGroup from './SearchSuggestionGroup'
 import SearchContext from './SearchContext'
 import LoadMask from '../LoadMask'
+import AmpSearchSuggestions from '../amp/search/AmpSearchSuggestions'
+import { useAmp } from 'next/amp'
 
 export const styles = theme => ({
   root: {
@@ -19,7 +21,7 @@ export const styles = theme => ({
 })
 const useStyles = makeStyles(styles, { name: 'RSFSearchSuggestions' })
 
-export default function SearchSuggestions({ classes }) {
+export default function SearchSuggestions({ classes, children }) {
   classes = useStyles({ classes })
 
   const { state } = useContext(SearchContext)
@@ -27,12 +29,17 @@ export default function SearchSuggestions({ classes }) {
   return (
     <div className={classes.root}>
       <LoadMask show={state.loading} transparent />
-      {state.groups &&
+
+      {useAmp() ? (
+        <AmpSearchSuggestions />
+      ) : (
+        state.groups &&
         state.groups.map((group, i) => (
           <div key={i} className={classes.group}>
             <SearchSuggestionGroup {...group} />
           </div>
-        ))}
+        ))
+      )}
     </div>
   )
 }

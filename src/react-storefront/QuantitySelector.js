@@ -10,7 +10,7 @@ import Input from '@material-ui/core/Input'
 import PropTypes from 'prop-types'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import PWAContext from './PWAContext'
-import AMPContext from './AMPContext'
+import AmpContext from './amp/AmpContext'
 
 export const styles = theme => ({
   root: {
@@ -65,7 +65,7 @@ export default function QuantitySelector({
 }) {
   classes = useStyles({ classes })
   const { amp } = useContext(PWAContext)
-  const { ampStateId } = useContext(AMPContext)
+  const { ampState } = useContext(AmpContext)
   const { quantitySelector, icon, button, ...inputClasses } = classes
 
   const bindProps = {
@@ -73,7 +73,7 @@ export default function QuantitySelector({
       'aria-label': ariaLabel,
       name,
       ...inputProps,
-      'amp-bind': `value=>${ampStateId}.quantity || ${value}`
+      'amp-bind': `value=>${ampState}.quantity || ${value}`
     },
     [amp ? 'readOnly' : 'disabled']: true
   }
@@ -93,7 +93,7 @@ export default function QuantitySelector({
             classes={{ root: button }}
             onClick={() => handleChange(value - 1)}
             aria-label={`add one ${ariaLabel}`}
-            on={`tap:AMP.setState({ ${ampStateId}: { quantity: max(${minValue}, (${ampStateId}.quantity || ${value}) - 1) } })`}
+            on={`tap:AMP.setState({ ${ampState}: { quantity: max(${minValue}, (${ampState}.quantity || ${value}) - 1) } })`}
           >
             {subtractIcon || <Remove classes={{ root: icon }} />}
           </IconButton>
@@ -104,7 +104,7 @@ export default function QuantitySelector({
             classes={{ root: button }}
             onClick={() => handleChange(value + 1)}
             aria-label={`subtract one ${ariaLabel}`}
-            on={`tap:AMP.setState({ ${ampStateId}: { quantity: min(${maxValue}, (${ampStateId}.quantity || ${value}) + 1) } })`}
+            on={`tap:AMP.setState({ ${ampState}: { quantity: min(${maxValue}, (${ampState}.quantity || ${value}) + 1) } })`}
           >
             {addIcon || <Add classes={{ root: icon }} />}
           </IconButton>

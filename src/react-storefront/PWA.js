@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import PWAContext from './PWAContext'
-import AMPContext from './AMPContext'
 import Router from 'next/router'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
 import './profile'
 import './hooks/useTraceUpdate'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-
-const ampContextValue = { ampStateId: 'rsf' }
 
 export const styles = theme => ({
   '@global': {
@@ -65,9 +62,7 @@ export default function PWA({ children, errorReporter }) {
 
   return (
     <PWAContext.Provider value={app}>
-      <AMPContext.Provider value={ampContextValue}>
-        <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
-      </AMPContext.Provider>
+      <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
     </PWAContext.Provider>
   )
 }

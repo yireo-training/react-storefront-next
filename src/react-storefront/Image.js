@@ -9,6 +9,7 @@ import VisibilitySensor from 'react-visibility-sensor'
 import qs from 'qs'
 import makeStyles from '@material-ui/styles/makeStyles'
 import PWAContext from './PWAContext'
+import { useAmp } from 'next/amp'
 
 export const styles = theme => ({
   root: {
@@ -101,7 +102,8 @@ export default function Image({
 
   classes = useStyles({ classes })
 
-  const { amp, hydrating } = useContext(PWAContext)
+  const { hydrating } = useContext(PWAContext)
+  const amp = useAmp()
   const [loaded, setLoaded] = useState(lazy === false || (lazy === 'ssr' && !hydrating) || amp)
   const [primaryNotFound, setPrimaryNotFound] = useState(false)
   const ref = useRef()

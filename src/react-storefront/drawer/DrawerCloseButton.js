@@ -14,6 +14,7 @@ export const styles = theme => ({
     position: 'absolute',
     top: 0,
     right: 0,
+    zIndex: 1,
     '& span': {
       textTransform: 'uppercase',
       fontWeight: 'bold'
@@ -43,6 +44,7 @@ export default function DrawerCloseButton({
   text,
   Icon,
   fullscreen,
+  open,
   ...others
 }) {
   classes = useStyles({ classes })
@@ -98,9 +100,15 @@ DrawerCloseButton.propTypes = {
   /**
    * Overrides the default icon
    */
-  Icon: PropTypes.elementType
+  Icon: PropTypes.elementType,
+
+  /**
+   * Set to `true` when the drawer is open
+   */
+  open: PropTypes.bool
 }
 
 DrawerCloseButton.defaultProps = {
-  Icon: ClearIcon
+  Icon: ClearIcon,
+  open: false
 }

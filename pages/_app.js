@@ -9,6 +9,7 @@ import PWA from '../src/react-storefront/PWA'
 import Nav from '../src/Nav'
 import reportError from '../src/reportError'
 import useJssStyles from 'react-storefront/hooks/useJssStyles'
+import AmpState from 'react-storefront/amp/AmpState'
 
 storeInitialPropsInHistory()
 
@@ -31,7 +32,9 @@ export default function MyApp({ Component, pageProps }) {
         <Header />
         <Nav />
         <main className={classes.main}>
-          <Component {...pageProps} />
+          <AmpState id="page" state={pageProps}>
+            <Component {...pageProps} />
+          </AmpState>
         </main>
       </ThemeProvider>
     </PWA>

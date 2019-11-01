@@ -5,6 +5,9 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import SearchProvider from './SearchProvider'
+import { useAmp } from 'next/amp'
+import AmpDrawer from '../amp/AmpDrawer'
+import AmpState from '../amp/AmpState'
 
 export const styles = theme => ({
   paper: {
@@ -19,9 +22,17 @@ export default function SearchDrawer({ classes, open, onClose, children }) {
 
   return (
     <SearchProvider onClose={onClose}>
-      <Drawer classes={classes} open={open} anchor="bottom" onClose={onClose} fullscreen>
-        {children}
-      </Drawer>
+      <AmpState id="rsfSearchDrawer" state={{ open: false, text: '' }}>
+        {useAmp() ? (
+          <AmpDrawer anchor="bottom" fullscreen>
+            {children}
+          </AmpDrawer>
+        ) : (
+          <Drawer classes={classes} open={open} anchor="bottom" onClose={onClose} fullscreen>
+            {children}
+          </Drawer>
+        )}
+      </AmpState>
     </SearchProvider>
   )
 }

@@ -6,9 +6,10 @@ import SearchContext from './SearchContext'
 import { Hbox } from '../Box'
 import { Input, IconButton } from '@material-ui/core'
 import ClearIcon from '@material-ui/icons/Clear'
-import clsx from 'clsx'
 import SearchSubmitButton from './SearchSubmitButton'
 import { Fab, Button } from '@material-ui/core'
+import AmpContext from '../amp/AmpContext'
+import clsx from 'clsx'
 
 export const styles = theme => ({
   root: {
@@ -51,11 +52,12 @@ export default function SearchField({
   const inputRef = useRef(null)
   const { fetchSuggestions } = useContext(SearchContext)
   const [text, setText] = useState('')
+  const { ampState } = useContext(AmpContext)
 
   const HideWhenEmpty = ({ children }) => (
     <div
       className={text.trim().length ? null : classes.hidden}
-      amp-bind={`class=>rsfSearchDrawer.searchText.length > 0 ? "" : "${classes.hidden}"`}
+      amp-bind={`class=>${ampState}.text.length > 0 ? "" : "${classes.hidden}"`}
     >
       {children}
     </div>
@@ -85,9 +87,9 @@ export default function SearchField({
         onChange={handleChange}
         onFocus={handleInputFocus}
         inputProps={{
-          'amp-bind': 'value=>rsfSearchDrawer.searchText'
+          'amp-bind': `value=>${ampState}.text`
         }}
-        on="input-debounced:AMP.setState({ rsfSearchDrawer: { searchText: rsfSearchDrawer.___moov_submitting ? rsfSearchDrawer.searchText : event.value } })"
+        on={`input-debounced:AMP.setState({ ${ampState}: { text: ${ampState}.___moov_submitting ? ${ampState}.text : event.value } })`}
         disableUnderline
         inputRef={inputRef}
         classes={{
@@ -101,7 +103,7 @@ export default function SearchField({
                 onClick={handleClearClick}
                 className={classes.searchReset}
                 rel="clear"
-                on="tap:AMP.setState({ rsfSearchDrawer: { searchText: '' }})"
+                on={`tap:AMP.setState({ ${ampState}: { text: '' }})`}
               >
                 <ClearIcon rel="clear" />
               </IconButton>

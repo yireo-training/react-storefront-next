@@ -22,7 +22,7 @@ export default function SearchButton({ children, classes, search, ...other }) {
       aria-label="Search"
       color="inherit"
       classes={{ label: classes.large }}
-      on="tap:AMP.setState({ rsfSearch: { open: true }})"
+      on="tap:AMP.setState({ rsfSearchDrawer: { open: true }})"
       {...other}
     >
       {children || <Search className={classes.icon} />}
