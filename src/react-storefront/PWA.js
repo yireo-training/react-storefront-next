@@ -6,6 +6,7 @@ import ErrorBoundary from './ErrorBoundary'
 import './profile'
 import './hooks/useTraceUpdate'
 import { makeStyles } from '@material-ui/core/styles'
+import AmpState from './amp/AmpState'
 
 export const styles = theme => ({
   '@global': {
@@ -62,7 +63,9 @@ export default function PWA({ children, errorReporter }) {
 
   return (
     <PWAContext.Provider value={app}>
-      <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
+      <ErrorBoundary onError={errorReporter}>
+        <AmpState>{children}</AmpState>
+      </ErrorBoundary>
     </PWAContext.Provider>
   )
 }

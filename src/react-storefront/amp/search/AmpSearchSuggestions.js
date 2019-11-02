@@ -22,7 +22,7 @@ const useStyles = makeStyles(styles, { name: 'RSFAmpSearchSuggestions' })
 
 export default function AmpSearchSuggestions({ classes }) {
   classes = useStyles({ classes })
-  const { ampState } = useContext(AmpContext)
+  const ampState = useContext(AmpContext)
 
   return (
     <>

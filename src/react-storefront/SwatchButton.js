@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useContext } from 'react'
 import { Vbox } from './Box'
 import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -6,6 +6,7 @@ import { Check as CheckedIcon } from '@material-ui/icons'
 import Image from './Image'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
+import AmpContext from './amp/AmpContext'
 
 export const styles = theme => ({
   root: {},
@@ -63,6 +64,14 @@ export const styles = theme => ({
   selectedLabel: {
     fontWeight: 'bold'
   },
+  default: {
+    height: 48,
+    width: 48,
+    '& svg': {
+      height: 24,
+      width: 24
+    }
+  },
   small: {
     height: 32,
     width: 32,
@@ -97,6 +106,8 @@ const useStyles = makeStyles(styles, { name: 'RSFSwatchButton' })
  * ```
  */
 function SwatchButton({
+  name,
+  value,
   selected,
   label,
   src,
@@ -109,6 +120,20 @@ function SwatchButton({
 }) {
   classes = useStyles({ classes })
 
+  const cls = isSelected =>
+    clsx({
+      [classes.checkMark]: true,
+      [classes.selectedBackground]: true,
+      [classes.root]: true,
+      [classes.selected]: isSelected
+    })
+
+  const { ampState, getValue } = useContext(AmpContext)
+
+  if (selected === undefined) {
+    selected = getValue(name) == value
+  }
+
   return (
     <Vbox className={classes.root}>
       <button
@@ -116,20 +141,24 @@ function SwatchButton({
         type="button"
         className={clsx({
           [classes.button]: true,
-          [classes.selected]: selected,
-          [classes[variant]]: true
+          [classes[variant]]: true,
+          [classes.selected]: selected
         })}
       >
         <div
-          className={clsx({
-            [classes.checkMark]: true,
-            [classes.selected]: selected,
-            [classes.selectedBackground]: true
-          })}
+          className={cls(selected)}
+          amp-bind={`class=>${ampState}.${name} == "${value}" ? "${cls(true)}" : "${cls(false)}"`}
         >
           <SelectedIcon className={classes.icon} />
         </div>
-        <Image classes={{ image: classes.image }} fill src={src} alt={alt} {...imageProps} />
+        <Image
+          classes={{ image: classes.image }}
+          fill
+          aspectRatio={1}
+          src={src}
+          alt={alt}
+          {...imageProps}
+        />
       </button>
       {label && (
         <Typography variant="caption" className={clsx({ [classes.selectedLabel]: selected })}>
@@ -141,6 +170,18 @@ function SwatchButton({
 }
 
 SwatchButton.propTypes = {
+  /**
+   * The key in AMP state from which to get the selected state
+   */
+  name: PropTypes.string,
+  /**
+   * The value.
+   */
+  value: PropTypes.any,
+  /**
+   * Controls the size of the button
+   */
+  variant: PropTypes.string,
   /**
    * Set to `true` to mark the button as selected.
    */
@@ -168,9 +209,9 @@ SwatchButton.propTypes = {
 }
 
 SwatchButton.defaultProps = {
-  selected: false,
   imageProps: {},
-  SelectedIcon: CheckedIcon
+  SelectedIcon: CheckedIcon,
+  variant: 'default'
 }
 
 export default memo(SwatchButton)

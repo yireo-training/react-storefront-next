@@ -3,19 +3,31 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useAmp } from 'next/amp'
 import AmpContext from './AmpContext'
+import get from 'lodash/get'
+import set from 'lodash/set'
 
 /**
  * Serializes the page props as an amp-state.
  */
-export default function AmpState({ id, children, state }) {
-  const value = useMemo(
-    () => ({
-      ampState: id
-    }),
-    []
-  )
-
+export default function AmpState({ id, children, store, updateStore, root }) {
   let scripts = null
+
+  const value = useMemo(() => {
+    return {
+      getValue: path => get(store, `${normalizeRoot(root)}${path}`),
+      setValue: (path, value) => {
+        updateStore(store => {
+          const newStore = { ...store }
+          set(store, `${normalizeRoot(root)}${path}`, value)
+          return newStore
+        })
+      },
+      ampState: id,
+      store,
+      updateStore,
+      root
+    }
+  }, [store, updateStore, id, root])
 
   if (useAmp()) {
     scripts = (
@@ -31,7 +43,7 @@ export default function AmpState({ id, children, state }) {
           <script
             type="application/json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify(state)
+              __html: JSON.stringify(store.pageData)
             }}
           />
         </amp-state>
@@ -47,6 +59,11 @@ export default function AmpState({ id, children, state }) {
   )
 }
 
+function normalizeRoot(root) {
+  if (root) root = `${root}.`
+  return root
+}
+
 AmpState.propTypes = {
   /**
    * An id for the root object
@@ -54,11 +71,18 @@ AmpState.propTypes = {
   id: PropTypes.string,
 
   /**
-   * The page props
+   * The page store returned from `hooks/useLazyStore`
    */
-  state: PropTypes.object.isRequired
+  store: PropTypes.object,
+
+  /**
+   * The page store update function returned from `hooks/useLazyStore`
+   */
+  updateStore: PropTypes.func
 }
 
 AmpState.defaultProps = {
-  id: 'page'
+  id: 'page',
+  store: {},
+  updateStore: Function.prototype
 }

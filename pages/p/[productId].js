@@ -18,6 +18,8 @@ import { Hbox } from 'react-storefront/Box'
 import Label from 'react-storefront/Label'
 import Fill from 'react-storefront/Fill'
 import Rating from 'react-storefront/Rating'
+import Bind from 'react-storefront/Bind'
+import AmpState from 'react-storefront/amp/AmpState'
 
 const styles = theme => ({
   carouselWrap: {
@@ -51,145 +53,121 @@ const Product = React.memo(lazyProps => {
   )
 
   return (
-    <Container maxWidth="lg">
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={6} md={5}>
-          <Hidden implementation="css" smUp>
-            {header}
-          </Hidden>
-          <Fill aspectRatio={1} className={classes.carouselWrap}>
-            <MediaCarousel
-              className={classes.carousel}
-              product={product}
-              thumbnail={thumbnail.current}
-            />
-          </Fill>
-        </Grid>
-        <Grid item xs={12} sm={6} md={7}>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <Hidden implementation="css" xsDown>
-                <div style={{ paddingBottom: theme.spacing(1) }}>{header}</div>
-              </Hidden>
-              {product ? (
-                <>
-                  <Hbox style={{ marginBottom: 10 }}>
-                    <Label>COLOR: </Label>
-                    <Typography>{pageData.color && pageData.color.text}</Typography>
-                  </Hbox>
-                  <ButtonSelector
-                    options={product.colors}
-                    value={pageData.color}
-                    name="color"
-                    updateStore={updateStore}
-                    // onSelectionChange={(_e, color) => {
-                    //   updateStore({
-                    //     ...store,
-                    //     pageData: {
-                    //       ...pageData,
-                    //       color
-                    //     }
-                    //   })
-                    // }}
-                  />
-                </>
-              ) : (
-                <div>
-                  <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
-                  <Hbox>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                  </Hbox>
-                </div>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {product ? (
-                <>
-                  <Hbox style={{ marginBottom: 10 }}>
-                    <Label>SIZE: </Label>
-                    <Typography>{pageData.size && pageData.size.text}</Typography>
-                  </Hbox>
-                  <ButtonSelector
-                    options={product.sizes}
-                    value={pageData.size}
-                    name="size"
-                    updateStore={updateStore}
-                  />
-                </>
-              ) : (
-                <div>
-                  <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
-                  <Hbox>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                    <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
-                  </Hbox>
-                </div>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <Hbox>
-                <Label>QTY:</Label>
-                <QuantitySelector
-                  value={pageData.quantity || 1}
-                  onChange={quantity =>
-                    updateStore({
-                      ...store,
-                      pageData: {
-                        ...pageData,
-                        quantity
-                      }
-                    })
-                  }
-                />
-              </Hbox>
-            </Grid>
-            <Grid item xs={12}>
-              <TabPanel>
-                <CmsSlot label="Description">Description</CmsSlot>
-                <CmsSlot label="Specs">Test</CmsSlot>
-                <div label="Reviews">
-                  {['here', 'here2', 'here3'].map((review, i) => (
-                    <Paper key={i}>{review}</Paper>
-                  ))}
-                </div>
-              </TabPanel>
+    <AmpState store={store} updateStore={updateStore} root="pageData">
+      <Container maxWidth="lg">
+        <Grid container spacing={4}>
+          <Grid item xs={12} sm={6} md={5}>
+            <Hidden implementation="css" smUp>
+              {header}
+            </Hidden>
+            <Fill aspectRatio={1} className={classes.carouselWrap}>
+              <MediaCarousel
+                className={classes.carousel}
+                product={product}
+                thumbnail={thumbnail.current}
+              />
+            </Fill>
+          </Grid>
+          <Grid item xs={12} sm={6} md={7}>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                <Hidden implementation="css" xsDown>
+                  <div style={{ paddingBottom: theme.spacing(1) }}>{header}</div>
+                </Hidden>
+                {product ? (
+                  <>
+                    <Hbox style={{ marginBottom: 10 }}>
+                      <Label>COLOR: </Label>
+                      <Typography>
+                        <Bind name="color.text" store={pageData} />
+                      </Typography>
+                    </Hbox>
+                    <ButtonSelector options={product.colors} name="color" />
+                  </>
+                ) : (
+                  <div>
+                    <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
+                    <Hbox>
+                      <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                      <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                      <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    </Hbox>
+                  </div>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                {product ? (
+                  <>
+                    <Hbox style={{ marginBottom: 10 }}>
+                      <Label>SIZE: </Label>
+                      <Typography>
+                        <Bind name="size.text" />
+                      </Typography>
+                    </Hbox>
+                    <ButtonSelector options={product.sizes} name="size" />
+                  </>
+                ) : (
+                  <div>
+                    <Skeleton style={{ height: 14, marginBottom: theme.spacing(2) }}></Skeleton>
+                    <Hbox>
+                      <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                      <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                      <Skeleton style={{ height: 48, width: 48, marginRight: 10 }}></Skeleton>
+                    </Hbox>
+                  </div>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <Hbox>
+                  <Label>QTY:</Label>
+                  <QuantitySelector name="quantity" />
+                </Hbox>
+              </Grid>
+              <Grid item xs={12}>
+                <TabPanel>
+                  <CmsSlot label="Description">Description</CmsSlot>
+                  <CmsSlot label="Specs">Test</CmsSlot>
+                  <div label="Reviews">
+                    {['here', 'here2', 'here3'].map((review, i) => (
+                      <Paper key={i}>{review}</Paper>
+                    ))}
+                  </div>
+                </TabPanel>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Row>
-            <Accordion>
+          <Grid item xs={12}>
+            <Row>
+              <Accordion>
+                <ExpandableSection expanded title="First">
+                  <div>The first section</div>
+                </ExpandableSection>
+                <ExpandableSection title="Second">
+                  <div>The second section</div>
+                </ExpandableSection>
+                <ExpandableSection title="Third">
+                  <div>The third section</div>
+                </ExpandableSection>
+              </Accordion>
+            </Row>
+            <Row>
               <ExpandableSection expanded title="First">
-                <div>The first section</div>
+                <div>The first no accordion section</div>
               </ExpandableSection>
               <ExpandableSection title="Second">
-                <div>The second section</div>
+                <div>The second no accordion section</div>
               </ExpandableSection>
-              <ExpandableSection title="Third">
-                <div>The third section</div>
-              </ExpandableSection>
-            </Accordion>
-          </Row>
-          <Row>
-            <ExpandableSection expanded title="First">
-              <div>The first no accordion section</div>
-            </ExpandableSection>
-            <ExpandableSection title="Second">
-              <div>The second no accordion section</div>
-            </ExpandableSection>
-          </Row>
+            </Row>
+          </Grid>
+          <div style={{ height: 500 }}></div>
+          <Grid item xs={12}>
+            <Lazy style={{ minHeight: 200 }}>
+              <div>Lazy content</div>
+            </Lazy>
+          </Grid>
         </Grid>
-        <div style={{ height: 500 }}></div>
-        <Grid item xs={12}>
-          <Lazy style={{ minHeight: 200 }}>
-            <div>Lazy content</div>
-          </Lazy>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </AmpState>
   )
 })
 

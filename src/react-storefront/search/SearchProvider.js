@@ -34,8 +34,6 @@ export default function SearchProvider({ children, initialGroups, onClose }) {
       const url = `/api/suggestions?q=${encodeURIComponent(text.trim())}`
       const { groups } = await fetch(url, { credentials: 'include' }).then(res => res.json())
 
-      console.log('setting state', groups)
-
       setState(state => ({
         ...state,
         loading: false,
@@ -66,8 +64,6 @@ export default function SearchProvider({ children, initialGroups, onClose }) {
   //   }),
   //   [state]
   // )
-
-  console.log('SearchContext.Provider')
 
   const context = {
     state,

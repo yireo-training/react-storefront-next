@@ -52,7 +52,7 @@ export default function SearchField({
   const inputRef = useRef(null)
   const { fetchSuggestions } = useContext(SearchContext)
   const [text, setText] = useState('')
-  const { ampState } = useContext(AmpContext)
+  const ampState = useContext(AmpContext)
 
   const HideWhenEmpty = ({ children }) => (
     <div

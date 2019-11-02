@@ -7,7 +7,6 @@ export default function Page({ children }) {
 
   useEffect(() => {
     Router.events.on('routeChangeStart', url => {
-      console.log('routeChangeStart', Router)
       app.loading = true
     })
 

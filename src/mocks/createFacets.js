@@ -21,10 +21,11 @@ export default function createFacets() {
       name: 'Size',
       ui: 'buttons',
       facets: [
-        { name: 'Small', code: 'size:sm' },
-        { name: 'Medium', code: 'size:md' },
-        { name: 'Large', code: 'size:lg' },
-        { name: 'X-Large', code: 'size:xl' }
+        { name: 'SM', code: 'size:sm' },
+        { name: 'MD', code: 'size:md' },
+        { name: 'LG', code: 'size:lg' },
+        { name: 'XL', code: 'size:xl' },
+        { name: 'XXL', code: 'size:xxl' }
       ]
     },
     {

@@ -63,15 +63,19 @@ export default function QuantitySelector({
 }) {
   classes = useStyles({ classes })
   const { amp } = useContext(PWAContext)
-  const { ampState } = useContext(AmpContext)
+  const { ampState, getValue, setValue } = useContext(AmpContext)
   const { quantitySelector, icon, button, ...inputClasses } = classes
+
+  const controlled = value !== undefined
+
+  if (!controlled) value = getValue(name)
 
   const bindProps = {
     inputProps: {
       'aria-label': ariaLabel,
       name,
       ...inputProps,
-      'amp-bind': `value=>${ampState}.quantity || ${value}`
+      'amp-bind': `value=>${ampState}.${name}`
     },
     [amp ? 'readOnly' : 'disabled']: true
   }
@@ -79,6 +83,10 @@ export default function QuantitySelector({
   function handleChange(value) {
     if (value >= minValue && value <= maxValue) {
       onChange(value)
+
+      if (!controlled) {
+        setValue(name, value)
+      }
     }
   }
 
@@ -91,7 +99,7 @@ export default function QuantitySelector({
             classes={{ root: button }}
             onClick={() => handleChange(value - 1)}
             aria-label={`add one ${ariaLabel}`}
-            on={`tap:AMP.setState({ ${ampState}: { quantity: max(${minValue}, (${ampState}.quantity || ${value}) - 1) } })`}
+            on={`tap:AMP.setState({ ${ampState}: { ${name}: max(${minValue}, (${ampState}.${name} || ${value}) - 1) } })`}
           >
             {subtractIcon || <Remove classes={{ root: icon }} />}
           </IconButton>
@@ -102,7 +110,7 @@ export default function QuantitySelector({
             classes={{ root: button }}
             onClick={() => handleChange(value + 1)}
             aria-label={`subtract one ${ariaLabel}`}
-            on={`tap:AMP.setState({ ${ampState}: { quantity: min(${maxValue}, (${ampState}.quantity || ${value}) + 1) } })`}
+            on={`tap:AMP.setState({ ${ampState}: { ${name}: min(${maxValue}, (${ampState}.${name} || ${value}) + 1) } })`}
           >
             {addIcon || <Add classes={{ root: icon }} />}
           </IconButton>
@@ -172,6 +180,5 @@ QuantitySelector.defaultProps = {
   onChange: Function.prototype,
   minValue: 1,
   maxValue: 100,
-  value: 1,
   ariaLabel: 'quantity'
 }

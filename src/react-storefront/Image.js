@@ -40,6 +40,8 @@ export const styles = theme => ({
     }
   },
   fill: {
+    width: '100%',
+    height: '100%',
     '& img': {
       display: 'block',
       objectFit: 'contain',
@@ -130,6 +132,7 @@ export default function Image({
     src,
     key: src,
     [amp ? 'class' : 'className']: clsx({
+      [classes.image]: true,
       [classes.fit]: aspectRatio != null
     }),
     layout: amp ? ampLayout() : null,
@@ -155,7 +158,6 @@ export default function Image({
             ref={ref}
             {...assignedAttributes}
             {...imgAttributes}
-            className={classes.image}
             onError={() => setPrimaryNotFound(true)}
           />
         )

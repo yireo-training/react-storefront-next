@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import { useAmp } from 'next/amp'
 import SwatchButton from './SwatchButton'
 import withDefaultHandler from './utils/withDefaultHandler'
+import AmpContext from './amp/AmpContext'
+import ToggleButton from './ToggleButton'
 
 export const styles = theme => ({
   buttons: {
@@ -49,9 +50,10 @@ const useStyles = makeStyles(styles, { name: 'RSFButtonSelector' })
  * This component supports AMP.
  */
 export default function ButtonSelector(props) {
-  let { options, ampStateId, name, showSelectedText, classes } = props
+  let { options, name, classes } = props
 
   const amp = useAmp()
+  const { ampState } = useContext(AmpContext)
 
   if (!options) return null
 
@@ -59,9 +61,7 @@ export default function ButtonSelector(props) {
 
   return (
     <div className={classes.root}>
-      {amp && (
-        <input type="hidden" name={name} amp-bind={`value=>${ampStateId}.${name}.selected.id`} />
-      )}
+      {amp && <input type="hidden" name={name} amp-bind={`value=>${ampState}.${name}.id`} />}
       <div className={classes.buttons}>
         {options.map((option, i) => (
           <Option
@@ -85,58 +85,51 @@ function Option({
   strikeThroughDisabled,
   strikeThroughAngle,
   buttonProps,
-  ampStateId,
   onSelectionChange,
-  updateStore,
   name
 }) {
-  if (!value) value = {}
-
-  const selected = value.id === option.id
+  const { ampState, getValue, setValue } = useContext(AmpContext)
+  if (!value) value = getValue(name)
+  const selected = value && value.id === option.id
 
   const handleClick = withDefaultHandler(onSelectionChange, (_e, value) => {
-    if (updateStore && name) {
-      updateStore(store => {
-        return {
-          ...store,
-          pageData: {
-            ...store.pageData,
-            [name]: store.pageData[name] === value ? null : value
-          }
-        }
-      })
+    if (name) {
+      setValue(name, getValue(name) === value ? null : value)
     }
   })
 
   const props = {
+    name: `${name}.id`,
+    value: option.id,
     onClick: e => handleClick(e, option),
     'aria-label': option.text,
     href: option.url,
     disabled: option.disabled,
-    on: `tap:AMP.setState({ ${ampStateId}: { ${name}: { selected: ${JSON.stringify(
+    on: `tap:AMP.setState({ ${ampState}: { ${name}: ${JSON.stringify(
       option
-    )} }, ${name}Interacted: true }})`,
+    )}, ${name}Interacted: true }})`,
     ...buttonProps
   }
 
+  const ButtonComponent = option.image || option.color ? SwatchButton : ToggleButton
+
   return (
     <div key={option.id} className={classes.wrap}>
-      {option.image || option.color ? (
-        <SwatchButton
-          selected={selected}
-          {...(option.image || {})}
-          color={option.color}
-          {...props}
-        />
-      ) : (
-        <Button
-          variant={selected ? 'contained' : 'outlined'}
-          color={selected ? 'primary' : 'default'}
-          {...props}
-        >
-          {option.text}
-        </Button>
-      )}
+      <ButtonComponent
+        name={`${name}.id`}
+        value={option.id}
+        onClick={e => handleClick(e, option)}
+        aria-label={option.text}
+        disabled={option.disabled}
+        on={`tap:AMP.setState({ ${ampState}: { ${name}: ${JSON.stringify(
+          option
+        )}, ${name}Interacted: true }})`}
+        color={option.color}
+        {...(option.image || {})}
+        {...buttonProps}
+      >
+        {option.text}
+      </ButtonComponent>
       {option.disabled && strikeThroughDisabled && (
         <div
           className={classes.strikeThrough}

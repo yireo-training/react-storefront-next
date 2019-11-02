@@ -84,7 +84,7 @@ export default function AmpDrawer({
   fullscreen
 }) {
   classes = useStyles({ classes })
-  const { ampState } = useContext(AmpContext)
+  const ampState = useContext(AmpContext)
 
   if (anchor === 'left' || anchor === 'right') {
     return (
