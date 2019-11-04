@@ -114,7 +114,7 @@ function MediaCarousel(props) {
     belowAdornments.push(<Image key="thumbnail" className={styles.thumbnail} fill {...thumbnail} />)
   }
 
-  if (media && media.some(item => item.magnify)) {
+  if (media && media.full && media.full.some(item => item.magnify)) {
     belowAdornments.push(<MagnifyHint key="magnify-hint" over={over} />)
   }
 
@@ -128,7 +128,8 @@ function MediaCarousel(props) {
       onMouseLeave={handleMouseLeave}
     >
       {media &&
-        media.map((item, i) => (
+        media.full &&
+        media.full.map((item, i) => (
           <Media
             key={i}
             onLoad={i === 0 ? onFullSizeImagesLoaded : null}

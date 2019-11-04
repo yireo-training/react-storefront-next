@@ -1,6 +1,13 @@
 import colors, { colorForId, grey } from './colors'
 import capitalize from 'lodash/capitalize'
 
+{
+  media: {
+    full: []
+    thumbnails: []
+  }
+}
+
 export default function createProduct(id, numColors = 4) {
   const color = colorForId(id)
 
@@ -16,19 +23,22 @@ export default function createProduct(id, numColors = 4) {
       }?text=${encodeURIComponent('Product ' + id)}`,
       alt: `Product ${id}`
     },
-    media: [color, 'red', 'blue'].map(key => ({
-      src: `https://via.placeholder.com/600x600/${colors[key].background}/${
-        colors[key].foreground
-      }?text=${encodeURIComponent('Product ' + id)}`,
-      alt: `Product ${id}`,
-      magnify: {
-        height: 1200,
-        width: 1200,
-        src: `https://via.placeholder.com/1200x1200/${colors[key].background}/${
+    media: {
+      full: [color, 'red', 'blue'].map(key => ({
+        src: `https://via.placeholder.com/600x600/${colors[key].background}/${
           colors[key].foreground
-        }?text=${encodeURIComponent('Product ' + id)}`
-      }
-    })),
+        }?text=${encodeURIComponent('Product ' + id)}`,
+        alt: `Product ${id}`,
+        magnify: {
+          height: 1200,
+          width: 1200,
+          src: `https://via.placeholder.com/1200x1200/${colors[key].background}/${
+            colors[key].foreground
+          }?text=${encodeURIComponent('Product ' + id)}`
+        }
+      })),
+      thumbnails: []
+    },
     sizes: [
       { id: 'sm', text: 'SM' },
       { id: 'md', text: 'MD' },
@@ -52,7 +62,8 @@ export default function createProduct(id, numColors = 4) {
             colors[name].background
           }?text=${encodeURIComponent(`Product ${id}`)}`,
           alt: name
-        }
+        },
+        media: [{ src: '...', alt: '' }]
       }))
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from 'react-storefront/AppBar'
 import Spacer from 'react-storefront/Spacer'
@@ -30,9 +30,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function Header({ children }) {
+export default function Header() {
   const classes = useStyles()
   const [menuOpen, setMenuOpen] = useState(false)
+  const handleMenuClose = useCallback(() => setMenuOpen(false), [])
+  const handleMenuButtonClick = useCallback(() => setMenuOpen(menuOpen => !menuOpen), [])
 
   return (
     <>
@@ -49,7 +51,7 @@ export default function Header({ children }) {
           </Hidden>
           <Spacer />
           <CartButton quantity={4} />
-          <MenuButton open={menuOpen} onClick={() => setMenuOpen(!menuOpen)} />
+          <MenuButton open={menuOpen} onClick={handleMenuButtonClick} />
         </Container>
       </AppBar>
       <Menu
@@ -58,11 +60,11 @@ export default function Header({ children }) {
         root={menu}
         open={menuOpen}
         expandFirstItem
+        onClose={handleMenuClose}
         // itemContentRenderer={() => <div>content</div>}
         // itemRenderer={() => <div>sdfsd</div>}
         // renderLeafHeader={() => <div>leaf header</div>}
         // renderLeafFooter={() => <div>leaf footer</div>}
-        onClose={() => setMenuOpen(false)}
       />
     </>
   )

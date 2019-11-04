@@ -12,23 +12,25 @@ export const styles = menuStyles
 
 const useStyles = makeStyles(styles, { name: 'RSFMenu' })
 
-function Menu({
-  classes,
-  className,
-  align,
-  drawerWidth,
-  persistent,
-  root,
-  open,
-  onClose,
-  expandFirstItem,
-  renderLeafFooter,
-  renderLeafHeader,
-  itemRenderer,
-  itemContentRenderer,
-  useExpanders,
-  ...others
-}) {
+function Menu(props) {
+  let {
+    classes,
+    className,
+    align,
+    drawerWidth,
+    persistent,
+    root,
+    open,
+    onClose,
+    expandFirstItem,
+    renderLeafFooter,
+    renderLeafHeader,
+    itemRenderer,
+    itemContentRenderer,
+    useExpanders,
+    ...others
+  } = props
+
   classes = useStyles({ classes })
 
   const [state, setState] = useState(() => {
