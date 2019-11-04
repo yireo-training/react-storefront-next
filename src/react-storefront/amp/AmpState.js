@@ -14,7 +14,9 @@ export default function AmpState({ id, children, store, updateStore, root }) {
 
   const value = useMemo(() => {
     return {
-      getValue: path => get(store, `${normalizeRoot(root)}${path}`),
+      getValue: path => {
+        return get(store, `${normalizeRoot(root)}${path}`)
+      },
       setValue: (path, value) => {
         updateStore(store => {
           const newStore = { ...store }
@@ -23,8 +25,6 @@ export default function AmpState({ id, children, store, updateStore, root }) {
         })
       },
       ampState: id,
-      store,
-      updateStore,
       root
     }
   }, [store, updateStore, id, root])
@@ -43,7 +43,7 @@ export default function AmpState({ id, children, store, updateStore, root }) {
           <script
             type="application/json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify(store.pageData)
+              __html: JSON.stringify(get(store, root))
             }}
           />
         </amp-state>
@@ -60,8 +60,11 @@ export default function AmpState({ id, children, store, updateStore, root }) {
 }
 
 function normalizeRoot(root) {
-  if (root) root = `${root}.`
-  return root
+  if (root) {
+    return `${root}.`
+  } else {
+    return ''
+  }
 }
 
 AmpState.propTypes = {

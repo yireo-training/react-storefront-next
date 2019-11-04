@@ -47,7 +47,7 @@ const Subcategory = lazyProps => {
         <Hbox align="flex-start">
           <Hidden implementation="css" xsDown>
             <div className={classes.sideBar}>
-              <Hidden xsDown initialWidth="lg">
+              <Hidden xsDown>
                 <Filter classes={{ root: classes.sideBar }} expandAll submitOnChange />
               </Hidden>
             </div>

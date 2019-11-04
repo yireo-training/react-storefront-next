@@ -3,6 +3,7 @@ const withServiceWorker = require('./src/react-storefront/webpack/withServiceWor
 const webpack = require('webpack')
 const API_VERSION = new Date().getTime()
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const NextXDNPlugin = require('./src/moov-xdn-next/webpack/NextXDNPlugin')
 
 module.exports = withServiceWorker({
   target: 'serverless',
@@ -24,6 +25,11 @@ module.exports = withServiceWorker({
       if (process.env.analyze === 'true') {
         config.plugins.push(new BundleAnalyzerPlugin())
       }
+      config.plugins.push(
+        new NextXDNPlugin({
+          outputFile: './tmp/oem.json'
+        })
+      )
       //   config.plugins.push(generateServiceWorker(options.config))
     }
 

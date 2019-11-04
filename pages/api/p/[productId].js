@@ -1,6 +1,8 @@
 import createProduct from '../../../src/mocks/createProduct'
+import createCustomCacheKey from '../../../src/moov-xdn/src/createCustomCacheKey'
+import withCaching from '../../../src/moov-xdn-next/src/withCaching'
 
-export default function fetchProduct(req, res) {
+function fetchProduct(req, res) {
   const {
     query: { productId }
   } = req
@@ -23,3 +25,10 @@ export default function fetchProduct(req, res) {
     )
   }, 1)
 }
+
+export default withCaching({
+  edge: {
+    maxAgeSeconds: 1000,
+    key: createCustomCacheKey().addCookie('currency')
+  }
+})(fetchProduct)

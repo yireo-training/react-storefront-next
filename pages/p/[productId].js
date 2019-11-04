@@ -179,6 +179,13 @@ Product.getInitialProps = fetchProps(
   ({ query }) => `http://localhost:3000/api/p/${query.productId}`
 )
 
+// Product.getInitialProps = withCaching({
+//   edge: {
+//     maxAgeSeconds: 1000,
+//     key: createCustomCacheKey().addCookie('currency')
+//   }
+// })(fetchProps(({ query }) => `http://localhost:3000/api/p/${query.productId}`))
+
 export default Product
 
 export const config = { amp: 'hybrid' }

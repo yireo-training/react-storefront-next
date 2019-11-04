@@ -39,6 +39,8 @@ function Filter({
 }) {
   classes = useStyles({ classes })
 
+  console.log('render filter')
+
   const {
     pageData: { facets }
   } = useContext(SearchResultsContext)
