@@ -46,6 +46,9 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   // save the page state in history.state before navigation
   const onHistoryChange = useCallback(() => {
     if (!goingBack.current) {
+      // We don't record pageData in history here because the browser has already changed the
+      // URL to the previous page.  It's too late.  This means that going forward will always result
+      // in a fetch (though usually this will just come from the browser's cache)
       recordState(stateRef.current.pageData)
       goingBack.current = false
     }
@@ -65,7 +68,10 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
 }
 
 /**
- * Records the page state in history.state.rsf[uri]
+ * Records the page state in history.state.rsf[uri].  Why is this needed?  Why can we not
+ * simply rely on the page data being in the browser's cache via the service worker? It's
+ * because we want to restore the state of the page as the user left it, including sorting,
+ * paging, and any other changes which might not be reflected in the URL.
  * @param {Object} state The page state
  */
 function recordState(state) {

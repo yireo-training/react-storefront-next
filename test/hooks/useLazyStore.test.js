@@ -1,12 +1,13 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import supressActWarnings from '../config/suppressActWarnings'
-import { Router, goBack } from '../config/mockRouter'
+import { Router, goBack, navigate } from '../config/mockRouter'
+import PWAContext from 'react-storefront/PWAContext'
 
 let useLazyStore
 
 describe('useLazyStore', () => {
-  let restore, values, Test, updateStore, additionalData
+  let restore, values, Test, updateStore, additionalData, wrapper
 
   beforeAll(() => {
     restore = supressActWarnings()
@@ -29,8 +30,12 @@ describe('useLazyStore', () => {
     }
   })
 
+  afterEach(() => {
+    if (wrapper) wrapper.unmount()
+  })
+
   it('should return props and do nothing if there are no lazy props', () => {
-    mount(<Test foo="bar" />)
+    wrapper = mount(<Test foo="bar" />)
     expect(values).toHaveLength(1)
     expect(updateStore).toBeDefined()
     expect(values[0]).toEqual({ foo: 'bar', loading: false, pageData: {} })
@@ -38,7 +43,7 @@ describe('useLazyStore', () => {
 
   it('should include the specified additionalData', () => {
     additionalData = { additional: { test: 'foo' } }
-    mount(<Test foo="bar" />)
+    wrapper = mount(<Test foo="bar" />)
     expect(values).toHaveLength(1)
     expect(values[0]).toEqual({
       foo: 'bar',
@@ -48,16 +53,107 @@ describe('useLazyStore', () => {
     })
   })
 
-  it('should render again once lazyProps have been resolved', done => {
-    global.fetch.mockResponseOnce(JSON.stringify({ pageData: { foo: 'bar' } }))
+  it('should render again once lazyProps have been resolved', () => {
+    global.fetch.mockResponseOnce(JSON.stringify({ pageData: { again: true } }))
+    wrapper = mount(<Test lazy="/data" />)
 
-    mount(<Test lazy="/data" />)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        expect(values).toHaveLength(2)
+        expect(values[0]).toEqual({ loading: true, pageData: {} })
+        expect(values[1]).toEqual({ loading: false, pageData: { again: true } })
+        resolve()
+      }, 100)
+    })
+  })
 
-    setTimeout(() => {
-      expect(values).toHaveLength(2)
-      expect(values[0]).toEqual({ loading: true, pageData: {} })
-      expect(values[1]).toEqual({ loading: false, pageData: { foo: 'bar' } })
-      done()
-    }, 10)
+  it('should record lazy pageData in history when navigating', () => {
+    global.fetch.mockResponseOnce(JSON.stringify({ pageData: { lazy: true } }))
+    wrapper = mount(<Test lazy="/data" />)
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        navigate('/next')
+        goBack()
+      }, 100)
+      setTimeout(() => {
+        expect(window.history.state).toEqual({ as: '/', rsf: { '/': { lazy: true } } })
+        resolve()
+      }, 200)
+    })
+  })
+
+  it('should record eager pageData in history when navigating', () => {
+    wrapper = mount(<Test pageData={{ eager: true }} />)
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        navigate('/next')
+        goBack()
+      }, 100)
+      setTimeout(() => {
+        expect(window.history.state).toEqual({ as: '/', rsf: { '/': { eager: true } } })
+        resolve()
+      }, 200)
+    })
+  })
+
+  it('should not record pageData when going back', () => {
+    navigate('/previous')
+    navigate('/next')
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        wrapper = mount(<Test pageData={{ x: 'y' }} />)
+        goBack()
+      }, 100)
+
+      setTimeout(() => {
+        expect(window.history.state).toEqual(null)
+        resolve()
+      }, 200)
+    })
+  })
+
+  it('should update the store if lazy props change', () => {
+    return new Promise((resolve, reject) => {
+      global.fetch.mockResponseOnce(JSON.stringify({ pageData: { value: 1 } }))
+      wrapper = mount(<Test lazy="/data/1" />)
+
+      setTimeout(() => {
+        global.fetch.mockResponseOnce(JSON.stringify({ pageData: { value: 2 } }))
+        wrapper.setProps({ lazy: '/data/2' })
+      }, 100)
+
+      setTimeout(() => {
+        expect(values).toHaveLength(4)
+        expect(values[3]).toEqual({ loading: false, pageData: { value: 2 } })
+        resolve()
+      }, 200)
+    })
+  })
+
+  it('should update the store if eager props change', () => {
+    wrapper = mount(<Test value={1} />)
+    wrapper.setProps({ value: 2 })
+    expect(values).toHaveLength(3)
+    expect(values[2].value).toBe(2)
+  })
+
+  it('should apply skeletonProps from PWAContext', () => {
+    wrapper = mount(
+      <PWAContext.Provider value={{ skeletonProps: { skeleton: true } }}>
+        <Test value={1} />
+      </PWAContext.Provider>
+    )
+
+    expect(values).toHaveLength(1)
+    expect(values[0]).toEqual({
+      loading: false,
+      pageData: {
+        skeleton: true
+      },
+      value: 1
+    })
   })
 })

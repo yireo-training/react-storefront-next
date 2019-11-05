@@ -14,6 +14,11 @@ export const Router = {
   }
 }
 
+export function navigate(url) {
+  events.emit('beforeHistoryChange')
+  window.history.pushState(null, null, url)
+}
+
 export function goBack() {
   if (beforePopState() !== false) {
     window.history.back()
