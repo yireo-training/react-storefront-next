@@ -42,6 +42,7 @@
     "webpack-bundle-analyzer": "^3.6.0"
   },
   "jest": {
+    "clearMocks": true,
     "testEnvironment": "./test/config/jsdom",
     "setupFiles": [
       "./test/config/setup.js"

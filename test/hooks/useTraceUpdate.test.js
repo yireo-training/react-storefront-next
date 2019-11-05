@@ -8,7 +8,7 @@ describe('useTraceUpdate', () => {
       useTraceUpdate(props)
       return null
     }
-    const log = jest.spyOn(console, 'log')
+    const log = jest.spyOn(console, 'log').mockImplementation()
     const wrapper = mount(<Test value={1} />)
     wrapper.setProps({ value: 1 })
     expect(log).toHaveBeenCalledWith('nothing changed')

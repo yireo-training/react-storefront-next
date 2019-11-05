@@ -11,7 +11,8 @@ export const Router = {
   },
   beforePopState(cb) {
     beforePopState = cb
-  }
+  },
+  push: jest.fn()
 }
 
 export function navigate(url) {

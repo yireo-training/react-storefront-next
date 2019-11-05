@@ -12,26 +12,28 @@ import qs from 'qs'
 export default function useSimpleNavigation() {
   const routes = useRef({})
 
-  useEffect(async () => {
-    delegate('a', 'click', e => {
-      const { delegateTarget } = e
-      const as = delegateTarget.getAttribute('href')
-
-      if (as) {
-        e.preventDefault()
+  useEffect(() => {
+    async function doEffect() {
+      delegate('a', 'click', e => {
+        const { delegateTarget } = e
+        const as = delegateTarget.getAttribute('href')
         const href = getRoute(as, routes.current)
-        const url = toNextURL(href)
-        Router.push(url, as)
-      }
-    })
 
-    routes.current = await fetchRouteManifest()
+        if (href) {
+          e.preventDefault()
+          const url = toNextURL(href)
+          Router.push(url, as)
+        }
+      })
+
+      routes.current = await fetchRouteManifest()
+    }
+
+    doEffect()
   }, [])
 }
 
 function toNextURL(href) {
-  if (!href) return null
-
   const url = new URL(href, window.location.protocol + window.location.hostname)
 
   return {
