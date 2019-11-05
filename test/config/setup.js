@@ -14,3 +14,4 @@ global.jsdom.reconfigure({
 global.fetch = fetchMock
 
 jest.doMock('isomorphic-unfetch', () => fetchMock)
+jest.doMock('next/router', () => require('./mockRouter').Router)
