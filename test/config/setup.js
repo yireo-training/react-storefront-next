@@ -12,3 +12,5 @@ global.jsdom.reconfigure({
 })
 
 global.fetch = fetchMock
+
+jest.doMock('isomorphic-unfetch', () => fetchMock)

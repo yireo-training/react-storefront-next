@@ -5,7 +5,10 @@ import PWAContext from '../PWAContext'
 import fetch from 'isomorphic-unfetch'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
-  const { skeletonProps } = useContext(PWAContext)
+  const pwaContext = useContext(PWAContext)
+  const skeletonProps = pwaContext && pwaContext.skeletonProps
+  const isLazy = lazyProps.lazy ? true : false
+  const isInitialMount = useRef(true)
 
   const createInitialState = () => {
     return merge(additionalData, { pageData: skeletonProps }, props, {
@@ -18,7 +21,6 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
   const goingBack = useRef(false)
   const [state, setState] = useState(createInitialState)
   const stateRef = useRef(state)
-  const isLazy = lazyProps.lazy ? true : false
 
   useEffect(() => {
     stateRef.current = state
@@ -30,9 +32,16 @@ export default function useLazyStore(lazyProps, additionalData = {}) {
         .then(res => res.json())
         .then(props => setState(state => merge({}, state, props, { loading: false })))
     } else {
-      setState(createInitialState)
+      if (!isInitialMount.current) {
+        // there is no need to do this if we just mounted since createInitialState will return the same thing as the current state
+        setState(createInitialState)
+      }
     }
   }, [lazyProps])
+
+  useEffect(() => {
+    isInitialMount.current = false
+  }, [])
 
   // save the page state in history.state before navigation
   const onHistoryChange = useCallback(() => {
