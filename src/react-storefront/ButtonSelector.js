@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import clsx from 'clsx'
 import { useAmp } from 'next/amp'
 import SwatchButton from './SwatchButton'
 import withDefaultHandler from './utils/withDefaultHandler'
@@ -90,7 +89,6 @@ function Option({
 }) {
   const { ampState, getValue, setValue } = useContext(AmpContext)
   if (!value) value = getValue(name)
-  const selected = value && value.id === option.id
 
   const handleClick = withDefaultHandler(onSelectionChange, (_e, value) => {
     if (name) {

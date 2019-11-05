@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import Link from 'react-storefront/Link'
 import { Vbox } from 'react-storefront/Box'
 import { Typography } from '@material-ui/core'
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function Product({ product, index }) {
+function ProductItem({ product, index }) {
   const classes = useStyles()
 
   return (
@@ -66,3 +66,5 @@ export default function Product({ product, index }) {
     </div>
   )
 }
+
+export default memo(ProductItem)

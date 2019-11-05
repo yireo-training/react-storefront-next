@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import ButtonSelector from '../ButtonSelector'
 import ProductLinkContext from './ProductLinkContext'
 
@@ -19,7 +17,7 @@ export default function ProductColors({ classes, product, ...others }) {
     <ButtonSelector
       options={product.colors}
       value={color}
-      onSelectionChange={(_e, color) => setColor(color)}
+      onSelectionChange={(_e, color) => setColor(color.media)}
       {...others}
     />
   )
