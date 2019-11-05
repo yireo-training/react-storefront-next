@@ -13,6 +13,15 @@ export async function prefetch(url) {
 }
 
 /**
+ * Prefetches the JSON API results for a given page
+ * @param {String} url The page URL.
+ */
+export function prefetchJsonFor(url) {
+  const parsed = new URL(url)
+  return prefetch(`/api/${parsed.path}${parsed.search}`)
+}
+
+/**
  * Resolves when the service worker has been installed.
  * @private
  */

@@ -9,6 +9,10 @@ export default function fetchProps(createAPIURL) {
 
 async function createLazyProps(as, apiURL, shell) {
   const doFetch = (onlyHit = false) => {
+    if (onlyHit && process.env.NODE_ENV === 'development') {
+      return Promise.resolve({ status: 204 })
+    }
+
     const headers = {
       'x-rsf-api-version': process.env.RSF_API_VERSION
     }

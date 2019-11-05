@@ -29,9 +29,17 @@ module.exports = class NextXDNPlugin {
         const route = toRouteSyntax(pagePath.replace(/\.(html|js)$/, ''))
         const pattern = pathToRegexp(route).toString()
 
-        let customCacheKey = get(mod, 'getInitialProps.xdnCacheConfig.edge.key')
+        let customCacheKey
+
+        if (pagePath.startsWith('api/')) {
+          customCacheKey = get(getConfigForApiRoute(mod), 'edge.key')
+        } else {
+          customCacheKey = get(mod, 'getInitialProps.xdnCacheConfig.edge.key')
+        }
 
         if (customCacheKey) {
+          console.log('got cache key for', pagePath)
+
           oemConfig.custom_cache_keys.push({
             path_regex: pattern,
             ...customCacheKey
@@ -54,4 +62,13 @@ module.exports = class NextXDNPlugin {
 
 function toRouteSyntax(pagePath) {
   return pagePath.replace(/\[([^\]]+)\]/g, ':$1')
+}
+
+function getConfigForApiRoute(mod) {
+  let config
+  global.rsfSetCacheConfig = c => (config = c)
+  const req = { headers: {}, url: '/' }
+  const res = { end: Function.prototype }
+  mod(req, res)
+  return config
 }

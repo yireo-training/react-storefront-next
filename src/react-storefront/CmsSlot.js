@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { lazyLoadImages as doLazyLoadImages } from './utils/lazyLoadImages'
-import { prefetchJsonFor } from './router/serviceWorker'
+import { prefetchJsonFor } from './serviceWorker'
 
 export const styles = theme => ({
   inline: {

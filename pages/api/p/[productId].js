@@ -23,7 +23,7 @@ function fetchProduct(req, res) {
         }
       })
     )
-  }, 1)
+  }, 1000)
 }
 
 export default withCaching({

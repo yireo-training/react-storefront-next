@@ -11,11 +11,17 @@ export default function withCaching(config) {
       const [req, res] = args
 
       if (req.url && res.setHeader) {
+        // handle API routes
         cache(res, config)
+      } else if (req.req) {
+        // handle getInitialProps
+        cache(req.res, config)
       }
 
       return fn(...args)
     }
+
+    result.xdnCacheConfig = config
 
     return result
   }

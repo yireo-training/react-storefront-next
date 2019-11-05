@@ -20,6 +20,8 @@ import Fill from 'react-storefront/Fill'
 import Rating from 'react-storefront/Rating'
 import Bind from 'react-storefront/Bind'
 import AmpState from 'react-storefront/amp/AmpState'
+import withCaching from '../../src/moov-xdn-next/src/withCaching'
+import createCustomCacheKey from '../../src/moov-xdn/src/createCustomCacheKey'
 
 const styles = theme => ({
   carouselWrap: {
@@ -175,16 +177,16 @@ const Product = React.memo(lazyProps => {
   )
 })
 
-Product.getInitialProps = fetchProps(
-  ({ query }) => `http://localhost:3000/api/p/${query.productId}`
-)
+Product.getInitialProps = withCaching({
+  edge: {
+    maxAgeSeconds: 1000,
+    key: createCustomCacheKey().addCookie('currency')
+  }
+})(fetchProps(({ query }) => `http://localhost:3000/api/p/${query.productId}`))
 
-// Product.getInitialProps = withCaching({
-//   edge: {
-//     maxAgeSeconds: 1000,
-//     key: createCustomCacheKey().addCookie('currency')
-//   }
-// })(fetchProps(({ query }) => `http://localhost:3000/api/p/${query.productId}`))
+// Product.getInitialProps = fetchProps(
+//   ({ query }) => `http://localhost:3000/api/p/${query.productId}`
+// )
 
 export default Product
 
