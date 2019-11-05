@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useContext } from 'react'
 import Carousel from './Carousel'
 import Image from '../Image'
 import { makeStyles } from '@material-ui/core/styles'
 import ReactImageMagnify from 'react-image-magnify'
 import MagnifyHint from './MagnifyHint'
+import AmpContext from '../amp/AmpContext'
 // import Video from '../Video'
 
 const styles = theme => ({
@@ -66,15 +67,43 @@ const useStyles = makeStyles(styles, { name: 'RSFMediaCarousel' })
  * ```
  */
 function MediaCarousel(props) {
-  let { product, thumbnail, media, imageProps, classes, magifyProps, ...others } = props
+  let {
+    baseURL,
+    thumbnail,
+    imageProps,
+    classes,
+    colorKey = 'color',
+    productIdKey = 'product.id',
+    mediaKey = 'product.media',
+    magifyProps,
+    ...others
+  } = props
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const styles = useStyles({ classes })
   const ref = useRef(null)
   const [over, setOver] = useState(false)
+  const { getValue } = useContext(AmpContext)
 
-  if (product) {
-    media = product.media
-  }
+  const productId = getValue(productIdKey)
+  const color = getValue(colorKey)
+
+  const [media, setMedia] = useState(() => getValue(mediaKey))
+
+  useEffect(() => {
+    const fetchMedia = async (productId, color) => {
+      const res = await fetch(
+        `http://localhost:3000${baseURL}?productId=${encodeURIComponent(productId)}&color=${encodeURIComponent(color.id)}`
+      )
+
+      setMedia((await res.json()).media)
+    }
+
+    if (color && color.media) {
+      setMedia(color.media)
+    } else if (color) {
+      fetchMedia(productId, color)
+    }
+  }, [color && color.id])
 
   const timeout = useRef(null)
 
@@ -98,15 +127,13 @@ function MediaCarousel(props) {
   })
 
   useEffect(() => {
-    setImagesLoaded(false)
-
     const firstImage = ref.current.querySelector('img')
 
     if (firstImage) {
       firstImage.addEventListener('load', onFullSizeImagesLoaded)
       return () => firstImage.removeEventListener('load', onFullSizeImagesLoaded)
     }
-  }, [(media && media[0]) || {}])
+  }, [])
 
   const belowAdornments = []
 

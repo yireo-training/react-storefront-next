@@ -1,9 +1,6 @@
 import React, { useState, useMemo, useContext } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import ProductLinkContext from './ProductLinkContext'
-import Link from '../Link'
 
 export const styles = theme => ({
   root: {}

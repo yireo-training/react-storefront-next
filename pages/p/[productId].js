@@ -62,12 +62,8 @@ const Product = React.memo(lazyProps => {
             </Hidden>
             <Fill aspectRatio={1} className={classes.carouselWrap}>
               <MediaCarousel
-                baseURL={`/api/p/images?productId={product.id}&color={color}`}
+                baseURL={`/api/p/media`}
                 className={classes.carousel}
-                color="color"
-                productId="product.id"
-                media="product.media"
-                product={product} // don't need this eventually
                 thumbnail={thumbnail.current}
               />
             </Fill>
