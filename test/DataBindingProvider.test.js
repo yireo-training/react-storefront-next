@@ -2,17 +2,17 @@ import { mount } from 'enzyme'
 import React, { useState, useContext, useEffect } from 'react'
 import AmpContext from 'react-storefront/amp/AmpContext'
 
-let PageState
+let DataBindingProvider
 let amp
 
-describe('PageState', () => {
+describe('DataBindingProvider', () => {
   let state, Test
 
   beforeAll(() => {
     jest.doMock('next/amp', () => ({
       useAmp: () => amp
     }))
-    PageState = require('react-storefront/PageState').default
+    DataBindingProvider = require('react-storefront/DataBindingProvider').default
   })
 
   beforeEach(() => {
@@ -21,9 +21,9 @@ describe('PageState', () => {
       const [store, updateStore] = useState(state)
 
       return (
-        <PageState id="testState" store={store} updateStore={updateStore} root="pageData">
+        <DataBindingProvider id="testState" store={store} updateStore={updateStore} root="pageData">
           {children}
-        </PageState>
+        </DataBindingProvider>
       )
     }
   })
@@ -55,9 +55,14 @@ describe('PageState', () => {
         const [store, updateStore] = useState(state)
 
         return (
-          <PageState id="testState" store={store} updateStore={updateStore} root="pageData">
+          <DataBindingProvider
+            id="testState"
+            store={store}
+            updateStore={updateStore}
+            root="pageData"
+          >
             {children}
-          </PageState>
+          </DataBindingProvider>
         )
       }
     })
@@ -100,9 +105,9 @@ describe('PageState', () => {
         const [store, updateStore] = useState(state)
 
         return (
-          <PageState id="testState" store={store} updateStore={updateStore} root={null}>
+          <DataBindingProvider id="testState" store={store} updateStore={updateStore} root={null}>
             {children}
-          </PageState>
+          </DataBindingProvider>
         )
       }
 

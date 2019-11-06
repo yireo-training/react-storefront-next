@@ -190,7 +190,7 @@ TabPanel.propTypes = {
 }
 
 TabPanel.defaultProps = {
-  ampStateId: 'moovPageState',
+  ampStateId: 'moovDataBindingProvider',
   ampStateProperty: 'selectedTab',
   variant: 'scrollable',
   selected: 0

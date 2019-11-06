@@ -21,19 +21,19 @@ export const styles = theme => ({
 })
 const useStyles = makeStyles(styles, { name: 'RSFToggleButton' })
 
-export default function ToggleButton({ classes, selected, name, value, ...others }) {
+export default function ToggleButton({ classes, selected, bind, value, ...others }) {
   const { selected: selectedClass, ...buttonClasses } = useStyles({ classes })
   const cls = isSelected => clsx({ [selectedClass]: isSelected })
   const { ampState, getValue } = useContext(AmpContext)
 
   if (selected === undefined) {
-    selected = getValue(name) == value
+    selected = getValue(bind) === value
   }
 
   return (
     <div
       className={cls(selected)}
-      amp-bind={`class=>${ampState}.${name} == "${value}" ? "${cls(true)}" : "${cls(false)}"`}
+      amp-bind={`class=>${ampState}.${bind} == "${value}" ? "${cls(true)}" : "${cls(false)}"`}
     >
       <Button
         {...others}
@@ -50,7 +50,7 @@ ToggleButton.propTypes = {
   /**
    * The key in AMP state from which to get the selected state
    */
-  name: PropTypes.string,
+  bind: PropTypes.string,
   /**
    * The value.
    */

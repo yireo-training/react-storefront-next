@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 /**
  * Returns a span whose text is pull from the specified store in react and from the field
- * of the same name provided by PageState when rendering amp.
+ * of the same name provided by DataBindingProvider when rendering amp.
  */
 export default function Bind({ name }) {
   const { ampState, getValue } = useContext(AmpContext)

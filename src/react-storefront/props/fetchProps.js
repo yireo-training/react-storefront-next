@@ -48,7 +48,10 @@ import fetch from 'isomorphic-unfetch'
  */
 export default function fetchProps(createAPIURL) {
   return options => {
-    const apiURL = createAPIURL(options)
+    const server = typeof window === 'undefined'
+    const host = server ? options.req.headers['host'] : ''
+    const protocol = server ? (host.startsWith('localhost') ? 'http://' : 'https://') : ''
+    const apiURL = `${protocol}${host}${createAPIURL(options)}`
     return createLazyProps(options.asPath, apiURL, options.rsf_app_shell === '1')
   }
 }

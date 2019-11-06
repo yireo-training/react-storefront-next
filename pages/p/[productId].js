@@ -19,7 +19,7 @@ import Label from 'react-storefront/Label'
 import Fill from 'react-storefront/Fill'
 import Rating from 'react-storefront/Rating'
 import Bind from 'react-storefront/Bind'
-import PageState from 'react-storefront/PageState'
+import DataBindingProvider from 'react-storefront/DataBindingProvider'
 import withCaching from '../../src/moov-xdn-next/src/withCaching'
 import createCustomCacheKey from '../../src/moov-xdn/src/createCustomCacheKey'
 import get from 'lodash/get'
@@ -55,7 +55,7 @@ const Product = React.memo(lazyProps => {
   )
 
   return (
-    <PageState store={store} updateStore={updateStore}>
+    <DataBindingProvider store={store} updateStore={updateStore}>
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={5}>
@@ -169,7 +169,7 @@ const Product = React.memo(lazyProps => {
           </Grid>
         </Grid>
       </Container>
-    </PageState>
+    </DataBindingProvider>
   )
 })
 
@@ -178,7 +178,7 @@ Product.getInitialProps = withCaching({
     maxAgeSeconds: 1000,
     key: createCustomCacheKey().addCookie('currency')
   }
-})(fetchProps(({ query }) => `http://localhost:3000/api/p/${query.productId}`))
+})(fetchProps(({ query }) => `/api/p/${query.productId}`))
 
 // Product.getInitialProps = fetchProps(
 //   ({ query }) => `http://localhost:3000/api/p/${query.productId}`

@@ -17,7 +17,7 @@ import FilterButton from 'react-storefront/plp/FilterButton'
 import Filter from 'react-storefront/plp/Filter'
 import Fill from 'react-storefront/Fill'
 import SearchResultsProvider from 'react-storefront/plp/SearchResultsProvider'
-import PageState from 'react-storefront/PageState'
+import DataBindingProvider from 'react-storefront/DataBindingProvider'
 
 const useStyles = makeStyles(theme => ({
   sideBar: {
@@ -41,7 +41,7 @@ const Subcategory = lazyProps => {
   const { pageData, loading } = store
 
   return (
-    <PageState store={store} updateStore={updateStore}>
+    <DataBindingProvider store={store} updateStore={updateStore}>
       <SearchResultsProvider store={store} updateStore={updateStore}>
         <Container maxWidth="lg">
           <Head>{loading ? null : <title>{pageData.title}</title>}</Head>
@@ -114,12 +114,12 @@ const Subcategory = lazyProps => {
           </Hbox>
         </Container>
       </SearchResultsProvider>
-    </PageState>
+    </DataBindingProvider>
   )
 }
 
 Subcategory.getInitialProps = fetchProps(({ query: { subcategoryId, ...search } }) => {
-  return `http://localhost:3000/api/s/${subcategoryId}${qs.stringify(search, {
+  return `/api/s/${subcategoryId}${qs.stringify(search, {
     addQueryPrefix: true
   })}`
 })

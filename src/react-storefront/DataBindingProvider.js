@@ -7,30 +7,30 @@ import get from 'lodash/get'
 import set from 'lodash/set'
 
 /**
- * Provides a way to access and update page state that works with both React and AMP.
+ * Provides a way to access and update state that works with both React and AMP.
  *
- * All page components should use `PageState` as the root element:
+ * All page components should use `DataBindingProvider` as the root element:
  *
  * ```js
  * function Product(lazyProps) {
  *   const [store, updateStore] = useLazyStore(lazyProps)
  *
  *   return (
- *     <PageState store={store} updateStore={updateStore}>
- *      // access values from page state by name
- *      <Typography variant="h1">
- *        <Bind name="product.name"/>
- *      </Typography>
+ *     <DataBindingProvider store={store} updateStore={updateStore}>
+ *        // access values from page state by name
+ *        <Typography variant="h1">
+ *          <Bind name="product.name"/>
+ *        </Typography>
  *
- *      // form fields will automatically update state by name
- *      <Label>QTY:</Label>
+ *        // form fields will automatically update state by name
+ *        <Label>QTY:</Label>
  *        <QuantitySelector name="quanity"/>
- *      </PageState>
+ *     </DataBindingProvider>
  *   )
  * })
  * ```
  */
-export default function PageState({ id, children, store, updateStore, root }) {
+export default function DataBindingProvider({ id, children, store, updateStore, root }) {
   let scripts = null
 
   const value = useMemo(() => {
@@ -88,7 +88,7 @@ function normalizeRoot(root) {
   }
 }
 
-PageState.propTypes = {
+DataBindingProvider.propTypes = {
   /**
    * An id for the root object
    */
@@ -110,7 +110,7 @@ PageState.propTypes = {
   root: PropTypes.string
 }
 
-PageState.defaultProps = {
+DataBindingProvider.defaultProps = {
   id: 'page',
   store: {},
   updateStore: Function.prototype,

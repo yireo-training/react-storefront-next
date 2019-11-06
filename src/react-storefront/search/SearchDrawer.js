@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import SearchProvider from './SearchProvider'
 import { useAmp } from 'next/amp'
 import AmpDrawer from '../amp/AmpDrawer'
-import PageState from '../PageState'
+import DataBindingProvider from '../DataBindingProvider'
 
 export const styles = theme => ({
   paper: {
@@ -22,7 +22,7 @@ export default function SearchDrawer({ classes, open, onClose, children }) {
 
   return (
     <SearchProvider onClose={onClose}>
-      <PageState id="rsfSearchDrawer" state={{ open: false, text: '' }}>
+      <DataBindingProvider id="rsfSearchDrawer" state={{ open: false, text: '' }}>
         {useAmp() ? (
           <AmpDrawer anchor="bottom" fullscreen>
             {children}
@@ -32,7 +32,7 @@ export default function SearchDrawer({ classes, open, onClose, children }) {
             {children}
           </Drawer>
         )}
-      </PageState>
+      </DataBindingProvider>
     </SearchProvider>
   )
 }
