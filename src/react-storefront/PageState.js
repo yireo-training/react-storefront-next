@@ -2,14 +2,35 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useAmp } from 'next/amp'
-import AmpContext from './AmpContext'
+import AmpContext from './amp/AmpContext'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
 /**
- * Serializes the page props as an amp-state.
+ * Provides a way to access and update page state that works with both React and AMP.
+ *
+ * All page components should use `PageState` as the root element:
+ *
+ * ```js
+ * function Product(lazyProps) {
+ *   const [store, updateStore] = useLazyStore(lazyProps)
+ *
+ *   return (
+ *     <PageState store={store} updateStore={updateStore}>
+ *      // access values from page state by name
+ *      <Typography variant="h1">
+ *        <Bind name="product.name"/>
+ *      </Typography>
+ *
+ *      // form fields will automatically update state by name
+ *      <Label>QTY:</Label>
+ *        <QuantitySelector name="quanity"/>
+ *      </PageState>
+ *   )
+ * })
+ * ```
  */
-export default function AmpState({ id, children, store, updateStore, root }) {
+export default function PageState({ id, children, store, updateStore, root }) {
   let scripts = null
 
   const value = useMemo(() => {
@@ -67,7 +88,7 @@ function normalizeRoot(root) {
   }
 }
 
-AmpState.propTypes = {
+PageState.propTypes = {
   /**
    * An id for the root object
    */
@@ -81,11 +102,17 @@ AmpState.propTypes = {
   /**
    * The page store update function returned from `hooks/useLazyStore`
    */
-  updateStore: PropTypes.func
+  updateStore: PropTypes.func,
+
+  /**
+   * A path prepended to all paths passed to `getValue` and `setValue`.
+   */
+  root: PropTypes.string
 }
 
-AmpState.defaultProps = {
+PageState.defaultProps = {
   id: 'page',
   store: {},
-  updateStore: Function.prototype
+  updateStore: Function.prototype,
+  root: 'pageData'
 }

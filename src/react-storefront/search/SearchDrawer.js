@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import SearchProvider from './SearchProvider'
 import { useAmp } from 'next/amp'
 import AmpDrawer from '../amp/AmpDrawer'
-import AmpState from '../amp/AmpState'
+import PageState from '../PageState'
 
 export const styles = theme => ({
   paper: {
@@ -22,7 +22,7 @@ export default function SearchDrawer({ classes, open, onClose, children }) {
 
   return (
     <SearchProvider onClose={onClose}>
-      <AmpState id="rsfSearchDrawer" state={{ open: false, text: '' }}>
+      <PageState id="rsfSearchDrawer" state={{ open: false, text: '' }}>
         {useAmp() ? (
           <AmpDrawer anchor="bottom" fullscreen>
             {children}
@@ -32,7 +32,7 @@ export default function SearchDrawer({ classes, open, onClose, children }) {
             {children}
           </Drawer>
         )}
-      </AmpState>
+      </PageState>
     </SearchProvider>
   )
 }

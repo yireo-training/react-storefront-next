@@ -19,7 +19,7 @@ import Label from 'react-storefront/Label'
 import Fill from 'react-storefront/Fill'
 import Rating from 'react-storefront/Rating'
 import Bind from 'react-storefront/Bind'
-import AmpState from 'react-storefront/amp/AmpState'
+import PageState from 'react-storefront/PageState'
 import withCaching from '../../src/moov-xdn-next/src/withCaching'
 import createCustomCacheKey from '../../src/moov-xdn/src/createCustomCacheKey'
 import get from 'lodash/get'
@@ -55,7 +55,7 @@ const Product = React.memo(lazyProps => {
   )
 
   return (
-    <AmpState store={store} updateStore={updateStore} root="pageData">
+    <PageState store={store} updateStore={updateStore}>
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={5}>
@@ -169,7 +169,7 @@ const Product = React.memo(lazyProps => {
           </Grid>
         </Grid>
       </Container>
-    </AmpState>
+    </PageState>
   )
 })
 

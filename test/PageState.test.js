@@ -2,17 +2,17 @@ import { mount } from 'enzyme'
 import React, { useState, useContext, useEffect } from 'react'
 import AmpContext from 'react-storefront/amp/AmpContext'
 
-let AmpState
+let PageState
 let amp
 
-describe('AmpState', () => {
+describe('PageState', () => {
   let state, Test
 
   beforeAll(() => {
     jest.doMock('next/amp', () => ({
       useAmp: () => amp
     }))
-    AmpState = require('react-storefront/amp/AmpState').default
+    PageState = require('react-storefront/PageState').default
   })
 
   beforeEach(() => {
@@ -21,9 +21,9 @@ describe('AmpState', () => {
       const [store, updateStore] = useState(state)
 
       return (
-        <AmpState id="testState" store={store} updateStore={updateStore} root="pageData">
+        <PageState id="testState" store={store} updateStore={updateStore} root="pageData">
           {children}
-        </AmpState>
+        </PageState>
       )
     }
   })
@@ -55,9 +55,9 @@ describe('AmpState', () => {
         const [store, updateStore] = useState(state)
 
         return (
-          <AmpState id="testState" store={store} updateStore={updateStore} root="pageData">
+          <PageState id="testState" store={store} updateStore={updateStore} root="pageData">
             {children}
-          </AmpState>
+          </PageState>
         )
       }
     })
@@ -100,9 +100,9 @@ describe('AmpState', () => {
         const [store, updateStore] = useState(state)
 
         return (
-          <AmpState id="testState" store={store} updateStore={updateStore}>
+          <PageState id="testState" store={store} updateStore={updateStore} root={null}>
             {children}
-          </AmpState>
+          </PageState>
         )
       }
 
