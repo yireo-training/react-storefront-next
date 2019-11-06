@@ -7,6 +7,7 @@ import './profile'
 import './hooks/useTraceUpdate'
 import { makeStyles } from '@material-ui/core/styles'
 import AmpState from './amp/AmpState'
+import LinkContext from './link/LinkContext'
 
 export const styles = theme => ({
   '@global': {
@@ -23,14 +24,13 @@ export const styles = theme => ({
 const useStyles = makeStyles(styles, { name: 'RSFPWA' })
 
 export default function PWA({ children, errorReporter }) {
-  const classes = useStyles()
+  useStyles()
   const thumbnail = useRef(null)
-  const skeletonProps = useRef(null)
+  const linkPageData = useRef(null)
 
   const app = useMemo(
     () => ({
       thumbnail,
-      skeletonProps,
       menu: {
         open: false
       }
@@ -51,7 +51,7 @@ export default function PWA({ children, errorReporter }) {
     // window.addEventListener('online', handleOnline)
     // window.addEventListener('offline', handleOffline)
 
-    const onRouteChangeComplete = () => (app.skeletonProps = null)
+    const onRouteChangeComplete = () => (linkPageData.current = null)
     Router.events.on('routeChangeComplete', onRouteChangeComplete)
 
     return () => {
@@ -63,9 +63,11 @@ export default function PWA({ children, errorReporter }) {
 
   return (
     <PWAContext.Provider value={app}>
-      <ErrorBoundary onError={errorReporter}>
-        <AmpState>{children}</AmpState>
-      </ErrorBoundary>
+      <LinkContext.Provider value={linkPageData}>
+        <ErrorBoundary onError={errorReporter}>
+          <AmpState>{children}</AmpState>
+        </ErrorBoundary>
+      </LinkContext.Provider>
     </PWAContext.Provider>
   )
 }

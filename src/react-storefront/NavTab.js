@@ -1,5 +1,5 @@
 import Tab from '@material-ui/core/Tab'
-import Link from './Link'
+import Link from './link/Link'
 import { makeStyles } from '@material-ui/core/styles'
 import { Popper, Hidden, Fade, Paper } from '@material-ui/core'
 import { useState, useCallback } from 'react'

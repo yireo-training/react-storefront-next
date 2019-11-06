@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { Router, goBack, navigate } from '../config/mockRouter'
+import { Router, goBack, navigate } from '../mocks/mockRouter'
 import useNavigationEvent from '../../src/react-storefront/hooks/useNavigationEvent'
 
 describe('useNavigationEvent', () => {

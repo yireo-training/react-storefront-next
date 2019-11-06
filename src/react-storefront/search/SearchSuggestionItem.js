@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import Link from '../Link'
+import Link from '../link/Link'
 import { Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import Image from '../Image'
@@ -37,7 +37,7 @@ export default function SearchSuggestionItem({ classes, item, ui, thumbnailProps
 
   return (
     <li className={classes.root}>
-      <Link as={item.as} href={item.href} skeletonProps={item.skeletonProps}>
+      <Link as={item.as} href={item.href} pageData={item.pageData}>
         {children ? (
           children
         ) : (

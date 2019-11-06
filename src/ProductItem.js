@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import Link from 'react-storefront/Link'
+import Link from 'react-storefront/link/Link'
 import { Vbox } from 'react-storefront/Box'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -44,7 +44,7 @@ function ProductItem({ product, index }) {
               href="/p/[productId]"
               className={classes.link}
               prefetch="visible"
-              skeletonProps={{ product }}
+              pageData={{ product }}
             >
               <ProductThumbnail
                 optimize={{ maxWidth: 200 }}

@@ -3,30 +3,7 @@ import useIntersectionObserver from 'react-storefront/hooks/useIntersectionObser
 import { mount } from 'enzyme'
 
 describe('useIntersectionObserver', () => {
-  let disconnected = false,
-    instance = null,
-    ref = null
-
-  beforeEach(() => {
-    global.IntersectionObserver = class {
-      constructor(callback) {
-        instance = this
-        this.callback = callback
-      }
-
-      mockChange(intersectionRatio) {
-        this.callback([{ intersectionRatio }])
-      }
-
-      observe(r) {
-        ref = r
-      }
-
-      disconnect() {
-        disconnected = true
-      }
-    }
-  })
+  let disconnected = false
 
   it('should fire the callback when the element becomes visible', () => {
     const onChange = jest.fn()
@@ -38,10 +15,11 @@ describe('useIntersectionObserver', () => {
     }
 
     mount(<Test />)
+    const { instance } = IntersectionObserver
     expect(instance).not.toBeNull()
-    instance.mockChange(0.5)
+    instance.simulateChange(0.5)
     expect(onChange).toHaveBeenCalledWith(true, expect.any(Function))
-    expect(ref).not.toBeNull()
+    expect(instance.ref).not.toBeNull()
   })
 
   it('should disconnect when the component is unmounted', () => {
@@ -55,7 +33,7 @@ describe('useIntersectionObserver', () => {
 
     const wrapper = mount(<Test />)
     wrapper.unmount()
-    expect(disconnected).toBe(true)
+    expect(IntersectionObserver.instance.disconnected).toBe(true)
   })
 
   it('should handle a null ref', () => {

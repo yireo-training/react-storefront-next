@@ -9,7 +9,7 @@ import { Hidden, Container } from '@material-ui/core'
 import Menu from 'react-storefront/menu/Menu'
 import MenuButton from 'react-storefront/menu/MenuButton'
 import createMenu from '../src/mocks/createMenu'
-import Link from 'react-storefront/Link'
+import Link from 'react-storefront/link/Link'
 
 const menu = createMenu()
 

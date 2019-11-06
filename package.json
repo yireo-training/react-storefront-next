@@ -47,6 +47,9 @@
     "setupFiles": [
       "./test/config/setup.js"
     ],
+    "setupFilesAfterEnv": [
+      "./test/config/mocks.js"
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/react-storefront/**/*.{js,jsx}",

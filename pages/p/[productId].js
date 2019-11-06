@@ -22,6 +22,7 @@ import Bind from 'react-storefront/Bind'
 import AmpState from 'react-storefront/amp/AmpState'
 import withCaching from '../../src/moov-xdn-next/src/withCaching'
 import createCustomCacheKey from '../../src/moov-xdn/src/createCustomCacheKey'
+import get from 'lodash/get'
 
 const styles = theme => ({
   carouselWrap: {
@@ -38,9 +39,8 @@ const Product = React.memo(lazyProps => {
   const theme = useTheme()
   const [store, updateStore] = useLazyStore(lazyProps, { pageData: { quantity: 1 } })
   const classes = useStyles()
-  const { pageData } = store
+  const product = get(store, 'pageData.product') || {}
   const { thumbnail } = useContext(PWAContext)
-  const { product } = pageData
 
   const header = (
     <Row>
@@ -81,7 +81,7 @@ const Product = React.memo(lazyProps => {
                     <Hbox style={{ marginBottom: 10 }}>
                       <Label>COLOR: </Label>
                       <Typography>
-                        <Bind name="color.text" store={pageData} />
+                        <Bind name="color.text" />
                       </Typography>
                     </Hbox>
                     <ButtonSelector options={product.colors} name="color" />

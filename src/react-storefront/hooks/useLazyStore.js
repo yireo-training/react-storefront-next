@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState, useContext, useCallback } from 'react'
 import Router from 'next/router'
 import merge from 'lodash/merge'
-import PWAContext from '../PWAContext'
+import LinkContext from '../link/LinkContext'
 import fetch from 'isomorphic-unfetch'
+import get from 'lodash/get'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
-  const pwaContext = useContext(PWAContext)
-  const skeletonProps = pwaContext && pwaContext.skeletonProps
+  const linkPageData = get(useContext(LinkContext), 'current')
   const isLazy = lazyProps.lazy ? true : false
   const isInitialMount = useRef(true)
 
   const createInitialState = () => {
-    return merge(additionalData, { pageData: skeletonProps }, props, {
+    return merge(additionalData, { pageData: linkPageData }, props, {
       loading: lazyProps.lazy != null,
       pageData: {}
     })

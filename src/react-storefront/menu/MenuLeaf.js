@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { ListItem } from '@material-ui/core'
 import clsx from 'clsx'
 import MenuItemContent from './MenuItemContent'
-import Link from '../Link'
+import Link from '../link/Link'
 import MenuContext from './MenuContext'
 
 function MenuLeaf({ item, trackSelected, ...others }) {

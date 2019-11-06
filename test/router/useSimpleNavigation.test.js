@@ -1,8 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import useSimpleNavigation from 'react-storefront/router/useSimpleNavigation'
-import { Router } from '../config/mockRouter'
-import sleep from '../config/sleep'
+import { Router } from '../mocks/mockRouter'
 
 describe('useSimpleNavigation', () => {
   let wrapper

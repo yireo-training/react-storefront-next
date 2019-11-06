@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import { mount } from 'enzyme'
 import supressActWarnings from '../config/suppressActWarnings'
-import { Router, goBack, navigate } from '../config/mockRouter'
-import PWAContext from 'react-storefront/PWAContext'
-
+import { Router, goBack, navigate } from '../mocks/mockRouter'
+import LinkContext from 'react-storefront/link/LinkContext'
 let useLazyStore
 
 describe('useLazyStore', () => {
@@ -140,11 +139,14 @@ describe('useLazyStore', () => {
     expect(values[2].value).toBe(2)
   })
 
-  it('should apply skeletonProps from PWAContext', () => {
+  it('should apply pageData from LinkContext', () => {
+    const ref = createRef()
+    ref.current = { skeleton: true }
+
     wrapper = mount(
-      <PWAContext.Provider value={{ skeletonProps: { skeleton: true } }}>
+      <LinkContext.Provider value={ref}>
         <Test value={1} />
-      </PWAContext.Provider>
+      </LinkContext.Provider>
     )
 
     expect(values).toHaveLength(1)

@@ -1,6 +1,6 @@
 import Enzyme from 'enzyme'
 import EnzymeAdapter from 'enzyme-adapter-react-16'
-import fetchMock from 'jest-fetch-mock'
+import sleep from './sleep'
 
 // Setup enzyme's react adapter
 Enzyme.configure({ adapter: new EnzymeAdapter() })
@@ -11,7 +11,4 @@ global.jsdom.reconfigure({
   }
 })
 
-global.fetch = fetchMock
-
-jest.doMock('isomorphic-unfetch', () => fetchMock)
-jest.doMock('next/router', () => require('./mockRouter').Router)
+global.sleep = sleep

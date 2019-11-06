@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Link from './Link'
+import Link from './link/Link'
 import ToolbarButton from './ToolbarButton'
 import { ShoppingCart as Cart } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
