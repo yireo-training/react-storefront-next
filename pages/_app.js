@@ -8,7 +8,7 @@ import PWA from '../src/react-storefront/PWA'
 import Nav from '../src/Nav'
 import reportError from '../src/reportError'
 import useJssStyles from 'react-storefront/hooks/useJssStyles'
-import PageState from 'react-storefront/PageState'
+import { useRouter } from 'next/router'
 
 storeInitialPropsInHistory()
 
@@ -23,6 +23,7 @@ const useStyles = makeStyles(styles)
 export default function MyApp({ Component, pageProps }) {
   useJssStyles()
   const classes = useStyles()
+  const { asPath } = useRouter()
 
   return (
     <PWA onError={reportError}>
@@ -31,9 +32,7 @@ export default function MyApp({ Component, pageProps }) {
         <Header />
         <Nav />
         <main className={classes.main}>
-          <PageState id="page" state={pageProps}>
-            <Component {...pageProps} />
-          </PageState>
+          <Component key={asPath} {...pageProps} />
         </main>
       </MuiThemeProvider>
     </PWA>
