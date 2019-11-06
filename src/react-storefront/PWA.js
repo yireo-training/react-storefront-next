@@ -6,7 +6,6 @@ import ErrorBoundary from './ErrorBoundary'
 import './profile'
 import './hooks/useTraceUpdate'
 import { makeStyles } from '@material-ui/core/styles'
-import PageState from './PageState'
 import LinkContext from './link/LinkContext'
 
 export const styles = theme => ({
@@ -64,9 +63,7 @@ export default function PWA({ children, errorReporter }) {
   return (
     <PWAContext.Provider value={app}>
       <LinkContext.Provider value={linkPageData}>
-        <ErrorBoundary onError={errorReporter}>
-          <PageState>{children}</PageState>
-        </ErrorBoundary>
+        <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
       </LinkContext.Provider>
     </PWAContext.Provider>
   )

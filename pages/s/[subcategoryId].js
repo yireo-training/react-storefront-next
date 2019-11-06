@@ -17,6 +17,7 @@ import FilterButton from 'react-storefront/plp/FilterButton'
 import Filter from 'react-storefront/plp/Filter'
 import Fill from 'react-storefront/Fill'
 import SearchResultsProvider from 'react-storefront/plp/SearchResultsProvider'
+import PageState from 'react-storefront/PageState'
 
 const useStyles = makeStyles(theme => ({
   sideBar: {
@@ -40,78 +41,80 @@ const Subcategory = lazyProps => {
   const { pageData, loading } = store
 
   return (
-    <SearchResultsProvider store={store} updateStore={updateStore}>
-      <Container maxWidth="lg">
-        <Head>{loading ? null : <title>{pageData.title}</title>}</Head>
-        <BackToTop />
-        <Hbox align="flex-start">
-          <Hidden implementation="css" xsDown>
-            <div className={classes.sideBar}>
-              <Hidden xsDown>
-                <Filter classes={{ root: classes.sideBar }} expandAll submitOnChange />
-              </Hidden>
-            </div>
-          </Hidden>
-          <Grid container style={{ position: 'relative' }}>
-            <LoadMask show={store.reloading} transparent align="top" />
-            <Grid item xs={12}>
-              <Typography component="h1" variant="h6" gutterBottom>
-                {pageData.name || <Skeleton style={{ height: 24 }} />}
-              </Typography>
-            </Grid>
-            <Grid item xs={6} style={{ paddingRight: theme.spacing(1) }}>
-              <Hidden implementation="css" smUp>
-                <FilterButton style={{ width: '100%' }} />
-              </Hidden>
-            </Grid>
-            <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <SortButton className={classes.sortButton} store={store} />
-            </Grid>
-            <Grid item xs={6}></Grid>
-            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              {loading ? (
-                <Skeleton style={{ width: 100, height: 12, marginBottom: theme.spacing(1) }} />
-              ) : (
-                <Typography variant="caption" className={classes.total}>
-                  {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
+    <PageState store={store} updateStore={updateStore}>
+      <SearchResultsProvider store={store} updateStore={updateStore}>
+        <Container maxWidth="lg">
+          <Head>{loading ? null : <title>{pageData.title}</title>}</Head>
+          <BackToTop />
+          <Hbox align="flex-start">
+            <Hidden implementation="css" xsDown>
+              <div className={classes.sideBar}>
+                <Hidden xsDown>
+                  <Filter classes={{ root: classes.sideBar }} expandAll submitOnChange />
+                </Hidden>
+              </div>
+            </Hidden>
+            <Grid container style={{ position: 'relative' }}>
+              <LoadMask show={store.reloading} transparent align="top" />
+              <Grid item xs={12}>
+                <Typography component="h1" variant="h6" gutterBottom>
+                  {pageData.name || <Skeleton style={{ height: 24 }} />}
                 </Typography>
-              )}
+              </Grid>
+              <Grid item xs={6} style={{ paddingRight: theme.spacing(1) }}>
+                <Hidden implementation="css" smUp>
+                  <FilterButton style={{ width: '100%' }} />
+                </Hidden>
+              </Grid>
+              <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <SortButton className={classes.sortButton} store={store} />
+              </Grid>
+              <Grid item xs={6}></Grid>
+              <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {loading ? (
+                  <Skeleton style={{ width: 100, height: 12, marginBottom: theme.spacing(1) }} />
+                ) : (
+                  <Typography variant="caption" className={classes.total}>
+                    {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
+                  </Typography>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                {!loading ? (
+                  <ResponsiveTiles>
+                    {pageData.products.map((product, i) => (
+                      <ProductItem key={product.id} product={product} index={i} />
+                    ))}
+                  </ResponsiveTiles>
+                ) : (
+                  <ResponsiveTiles style={{ marginTop: 0 }}>
+                    {(() => {
+                      const tiles = []
+                      for (let i = 0; i < 10; i++) {
+                        tiles.push(
+                          <div key={i} style={{ marginBottom: theme.spacing(3) }}>
+                            <Fill style={{ marginBottom: '1em' }}>
+                              <Skeleton style={{ height: '100%' }} />
+                            </Fill>
+                            <Skeleton style={{ height: 16 }} />
+                            <Skeleton style={{ height: 16 }} />
+                            <Skeleton style={{ height: 16 }} />
+                          </div>
+                        )
+                      }
+                      return tiles
+                    })()}
+                  </ResponsiveTiles>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                {!loading && <ShowMore />}
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              {!loading ? (
-                <ResponsiveTiles>
-                  {pageData.products.map((product, i) => (
-                    <ProductItem key={product.id} product={product} index={i} />
-                  ))}
-                </ResponsiveTiles>
-              ) : (
-                <ResponsiveTiles style={{ marginTop: 0 }}>
-                  {(() => {
-                    const tiles = []
-                    for (let i = 0; i < 10; i++) {
-                      tiles.push(
-                        <div key={i} style={{ marginBottom: theme.spacing(3) }}>
-                          <Fill style={{ marginBottom: '1em' }}>
-                            <Skeleton style={{ height: '100%' }} />
-                          </Fill>
-                          <Skeleton style={{ height: 16 }} />
-                          <Skeleton style={{ height: 16 }} />
-                          <Skeleton style={{ height: 16 }} />
-                        </div>
-                      )
-                    }
-                    return tiles
-                  })()}
-                </ResponsiveTiles>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              {!loading && <ShowMore />}
-            </Grid>
-          </Grid>
-        </Hbox>
-      </Container>
-    </SearchResultsProvider>
+          </Hbox>
+        </Container>
+      </SearchResultsProvider>
+    </PageState>
   )
 }
 
