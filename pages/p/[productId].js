@@ -122,7 +122,7 @@ const Product = React.memo(lazyProps => {
               <Grid item xs={12}>
                 <Hbox>
                   <Label>QTY:</Label>
-                  <QuantitySelector name="quantity" />
+                  <QuantitySelector bind="quantity" />
                 </Hbox>
               </Grid>
               <Grid item xs={12}>

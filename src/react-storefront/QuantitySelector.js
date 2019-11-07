@@ -1,14 +1,10 @@
-/**
- * @license
- * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
- */
-import React, { useContext } from 'react'
+import React from 'react'
 import { Add, Remove } from '@material-ui/icons'
 import { IconButton, Input } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import PWAContext from './PWAContext'
-import AmpContext from './amp/AmpContext'
+import withDataBinding from './bind/withDataBinding'
+import { useAmp } from 'next/amp'
 
 export const styles = theme => ({
   root: {
@@ -47,46 +43,29 @@ const useStyles = makeStyles(styles, { name: 'RSFQuantitySelector' })
  * A quantity selector with plus and minus buttons. Any extra props are spread to the
  * underlying Material UI input element.
  */
-export default function QuantitySelector({
+function QuantitySelector({
   name,
   classes,
   addIcon,
   subtractIcon,
   value,
+  onValueChange,
   minValue,
   maxValue,
   analytics,
   inputProps,
   ariaLabel,
-  onChange,
+  bind,
+  amp,
   ...other
 }) {
   classes = useStyles({ classes })
-  const { amp } = useContext(PWAContext)
-  const { ampState, getValue, setValue } = useContext(AmpContext)
   const { quantitySelector, icon, button, ...inputClasses } = classes
-
-  const controlled = value !== undefined
-
-  if (!controlled) value = getValue(name)
-
-  const bindProps = {
-    inputProps: {
-      'aria-label': ariaLabel,
-      name,
-      ...inputProps,
-      'amp-bind': `value=>${ampState}.${name}`
-    },
-    [amp ? 'readOnly' : 'disabled']: true
-  }
+  const isAmp = useAmp()
 
   function handleChange(value) {
     if (value >= minValue && value <= maxValue) {
-      onChange(value)
-
-      if (!controlled) {
-        setValue(name, value)
-      }
+      onValueChange(value)
     }
   }
 
@@ -99,7 +78,10 @@ export default function QuantitySelector({
             classes={{ root: button }}
             onClick={() => handleChange(value - 1)}
             aria-label={`add one ${ariaLabel}`}
-            on={`tap:AMP.setState({ ${ampState}: { ${name}: max(${minValue}, (${ampState}.${name} || ${value}) - 1) } })`}
+            {...amp.createHandler({
+              event: 'tap',
+              value: `max(${minValue}, (${amp.getValue()} || ${value}) - 1)`
+            })}
           >
             {subtractIcon || <Remove classes={{ root: icon }} />}
           </IconButton>
@@ -110,7 +92,10 @@ export default function QuantitySelector({
             classes={{ root: button }}
             onClick={() => handleChange(value + 1)}
             aria-label={`subtract one ${ariaLabel}`}
-            on={`tap:AMP.setState({ ${ampState}: { ${name}: min(${maxValue}, (${ampState}.${name} || ${value}) + 1) } })`}
+            {...amp.createHandler({
+              event: 'tap',
+              value: `min(${maxValue}, (${amp.getValue()} || ${value}) + 1)`
+            })}
           >
             {addIcon || <Add classes={{ root: icon }} />}
           </IconButton>
@@ -121,7 +106,13 @@ export default function QuantitySelector({
           underline: classes.underline,
           ...inputClasses
         }}
-        {...bindProps}
+        inputProps={{
+          'aria-label': ariaLabel,
+          name,
+          ...inputProps,
+          ...amp.bind({ field: 'value', prop: 'value' })
+        }}
+        {...{ [isAmp ? 'readOnly' : 'disabled']: true }}
         {...other}
       />
     </>
@@ -182,3 +173,5 @@ QuantitySelector.defaultProps = {
   maxValue: 100,
   ariaLabel: 'quantity'
 }
+
+export default withDataBinding(QuantitySelector)
