@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useAmp } from 'next/amp'
-import AmpContext from './amp/AmpContext'
+import DataBindingContext from './DataBindingContext'
 import get from 'lodash/get'
 import set from 'lodash/set'
 
@@ -75,7 +75,7 @@ export default function DataBindingProvider({ id, children, store, updateStore, 
   return (
     <>
       {scripts}
-      <AmpContext.Provider value={value}>{children}</AmpContext.Provider>
+      <DataBindingContext.Provider value={value}>{children}</DataBindingContext.Provider>
     </>
   )
 }

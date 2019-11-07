@@ -4,7 +4,7 @@ import Image from '../Image'
 import { makeStyles } from '@material-ui/core/styles'
 import ReactImageMagnify from 'react-image-magnify'
 import MagnifyHint from './MagnifyHint'
-import AmpContext from '../amp/AmpContext'
+import DataBindingContext from '../bind/DataBindingContext'
 // import Video from '../Video'
 
 const styles = theme => ({
@@ -82,7 +82,7 @@ function MediaCarousel(props) {
   const styles = useStyles({ classes })
   const ref = useRef(null)
   const [over, setOver] = useState(false)
-  const { getValue } = useContext(AmpContext)
+  const { getValue } = useContext(DataBindingContext)
 
   const productId = getValue(productIdKey)
   const color = getValue(colorKey)
@@ -92,7 +92,9 @@ function MediaCarousel(props) {
   useEffect(() => {
     const fetchMedia = async (productId, color) => {
       const res = await fetch(
-        `http://localhost:3000${baseURL}?productId=${encodeURIComponent(productId)}&color=${encodeURIComponent(color.id)}`
+        `http://localhost:3000${baseURL}?productId=${encodeURIComponent(
+          productId
+        )}&color=${encodeURIComponent(color.id)}`
       )
 
       setMedia((await res.json()).media)

@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import SearchSuggestionItem from '../../search/SearchSuggestionItem'
 import SearchSuggestionGroup from '../../search/SearchSuggestionGroup'
 import Head from 'next/head'
-import AmpContext from '../AmpContext'
+import DataBindingContext from '../../bind/DataBindingContext'
 
 export const styles = theme => ({
   root: {},
@@ -22,7 +22,7 @@ const useStyles = makeStyles(styles, { name: 'RSFAmpSearchSuggestions' })
 
 export default function AmpSearchSuggestions({ classes }) {
   classes = useStyles({ classes })
-  const ampState = useContext(AmpContext)
+  const ampState = useContext(DataBindingContext)
 
   return (
     <>

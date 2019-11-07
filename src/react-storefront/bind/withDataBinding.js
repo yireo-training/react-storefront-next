@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import AmpContext from '../amp/AmpContext'
+import DataBindingContext from '../bind/DataBindingContext'
 import { useAmp } from 'next/amp'
 import isObject from 'lodash/isObject'
 import capitalize from 'lodash/capitalize'
@@ -28,7 +28,7 @@ import capitalize from 'lodash/capitalize'
 export default function withDataBinding(Component) {
   return ({ bind, name, ...props }) => {
     const normalizedBind = normalizeBind(bind)
-    const { ampState, getValue, setValue } = useContext(AmpContext)
+    const { ampState, getValue, setValue } = useContext(DataBindingContext)
     const boundProps = getBoundProps(normalizedBind, getValue, setValue)
     const createAmpValueExpression = getAmpValue(ampState, normalizedBind)
     const amp = useAmp()

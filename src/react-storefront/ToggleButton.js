@@ -3,7 +3,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import AmpContext from './amp/AmpContext'
+import DataBindingContext from './bind/DataBindingContext'
 
 export const styles = theme => ({
   selected: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(styles, { name: 'RSFToggleButton' })
 export default function ToggleButton({ classes, selected, bind, value, ...others }) {
   const { selected: selectedClass, ...buttonClasses } = useStyles({ classes })
   const cls = isSelected => clsx({ [selectedClass]: isSelected })
-  const { ampState, getValue } = useContext(AmpContext)
+  const { ampState, getValue } = useContext(DataBindingContext)
 
   if (selected === undefined) {
     selected = getValue(bind) === value

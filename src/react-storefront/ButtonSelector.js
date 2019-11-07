@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useAmp } from 'next/amp'
 import SwatchButton from './SwatchButton'
 import withDefaultHandler from './utils/withDefaultHandler'
-import AmpContext from './amp/AmpContext'
+import DataBindingContext from './bind/DataBindingContext'
 import ToggleButton from './ToggleButton'
 
 export const styles = theme => ({
@@ -52,7 +52,7 @@ export default function ButtonSelector(props) {
   let { options, name, classes } = props
 
   const amp = useAmp()
-  const { ampState } = useContext(AmpContext)
+  const { ampState } = useContext(DataBindingContext)
 
   if (!options) return null
 
@@ -87,7 +87,7 @@ function Option({
   onSelectionChange,
   name
 }) {
-  const { ampState, getValue, setValue } = useContext(AmpContext)
+  const { ampState, getValue, setValue } = useContext(DataBindingContext)
   if (!value) value = getValue(name)
 
   const handleClick = withDefaultHandler(onSelectionChange, (_e, value) => {

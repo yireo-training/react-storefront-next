@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import DrawerCloseButton from '../drawer/DrawerCloseButton'
-import AmpContext from './AmpContext'
+import DataBindingContext from '../bind/DataBindingContext'
 import PropTypes from 'prop-types'
 
 const animationByAnchor = {
@@ -84,7 +84,7 @@ export default function AmpDrawer({
   fullscreen
 }) {
   classes = useStyles({ classes })
-  const ampState = useContext(AmpContext)
+  const ampState = useContext(DataBindingContext)
 
   if (anchor === 'left' || anchor === 'right') {
     return (

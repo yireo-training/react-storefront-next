@@ -8,7 +8,7 @@ import { Input, IconButton } from '@material-ui/core'
 import ClearIcon from '@material-ui/icons/Clear'
 import SearchSubmitButton from './SearchSubmitButton'
 import { Fab, Button } from '@material-ui/core'
-import AmpContext from '../amp/AmpContext'
+import DataBindingContext from '../bind/DataBindingContext'
 import clsx from 'clsx'
 
 export const styles = theme => ({
@@ -52,7 +52,7 @@ export default function SearchField({
   const inputRef = useRef(null)
   const { fetchSuggestions } = useContext(SearchContext)
   const [text, setText] = useState('')
-  const ampState = useContext(AmpContext)
+  const ampState = useContext(DataBindingContext)
 
   const HideWhenEmpty = ({ children }) => (
     <div

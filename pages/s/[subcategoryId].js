@@ -17,7 +17,7 @@ import FilterButton from 'react-storefront/plp/FilterButton'
 import Filter from 'react-storefront/plp/Filter'
 import Fill from 'react-storefront/Fill'
 import SearchResultsProvider from 'react-storefront/plp/SearchResultsProvider'
-import DataBindingProvider from 'react-storefront/DataBindingProvider'
+import DataBindingProvider from 'react-storefront/bind/DataBindingProvider'
 
 const useStyles = makeStyles(theme => ({
   sideBar: {

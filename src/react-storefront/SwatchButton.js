@@ -6,7 +6,7 @@ import { Check as CheckedIcon } from '@material-ui/icons'
 import Image from './Image'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
-import AmpContext from './amp/AmpContext'
+import DataBindingContext from './bind/DataBindingContext'
 
 export const styles = theme => ({
   root: {},
@@ -128,7 +128,7 @@ function SwatchButton({
       [classes.selected]: isSelected
     })
 
-  const { ampState, getValue } = useContext(AmpContext)
+  const { ampState, getValue } = useContext(DataBindingContext)
 
   if (selected === undefined) {
     selected = getValue(name) == value

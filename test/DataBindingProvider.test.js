@@ -1,6 +1,6 @@
 import { mount } from 'enzyme'
 import React, { useState, useContext, useEffect } from 'react'
-import AmpContext from 'react-storefront/amp/AmpContext'
+import DataBindingContext from 'react-storefront/bind/DataBindingContext'
 
 let DataBindingProvider
 let amp
@@ -12,7 +12,7 @@ describe('DataBindingProvider', () => {
     jest.doMock('next/amp', () => ({
       useAmp: () => amp
     }))
-    DataBindingProvider = require('react-storefront/DataBindingProvider').default
+    DataBindingProvider = require('react-storefront/bind/DataBindingProvider').default
   })
 
   beforeEach(() => {
@@ -78,7 +78,7 @@ describe('DataBindingProvider', () => {
       let value
 
       function Child({ name }) {
-        const { getValue } = useContext(AmpContext)
+        const { getValue } = useContext(DataBindingContext)
         value = getValue(name)
         return <span id="value">{value}</span>
       }
@@ -96,7 +96,7 @@ describe('DataBindingProvider', () => {
       let value
 
       function Child({ name }) {
-        const { getValue } = useContext(AmpContext)
+        const { getValue } = useContext(DataBindingContext)
         value = getValue(name)
         return <span id="value">{value}</span>
       }
@@ -126,7 +126,7 @@ describe('DataBindingProvider', () => {
       let value
 
       function Child() {
-        const { getValue, setValue } = useContext(AmpContext)
+        const { getValue, setValue } = useContext(DataBindingContext)
 
         useEffect(() => {
           setValue('name', 'Test')
@@ -150,7 +150,7 @@ describe('DataBindingProvider', () => {
       let ampState
 
       function Child() {
-        ampState = useContext(AmpContext).ampState
+        ampState = useContext(DataBindingContext).ampState
         return null
       }
 

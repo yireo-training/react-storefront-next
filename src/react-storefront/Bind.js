@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import AmpContext from './amp/AmpContext'
+import DataBindingContext from './bind/DataBindingContext'
 import PropTypes from 'prop-types'
 
 /**
@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
  * of the same name provided by DataBindingProvider when rendering amp.
  */
 export default function Bind({ name }) {
-  const { ampState, getValue } = useContext(AmpContext)
+  const { ampState, getValue } = useContext(DataBindingContext)
   return <span amp-bind={`text=>${ampState}.${name} || ''`}>{getValue(name)}</span>
 }
 

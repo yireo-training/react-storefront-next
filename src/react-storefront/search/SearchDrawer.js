@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import SearchProvider from './SearchProvider'
 import { useAmp } from 'next/amp'
 import AmpDrawer from '../amp/AmpDrawer'
-import DataBindingProvider from '../DataBindingProvider'
+import DataBindingProvider from '../bind/DataBindingProvider'
 
 export const styles = theme => ({
   paper: {
