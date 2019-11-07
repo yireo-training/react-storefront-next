@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { mount } from 'enzyme'
 import ToggleButton from 'react-storefront/ToggleButton'
-import DataBindingProvider from 'react-storefront/DataBindingProvider'
+import DataBindingProvider from 'react-storefront/bind/DataBindingProvider'
 import { Button } from '@material-ui/core'
 
 describe('ToggleButton.test', () => {
@@ -10,7 +10,9 @@ describe('ToggleButton.test', () => {
   beforeEach(() => {})
 
   afterEach(() => {
-    wrapper.unmount()
+    try {
+      wrapper.unmount()
+    } catch (e) {}
   })
 
   it('should get the value from bind', () => {

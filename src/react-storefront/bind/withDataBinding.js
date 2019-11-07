@@ -43,7 +43,7 @@ export default function withDataBinding(Component) {
         amp={{
           state: ampState,
           getValue: createAmpValueExpression,
-          bind: getAmpBind(ampState, createAmpValueExpression),
+          bind: getAmpBind(amp, createAmpValueExpression),
           createHandler: createAmpEventHandler(amp, normalizedBind, ampState)
         }}
       />
@@ -100,7 +100,7 @@ function createAmpEventHandler(amp, bind, ampState) {
  * @return {Object}
  */
 function normalizeBind(bind) {
-  if (!isObject(bind)) {
+  if (!isObject(bind) || Array.isArray(bind)) {
     bind = { value: bind }
   }
 
