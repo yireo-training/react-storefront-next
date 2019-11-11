@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Head } from 'next'
+import Head from 'next/head'
 import { makeStyles } from '@material-ui/core/styles'
 import { useAmp } from 'next/amp'
 
@@ -27,6 +27,8 @@ export const styles = theme => ({
 const useStyles = makeStyles(styles, { name: 'RSFVideo' })
 
 export default function Video({ children, classes, ...props }) {
+  classes = useStyles({ classes })
+  
   const amp = useAmp()
   const Tag = amp ? 'amp-video' : 'video'
 

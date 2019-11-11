@@ -4,8 +4,8 @@ import Image from '../Image'
 import { makeStyles } from '@material-ui/core/styles'
 import ReactImageMagnify from 'react-image-magnify'
 import MagnifyHint from './MagnifyHint'
+import Video from '../Video'
 import DataBindingContext from '../bind/DataBindingContext'
-// import Video from '../Video'
 
 const styles = theme => ({
   imageWrap: {
@@ -78,15 +78,14 @@ function MediaCarousel(props) {
     magifyProps,
     ...others
   } = props
+
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const styles = useStyles({ classes })
   const ref = useRef(null)
   const [over, setOver] = useState(false)
   const { getValue } = useContext(DataBindingContext)
-
   const productId = getValue(productIdKey)
   const color = getValue(colorKey)
-
   const [media, setMedia] = useState(() => getValue(mediaKey))
 
   useEffect(() => {
