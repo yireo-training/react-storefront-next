@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prod": "NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production node server.js",
+    "storybook": "start-storybook -c ./src/react-storefront/.storybook"
   },
   "dependencies": {
     "@material-ui/core": "^4.5.0",
@@ -33,6 +34,8 @@
     "workbox-webpack-plugin": "^4.3.1"
   },
   "devDependencies": {
+    "@storybook/react": "^5.2.6",
+    "babel-loader": "^8.0.6",
     "babel-plugin-transform-imports": "^2.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
