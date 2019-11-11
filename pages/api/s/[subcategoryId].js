@@ -26,6 +26,7 @@ export default function getSubcategory(req, res) {
             title: `Subcategory ${subcategoryId}`,
             total: 100,
             page: parseInt(page),
+            totalPages: 5,
             filters,
             appliedFilters: filters,
             sort,

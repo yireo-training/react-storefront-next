@@ -71,13 +71,15 @@ const Subcategory = lazyProps => {
               </Grid>
               <Grid item xs={6}></Grid>
               <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {loading ? (
-                  <Skeleton style={{ width: 100, height: 12, marginBottom: theme.spacing(1) }} />
-                ) : (
-                  <Typography variant="caption" className={classes.total}>
-                    {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
-                  </Typography>
-                )}
+                <Typography variant="caption" className={classes.total}>
+                  {loading ? (
+                    <Skeleton style={{ width: 100, height: 12, marginBottom: theme.spacing(1) }} />
+                  ) : (
+                    <span>
+                      {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
+                    </span>
+                  )}
+                </Typography>
               </Grid>
               <Grid item xs={12}>
                 {!loading ? (
@@ -108,7 +110,7 @@ const Subcategory = lazyProps => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                {!loading && <ShowMore />}
+                {!loading && <ShowMore variant="infinite" />}
               </Grid>
             </Grid>
           </Hbox>

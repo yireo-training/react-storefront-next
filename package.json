@@ -40,6 +40,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "jest": "^24.9.0",
+    "jest-enzyme": "^7.1.2",
     "jest-fetch-mock": "^2.1.2",
     "jsdom": "^15.2.1",
     "webpack-bundle-analyzer": "^3.6.0"
@@ -51,7 +52,8 @@
       "./test/config/setup.js"
     ],
     "setupFilesAfterEnv": [
-      "./test/config/mocks.js"
+      "./test/config/mocks.js",
+      "./node_modules/jest-enzyme/lib/index.js"
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
