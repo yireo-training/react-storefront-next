@@ -1,27 +1,27 @@
-import React, { useState, useMemo, useContext } from 'react'
+import React, { useState } from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import ProductLinkContext from './ProductLinkContext'
+import DataBindingProvider from 'react-storefront/bind/DataBindingProvider'
 
 export const styles = theme => ({
   root: {}
 })
+
 const useStyles = makeStyles(styles, { name: 'RSFProductLink' })
 
 export default function ProductLink({ classes, product, children }) {
   classes = useStyles({ classes })
+  const [store, updateStore] = useState(product)
 
-  const [color, setColor] = useState({ thumbnail: product.thumbnail })
-
-  const context = useMemo(() => {
-    return {
-      color,
-      setColor
-    }
-  }, [color])
-
-  return <ProductLinkContext.Provider value={context}>{children}</ProductLinkContext.Provider>
+  return (
+    <DataBindingProvider
+      id={`RSFProductLink${product.id}`}
+      store={store}
+      updateStore={updateStore}
+      root={null}
+    >
+      {children}
+    </DataBindingProvider>
+  )
 }
-
 ProductLink.propTypes = {}
-
 ProductLink.defaultProps = {}

@@ -41,7 +41,7 @@ export default function DataBindingProvider({ id, children, store, updateStore, 
       setValue: (path, value) => {
         updateStore(store => {
           const newStore = { ...store }
-          set(store, `${normalizeRoot(root)}${path}`, value)
+          set(newStore, `${normalizeRoot(root)}${path}`, value)
           return newStore
         })
       },
@@ -64,7 +64,7 @@ export default function DataBindingProvider({ id, children, store, updateStore, 
           <script
             type="application/json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify(get(store, root))
+              __html: JSON.stringify(root ? get(store, root) : store)
             }}
           />
         </amp-state>

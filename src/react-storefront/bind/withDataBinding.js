@@ -43,7 +43,7 @@ export default function withDataBinding(Component) {
         amp={{
           state: ampState,
           getValue: createAmpValueExpression,
-          bind: getAmpBind(amp, createAmpValueExpression),
+          bind: getAmpBind(amp, bind, createAmpValueExpression),
           createHandler: createAmpEventHandler(amp, normalizedBind, ampState)
         }}
       />
@@ -56,9 +56,11 @@ export default function withDataBinding(Component) {
  * @param {Boolean} amp True when amp is enabled
  * @param {Function} createAmpValueExpression A function that generates AMP values expressions for the current state.
  */
-function getAmpBind(amp, createAmpValueExpression) {
-  if (!amp) return () => ({})
-  return ({ field, prop }) => ({ 'amp-bind': `${field}=>${createAmpValueExpression(prop)}` })
+function getAmpBind(amp, bind, createAmpValueExpression) {
+  if (!amp || !bind) return () => ({})
+  return ({ field, prop, value }) => ({
+    'amp-bind': `${field}=>${value !== undefined ? value : createAmpValueExpression(prop)}`
+  })
 }
 
 /**
@@ -70,9 +72,10 @@ function getAmpBind(amp, createAmpValueExpression) {
  * @return {Function}
  */
 function createAmpEventHandler(amp, bind, ampState) {
-  if (!amp) return () => ({})
-  return ({ event, prop = 'value', value }) => {
+  if (!amp || !bind) return () => ({})
+  return ({ event, prop = 'currentValue', value }) => {
     const field = bind[prop][0]
+
     return { on: `${event}:AMP.setState({ ${ampState}: { ${field}: ${value} } })` }
   }
 }
@@ -101,7 +104,7 @@ function createAmpEventHandler(amp, bind, ampState) {
  */
 function normalizeBind(bind) {
   if (!isObject(bind) || Array.isArray(bind)) {
-    bind = { value: bind }
+    bind = { currentValue: bind }
   }
 
   for (let key in bind) {
@@ -130,7 +133,7 @@ function normalizeBindValue(value) {
  *
  * ```js
  * {
- *   value: (the value)
+ *   currentValue: (the value)
  *   onValueChange: (function to update the value)
  * }
  * ```
@@ -161,7 +164,11 @@ function getBoundProps(bind, getValue, setValue) {
  * @return {String}
  */
 function getCallback(prop) {
-  return `on${capitalize(prop)}Change`
+  if (prop === 'currentValue') {
+    return `onValueChange`
+  } else {
+    return `on${capitalize(prop)}Change`
+  }
 }
 
 /**
@@ -188,5 +195,13 @@ function getBoundValue(expressions, getValue) {
  * @return {String}
  */
 function getAmpValue(ampState, bind) {
-  return (prop = 'value') => `(${bind[prop].map(v => `${ampState}.${v}`).join('||')})`
+  return (prop = 'currentValue') => {
+    if (!bind[prop]) {
+      return null
+    } else if (bind[prop].length === 1) {
+      return `${ampState}.${bind[prop]}`
+    } else {
+      return `(${bind[prop].map(v => `${ampState}.${v}`).join('||')})`
+    }
+  }
 }

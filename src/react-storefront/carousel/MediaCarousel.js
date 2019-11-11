@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import ReactImageMagnify from 'react-image-magnify'
 import MagnifyHint from './MagnifyHint'
 import Video from '../Video'
-import DataBindingContext from '../bind/DataBindingContext'
 
 const styles = theme => ({
   imageWrap: {
@@ -67,26 +66,15 @@ const useStyles = makeStyles(styles, { name: 'RSFMediaCarousel' })
  * ```
  */
 function MediaCarousel(props) {
-  let {
-    baseURL,
-    thumbnail,
-    imageProps,
-    classes,
-    colorKey = 'color',
-    productIdKey = 'product.id',
-    mediaKey = 'product.media',
-    magifyProps,
-    ...others
-  } = props
+  let { baseURL, thumbnail, imageProps, classes, product, magifyProps, ...others } = props
 
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const styles = useStyles({ classes })
   const ref = useRef(null)
   const [over, setOver] = useState(false)
-  const { getValue } = useContext(DataBindingContext)
-  const productId = getValue(productIdKey)
-  const color = getValue(colorKey)
-  const [media, setMedia] = useState(() => getValue(mediaKey))
+  const color = product.color
+  const productId = product.id
+  const [media, setMedia] = useState(() => product.media)
 
   useEffect(() => {
     const fetchMedia = async (productId, color) => {
@@ -103,6 +91,8 @@ function MediaCarousel(props) {
       setMedia(color.media)
     } else if (color) {
       fetchMedia(productId, color)
+    } else {
+      setMedia(product.media)
     }
   }, [color && color.id])
 
@@ -145,7 +135,6 @@ function MediaCarousel(props) {
   if (media && media.full && media.full.some(item => item.magnify)) {
     belowAdornments.push(<MagnifyHint key="magnify-hint" over={over} />)
   }
-
   return (
     <Carousel
       ref={ref}

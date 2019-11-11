@@ -1,10 +1,7 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import { useAmp } from 'next/amp'
 import SwatchButton from './SwatchButton'
-import withDefaultHandler from './utils/withDefaultHandler'
-import DataBindingContext from './bind/DataBindingContext'
 import ToggleButton from './ToggleButton'
 
 export const styles = theme => ({
@@ -48,11 +45,8 @@ const useStyles = makeStyles(styles, { name: 'RSFButtonSelector' })
  *
  * This component supports AMP.
  */
-export default function ButtonSelector(props) {
+function ButtonSelector(props) {
   let { options, name, classes } = props
-
-  const amp = useAmp()
-  const { ampState } = useContext(DataBindingContext)
 
   if (!options) return null
 
@@ -60,7 +54,6 @@ export default function ButtonSelector(props) {
 
   return (
     <div className={classes.root}>
-      {amp && <input type="hidden" name={name} amp-bind={`value=>${ampState}.${name}.id`} />}
       <div className={classes.buttons}>
         {options.map((option, i) => (
           <Option
@@ -79,49 +72,23 @@ export default function ButtonSelector(props) {
 
 function Option({
   option,
-  value,
+  bind,
   classes,
   strikeThroughDisabled,
   strikeThroughAngle,
   buttonProps,
-  onSelectionChange,
-  name
+  onSelectionChange
 }) {
-  const { ampState, getValue, setValue } = useContext(DataBindingContext)
-  if (!value) value = getValue(name)
-
-  const handleClick = withDefaultHandler(onSelectionChange, (_e, value) => {
-    if (name) {
-      setValue(name, getValue(name) === value ? null : value)
-    }
-  })
-
-  const props = {
-    name: `${name}.id`,
-    value: option.id,
-    onClick: e => handleClick(e, option),
-    'aria-label': option.text,
-    href: option.url,
-    disabled: option.disabled,
-    on: `tap:AMP.setState({ ${ampState}: { ${name}: ${JSON.stringify(
-      option
-    )}, ${name}Interacted: true }})`,
-    ...buttonProps
-  }
-
   const ButtonComponent = option.image || option.color ? SwatchButton : ToggleButton
 
   return (
     <div key={option.id} className={classes.wrap}>
       <ButtonComponent
-        name={`${name}.id`}
-        value={option.id}
-        onClick={e => handleClick(e, option)}
+        value={option}
+        onClick={onSelectionChange}
         aria-label={option.text}
         disabled={option.disabled}
-        on={`tap:AMP.setState({ ${ampState}: { ${name}: ${JSON.stringify(
-          option
-        )}, ${name}Interacted: true }})`}
+        bind={bind}
         color={option.color}
         {...(option.image || {})}
         {...buttonProps}
@@ -183,3 +150,5 @@ ButtonSelector.defaultProps = {
   strikeThroughDisabled: false,
   strikeThroughAngle: 45
 }
+
+export default ButtonSelector

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import Lazy from 'react-storefront/Lazy'
 import ButtonSelector from 'react-storefront/ButtonSelector'
 import QuantitySelector from 'react-storefront/QuantitySelector'
@@ -39,7 +39,8 @@ const Product = React.memo(lazyProps => {
   const theme = useTheme()
   const [store, updateStore] = useLazyStore(lazyProps, { pageData: { quantity: 1 } })
   const classes = useStyles()
-  const product = get(store, 'pageData.product') || {}
+  const [product, updateProduct] = useState(get(store, 'pageData.product') || {})
+
   const { thumbnail } = useContext(PWAContext)
 
   const header = (
@@ -55,7 +56,12 @@ const Product = React.memo(lazyProps => {
   )
 
   return (
-    <DataBindingProvider store={store} updateStore={updateStore}>
+    <DataBindingProvider
+      id={`RSFProduct${product.id}`}
+      store={product}
+      updateStore={updateProduct}
+      root={null}
+    >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={5}>
@@ -67,6 +73,8 @@ const Product = React.memo(lazyProps => {
                 baseURL={`/api/p/media`}
                 className={classes.carousel}
                 thumbnail={thumbnail.current}
+                product={product}
+                // bind={{ productId: 'id', media: 'media', color: 'color' }}
               />
             </Fill>
           </Grid>
@@ -81,10 +89,10 @@ const Product = React.memo(lazyProps => {
                     <Hbox style={{ marginBottom: 10 }}>
                       <Label>COLOR: </Label>
                       <Typography>
-                        <Bind name="color.text" />
+                        <Bind bind="color.text" />
                       </Typography>
                     </Hbox>
-                    <ButtonSelector options={product.colors} name="color" />
+                    <ButtonSelector options={product.colors} bind="color" />
                   </>
                 ) : (
                   <div>
@@ -103,10 +111,10 @@ const Product = React.memo(lazyProps => {
                     <Hbox style={{ marginBottom: 10 }}>
                       <Label>SIZE: </Label>
                       <Typography>
-                        <Bind name="size.text" />
+                        <Bind bind="size.text" />
                       </Typography>
                     </Hbox>
-                    <ButtonSelector options={product.sizes} name="size" />
+                    <ButtonSelector options={product.sizes} bind="size" />
                   </>
                 ) : (
                   <div>

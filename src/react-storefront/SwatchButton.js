@@ -1,12 +1,13 @@
-import React, { memo, useContext } from 'react'
+import React, { memo } from 'react'
 import { Vbox } from './Box'
-import { Button, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Check as CheckedIcon } from '@material-ui/icons'
 import Image from './Image'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
-import DataBindingContext from './bind/DataBindingContext'
+import withDataBinding from './bind/withDataBinding'
+import withDefaultHandler from './utils/withDefaultHandler'
 
 export const styles = theme => ({
   root: {},
@@ -107,13 +108,17 @@ const useStyles = makeStyles(styles, { name: 'RSFSwatchButton' })
  */
 function SwatchButton({
   name,
+  currentValue,
+  onValueChange,
   value,
+  amp,
   selected,
   label,
   src,
   alt,
   classes,
   imageProps,
+  onClick,
   SelectedIcon,
   variant,
   ...buttonProps
@@ -128,10 +133,12 @@ function SwatchButton({
       [classes.selected]: isSelected
     })
 
-  const { ampState, getValue } = useContext(DataBindingContext)
+  const handleClick = withDefaultHandler(onClick, _e => {
+    onValueChange(currentValue === value ? null : value)
+  })
 
   if (selected === undefined) {
-    selected = getValue(name) == value
+    selected = value == currentValue
   }
 
   return (
@@ -139,6 +146,11 @@ function SwatchButton({
       <button
         {...buttonProps}
         type="button"
+        onClick={e => handleClick(e)}
+        {...amp.createHandler({
+          event: 'tap',
+          value: `${JSON.stringify({ ...value })}`
+        })}
         className={clsx({
           [classes.button]: true,
           [classes[variant]]: true,
@@ -147,7 +159,12 @@ function SwatchButton({
       >
         <div
           className={cls(selected)}
-          amp-bind={`class=>${ampState}.${name} == "${value}" ? "${cls(true)}" : "${cls(false)}"`}
+          {...amp.bind({
+            field: 'class',
+            value: `${amp.getValue()}.id == '${value && value.id}' ? '${cls(true)}' : '${cls(
+              false
+            )}'`
+          })}
         >
           <SelectedIcon className={classes.icon} />
         </div>
@@ -214,4 +231,4 @@ SwatchButton.defaultProps = {
   variant: 'default'
 }
 
-export default memo(SwatchButton)
+export default memo(withDataBinding(SwatchButton))

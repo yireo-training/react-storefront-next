@@ -10,6 +10,7 @@ import qs from 'qs'
 import { makeStyles } from '@material-ui/core/styles'
 import PWAContext from './PWAContext'
 import { useAmp } from 'next/amp'
+import withDataBinding from 'react-storefront/bind/withDataBinding'
 
 export const styles = theme => ({
   root: {
@@ -61,7 +62,7 @@ const useStyles = makeStyles(styles, { name: 'RSFImage' })
  * by setting the `fill` prop, or grow/shrink while maintaining a given aspect ratio
  * by setting the `aspectRatio` prop.
  */
-export default function Image({
+function Image({
   lazy,
   lazyOffset,
   notFoundSrc,
@@ -75,16 +76,17 @@ export default function Image({
   aspectRatio,
   alt,
   src,
+  amp,
   optimize,
   ...imgAttributes
 }) {
-  function getOptimizedSrc() {
+  function getOptimizedSrc(url = src) {
     if (quality || Object.keys(optimize).length > 0) {
-      const options = { ...optimize, img: src }
+      const options = { ...optimize, img: url }
       if (quality) options.quality = quality
       return `https://opt.moovweb.net/?${qs.stringify(options)}`
     } else {
-      return src
+      return url
     }
   }
 
@@ -105,8 +107,8 @@ export default function Image({
   classes = useStyles({ classes })
 
   const { hydrating } = useContext(PWAContext)
-  const amp = useAmp()
-  const [loaded, setLoaded] = useState(lazy === false || (lazy === 'ssr' && !hydrating) || amp)
+  const isAmp = useAmp()
+  const [loaded, setLoaded] = useState(lazy === false || (lazy === 'ssr' && !hydrating) || isAmp)
   const [primaryNotFound, setPrimaryNotFound] = useState(false)
   const ref = useRef()
 
@@ -131,15 +133,17 @@ export default function Image({
   const assignedAttributes = {
     src,
     key: src,
-    [amp ? 'class' : 'className']: clsx({
+    [isAmp ? 'class' : 'className']: clsx({
       [classes.image]: true,
       [classes.fit]: aspectRatio != null
     }),
-    layout: amp ? ampLayout() : null,
+    layout: isAmp ? ampLayout() : null,
     height,
     width,
     alt
   }
+
+  const optimizedUrlTemplate = getOptimizedSrc('__url__')
 
   let result = (
     <div
@@ -150,8 +154,16 @@ export default function Image({
       })}
     >
       {aspectRatio && <div style={{ paddingTop: `${aspectRatio}%` }} />}
-      {amp ? (
-        <amp-img {...assignedAttributes} />
+      {isAmp ? (
+        <amp-img
+          {...assignedAttributes}
+          {...amp.bind({
+            field: 'src',
+            value: `'${optimizedUrlTemplate}'.split('__url__').join(encodeURIComponent(${amp.getValue(
+              'src'
+            )}))`
+          })}
+        />
       ) : (
         loaded && (
           <img
@@ -165,7 +177,7 @@ export default function Image({
     </div>
   )
 
-  if (!amp && lazy) {
+  if (!isAmp && lazy) {
     result = (
       <VisibilitySensor
         active={!loaded}
@@ -250,3 +262,5 @@ Image.defaultProps = {
   lazyOffset: 100,
   optimize: {}
 }
+
+export default withDataBinding(Image)

@@ -47,6 +47,10 @@ function ProductItem({ product, index }) {
               pageData={{ product }}
             >
               <ProductThumbnail
+                bind={{
+                  src: ['color.media.thumbnail.src', 'thumbnail.src'],
+                  alt: ['color.media.thumbnail.alt', 'thumbnail.alt']
+                }}
                 optimize={{ maxWidth: 200 }}
                 lazy={index >= 4 && index < 20 ? 'ssr' : false}
                 aspectRatio={100}
@@ -56,7 +60,11 @@ function ProductItem({ product, index }) {
               <Typography variant="subtitle1" className={classes.name}>
                 {product.name}
               </Typography>
-              <ProductColors product={product} buttonProps={{ variant: 'small' }} />
+              <ProductColors
+                colors={product.colors}
+                bind="color"
+                buttonProps={{ variant: 'small' }}
+              />
               <Rating product={product} className={classes.rating} />
               <Typography className={classes.price}>{product.price}</Typography>
             </div>

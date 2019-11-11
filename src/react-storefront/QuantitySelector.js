@@ -48,20 +48,21 @@ function QuantitySelector({
   classes,
   addIcon,
   subtractIcon,
-  value,
+  currentValue: value,
   onValueChange,
   minValue,
   maxValue,
   analytics,
   inputProps,
   ariaLabel,
-  bind,
   amp,
   ...other
 }) {
   classes = useStyles({ classes })
   const { quantitySelector, icon, button, ...inputClasses } = classes
   const isAmp = useAmp()
+
+  if (!value) value = 1
 
   function handleChange(value) {
     if (value >= minValue && value <= maxValue) {
@@ -110,7 +111,7 @@ function QuantitySelector({
           'aria-label': ariaLabel,
           name,
           ...inputProps,
-          ...amp.bind({ field: 'value', prop: 'value' })
+          ...amp.bind({ field: 'value', value: `${amp.getValue()} || 1` })
         }}
         {...{ [isAmp ? 'readOnly' : 'disabled']: true }}
         {...other}
