@@ -55,6 +55,7 @@ const useStyles = makeStyles(styles, { name: 'RSFShowMore' })
  */
 export default function ShowMore({
   className,
+  style,
   children,
   variant,
   infiniteLoadOffset,
@@ -93,12 +94,14 @@ export default function ShowMore({
         partialVisibility
         offset={{ bottom: -infiniteLoadOffset }}
       >
-        <div className={classes.loading}>{renderLoadingIcon()}</div>
+        <div className={clsx(classes.loading, className)} style={style}>
+          {renderLoadingIcon()}
+        </div>
       </VisibilitySensor>
     )
   } else {
     return (
-      <div className={clsx(classes.root, className)}>
+      <div className={clsx(classes.root, className)} style={style}>
         {loading ? (
           <div className={classes.loading}>{renderLoadingIcon()}</div>
         ) : (
@@ -144,7 +147,7 @@ ShowMore.propTypes = {
   /**
    * Minimum amount of pixels from the bottom of the page to where the user has
    * scrolled before the new page is loaded. Used in conjunction with 'infinite'
-   * variant. Defaults to 100.
+   * variant. Defaults to 200.
    */
   infiniteLoadOffset: PropTypes.number
 }
@@ -152,5 +155,5 @@ ShowMore.propTypes = {
 ShowMore.defaultProps = {
   renderLoadingIcon: () => <CircularProgress />,
   variant: VARIANTS.BUTTON,
-  infiniteLoadOffset: 100
+  infiniteLoadOffset: 200
 }

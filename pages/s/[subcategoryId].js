@@ -110,7 +110,7 @@ const Subcategory = lazyProps => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                {!loading && <ShowMore variant="infinite" />}
+                {!loading && <ShowMore variant="infinite" style={{ paddingBottom: 200 }} />}
               </Grid>
             </Grid>
           </Hbox>

@@ -78,6 +78,8 @@ function Image({
   src,
   amp,
   optimize,
+  onValueChange,
+  currentValue,
   ...imgAttributes
 }) {
   function getOptimizedSrc(url = src) {
