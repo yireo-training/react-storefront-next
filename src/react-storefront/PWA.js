@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import PWAContext from './PWAContext'
-import Router from 'next/router'
 import PropTypes from 'prop-types'
 import ErrorBoundary from './ErrorBoundary'
+import { makeStyles } from '@material-ui/core/styles'
+import LinkContextProvider from './link/LinkContextProvider'
 import './profile'
 import './hooks/useTraceUpdate'
-import { makeStyles } from '@material-ui/core/styles'
-import LinkContext from './link/LinkContext'
 
 export const styles = theme => ({
   '@global': {
@@ -25,7 +24,6 @@ const useStyles = makeStyles(styles, { name: 'RSFPWA' })
 export default function PWA({ children, errorReporter }) {
   useStyles()
   const thumbnail = useRef(null)
-  const linkPageData = useRef(null)
 
   const app = useMemo(
     () => ({
@@ -50,11 +48,7 @@ export default function PWA({ children, errorReporter }) {
     // window.addEventListener('online', handleOnline)
     // window.addEventListener('offline', handleOffline)
 
-    const onRouteChangeComplete = () => (linkPageData.current = null)
-    Router.events.on('routeChangeComplete', onRouteChangeComplete)
-
     return () => {
-      Router.events.off('routeChangeComplete', onRouteChangeComplete)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
     }
@@ -62,9 +56,9 @@ export default function PWA({ children, errorReporter }) {
 
   return (
     <PWAContext.Provider value={app}>
-      <LinkContext.Provider value={linkPageData}>
+      <LinkContextProvider>
         <ErrorBoundary onError={errorReporter}>{children}</ErrorBoundary>
-      </LinkContext.Provider>
+      </LinkContextProvider>
     </PWAContext.Provider>
   )
 }

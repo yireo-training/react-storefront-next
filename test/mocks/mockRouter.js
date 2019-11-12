@@ -18,6 +18,7 @@ export const Router = {
 export function navigate(url) {
   events.emit('beforeHistoryChange')
   window.history.pushState(null, null, url)
+  events.emit('routeChangeComplete')
 }
 
 export function goBack() {
