@@ -1,3 +1,24 @@
 {
-  "custom_cache_keys": []
+  "custom_cache_keys": [
+    {
+      "path_regex": "/^api\\/p\\/([^\\/]+?)(?:\\/)?$/i",
+      "headers": [],
+      "queryParametersMode": "blacklist",
+      "queryParameterslist": [],
+      "queryParametersChanged": false,
+      "cookies": {
+        "currency": null
+      }
+    },
+    {
+      "path_regex": "/^p\\/([^\\/]+?)(?:\\/)?$/i",
+      "headers": [],
+      "queryParametersMode": "blacklist",
+      "queryParameterslist": [],
+      "queryParametersChanged": false,
+      "cookies": {
+        "currency": null
+      }
+    }
+  ]
 }

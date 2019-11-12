@@ -188,10 +188,6 @@ Product.getInitialProps = withCaching({
   }
 })(fetchProps(({ query }) => `/api/p/${query.productId}`))
 
-// Product.getInitialProps = fetchProps(
-//   ({ query }) => `http://localhost:3000/api/p/${query.productId}`
-// )
-
 export default Product
 
 export const config = { amp: 'hybrid' }
