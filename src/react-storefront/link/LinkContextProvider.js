@@ -9,7 +9,7 @@ export default function LinkContextProvider({ children }) {
   const linkPageData = useRef(null)
 
   useEffect(() => {
-    const onRouteChangeComplete = () => (linkPageData.current = null)
+    const onRouteChangeComplete = () => (linkPageData.current = undefined)
     Router.events.on('routeChangeComplete', onRouteChangeComplete)
 
     return () => {
