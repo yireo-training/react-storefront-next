@@ -20,4 +20,4 @@ yarn build && yarn prod
 # Structure
 
 What will eventually be published as `react-storefront` v7.0.0 currently resides in
-the react-storefront directory. The rest of the repo follows the standard next.js project structure
+the `lib/react-storefront` directory. The rest of the repo follows the standard next.js project structure.
