@@ -8,14 +8,12 @@ const NextXDNPlugin = require('./lib/moov-xdn-next/webpack/NextXDNPlugin')
 module.exports = withServiceWorker({
   target: 'serverless',
   webpack(config, options) {
-    config.resolve.alias['react-storefront'] = path.join(
-      __dirname,
-      'lib',
-      'react-storefront',
-      'src'
-    )
-    config.resolve.alias['moov-xdn-next'] = path.join(__dirname, 'lib', 'moov-xdn-next', 'src')
-    config.resolve.alias['moov-xdn'] = path.join(__dirname, 'lib', 'moov-xdn', 'src')
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'react-storefront': path.resolve('./lib/react-storefront/src'),
+      'moov-xdn-next': path.resolve('./lib/moov-xdn-next/src'),
+      'moov-xdn': path.resolve('./lib/moov-xdn/src')
+    }
 
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -37,7 +35,6 @@ module.exports = withServiceWorker({
           outputFile: './tmp/oem.json'
         })
       )
-      //   config.plugins.push(generateServiceWorker(options.config))
     }
 
     return config
