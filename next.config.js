@@ -1,14 +1,21 @@
 const path = require('path')
-const withServiceWorker = require('./src/react-storefront/webpack/withServiceWorker')
 const webpack = require('webpack')
 const API_VERSION = new Date().getTime()
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const NextXDNPlugin = require('./src/moov-xdn-next/webpack/NextXDNPlugin')
+const withServiceWorker = require('./lib/react-storefront/webpack/withServiceWorker')
+const NextXDNPlugin = require('./lib/moov-xdn-next/webpack/NextXDNPlugin')
 
 module.exports = withServiceWorker({
   target: 'serverless',
   webpack(config, options) {
-    config.resolve.alias['react-storefront'] = path.join(__dirname, 'src', 'react-storefront')
+    config.resolve.alias['react-storefront'] = path.join(
+      __dirname,
+      'lib',
+      'react-storefront',
+      'src'
+    )
+    config.resolve.alias['moov-xdn-next'] = path.join(__dirname, 'lib', 'moov-xdn-next', 'src')
+    config.resolve.alias['moov-xdn'] = path.join(__dirname, 'lib', 'moov-xdn', 'src')
 
     config.plugins.push(
       new webpack.DefinePlugin({

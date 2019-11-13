@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "prod": "NODE_ENV=production node server.js",
-    "storybook": "start-storybook -c ./src/react-storefront/.storybook"
+    "storybook": "start-storybook -c ./lib/react-storefront/.storybook"
   },
   "dependencies": {
     "@material-ui/core": "^4.5.0",
@@ -47,22 +47,21 @@
   },
   "jest": {
     "clearMocks": true,
-    "testEnvironment": "./test/config/jsdom",
+    "testEnvironment": "./lib/react-storefront/test/config/jsdom",
     "setupFiles": [
-      "./test/config/setup.js"
+      "./lib/react-storefront/test/config/setup.js"
     ],
     "setupFilesAfterEnv": [
-      "./test/config/mocks.js",
+      "./lib/react-storefront/test/config/mocks.js",
       "./node_modules/jest-enzyme/lib/index.js"
     ],
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/react-storefront/**/*.{js,jsx}",
+      "./lib/react-storefront/src/**/*.{js,jsx}",
       "!**/index.js"
     ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|svg)$": "../test/config/assetMock.js",
-      "react-storefront/(.*)": "<rootDir>/src/react-storefront/$1"
+      "react-storefront/(.*)": "<rootDir>/lib/react-storefront/src/$1"
     }
   }
 }

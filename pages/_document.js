@@ -1,8 +1,8 @@
 import React from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
-import theme from '../src/theme'
-import renderAmp from '../src/react-storefront/amp/renderAmp'
+import theme from '../components/theme'
+import renderAmp from 'react-storefront/amp/renderAmp'
 
 class MyDocument extends Document {
   render() {

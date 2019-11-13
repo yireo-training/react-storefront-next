@@ -1,56 +1,46 @@
-import React from 'react'
-import Link from 'next/link'
+import React, { useState } from 'react'
+import NavTab from 'react-storefront/NavTab'
+import NavTabs from 'react-storefront/NavTabs'
+import Row from 'react-storefront/Row'
+import Link from 'react-storefront/link/Link'
 
-const links = [
-  { href: 'https://zeit.co/now', label: 'ZEIT' },
-  { href: 'https://github.com/zeit/next.js', label: 'GitHub' }
-].map(link => {
-  link.key = `nav-link-${link.href}-${link.label}`
-  return link
-})
+export default function Nav() {
+  const [tabs, setTabs] = useState(data)
 
-const Nav = () => (
-  <nav>
-    <ul>
-      <li>
-        <Link href='/'>
-          <a>Home</a>
-        </Link>
-      </li>
-      {links.map(({ key, href, label }) => (
-        <li key={key}>
-          <a href={href}>{label}</a>
-        </li>
+  return (
+    <NavTabs>
+      {tabs.map(tab => (
+        <NavTab key={tab.as} href={tab.href} as={tab.as} label={tab.text}>
+          {React.useMemo(
+            () => (
+              <div style={{ padding: 20 }}>
+                <Row>
+                  <Link href="/s/[subcategoryId]" as="/s/1">
+                    Subcategory 1
+                  </Link>
+                </Row>
+                <Row>
+                  <Link href="/s/[subcategoryId]" as="/s/2">
+                    Subcategory 2
+                  </Link>
+                </Row>
+                <Row>
+                  <Link href="/s/[subcategoryId]" as="/s/3">
+                    Subcategory 3
+                  </Link>
+                </Row>
+              </div>
+            ),
+            []
+          )}
+        </NavTab>
       ))}
-    </ul>
+    </NavTabs>
+  )
+}
 
-    <style jsx>{`
-      :global(body) {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir,
-          Helvetica, sans-serif;
-      }
-      nav {
-        text-align: center;
-      }
-      ul {
-        display: flex;
-        justify-content: space-between;
-      }
-      nav > ul {
-        padding: 4px 16px;
-      }
-      li {
-        display: flex;
-        padding: 6px 8px;
-      }
-      a {
-        color: #067df7;
-        text-decoration: none;
-        font-size: 13px;
-      }
-    `}</style>
-  </nav>
-)
+const data = []
 
-export default Nav
+for (let i = 1; i <= 10; i++) {
+  data.push({ as: `/s/${i}`, href: '/s/[subcategoryId]', text: `Category ${i}` })
+}

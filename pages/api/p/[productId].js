@@ -1,6 +1,6 @@
-import createProduct from '../../../src/mocks/createProduct'
-import createCustomCacheKey from '../../../src/moov-xdn/src/createCustomCacheKey'
-import withCaching from '../../../src/moov-xdn-next/src/withCaching'
+import createProduct from '../../../components/mocks/createProduct'
+import createCustomCacheKey from 'moov-xdn/createCustomCacheKey'
+import withCaching from 'moov-xdn-next/withCaching'
 
 function fetchProduct(req, res) {
   const {

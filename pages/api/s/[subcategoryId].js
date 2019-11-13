@@ -1,7 +1,7 @@
-import createFacets from '../../../src/mocks/createFacets'
-import createSortOptions from '../../../src/mocks/createSortOptions'
-import createProduct from '../../../src/mocks/createProduct'
-import colors, { indexForColor } from '../../../src/mocks/colors'
+import createFacets from '../../../components/mocks/createFacets'
+import createSortOptions from '../../../components/mocks/createSortOptions'
+import createProduct from '../../../components/mocks/createProduct'
+import colors, { indexForColor } from '../../../components/mocks/colors'
 
 export default function getSubcategory(req, res) {
   let {

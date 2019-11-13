@@ -1,4 +1,4 @@
-import createMedia from '../../../src/mocks/createMedia'
+import createMedia from '../../../components/mocks/createMedia'
 
 export default function media(req, res) {
   const {

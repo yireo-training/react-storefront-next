@@ -5,9 +5,9 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Rating from 'react-storefront/Rating'
 import ForwardThumbnail from 'react-storefront/ForwardThumbnail'
-import ProductThumbnail from './react-storefront/product-link/ProductThumbnail'
-import ProductLink from './react-storefront/product-link/ProductLink'
-import ProductOptionSelector from './react-storefront/option/ProductOptionSelector'
+import ProductThumbnail from 'react-storefront/product-link/ProductThumbnail'
+import ProductLink from 'react-storefront/product-link/ProductLink'
+import ProductOptionSelector from 'react-storefront/option/ProductOptionSelector'
 
 const useStyles = makeStyles(theme => ({
   root: {
