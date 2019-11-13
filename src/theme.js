@@ -20,11 +20,12 @@ const theme = createMuiTheme({
   zIndex: {
     modal: 999,
     amp: {
-      modal: 999
+      modal: 2147483646
     }
   },
   headerHeight: 64,
-  loadMaskOffsetTop: 64 + 56 + 4
+  loadMaskOffsetTop: 64 + 56 + 4,
+  drawerWidth: 330
 })
 
 export default theme

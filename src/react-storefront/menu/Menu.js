@@ -7,6 +7,8 @@ import clsx from 'clsx'
 import SEOLinks from './SEOLinks'
 import MenuBody from './MenuBody'
 import PropTypes from 'prop-types'
+import { useAmp } from 'next/amp'
+import AmpMenu from '../amp/AmpMenu'
 
 export const styles = menuStyles
 
@@ -93,6 +95,14 @@ function Menu(props) {
     }),
     [classes]
   )
+
+  if (useAmp()) {
+    return (
+      <MenuContext.Provider value={context}>
+        <AmpMenu {...props} />
+      </MenuContext.Provider>
+    )
+  }
 
   return (
     <>

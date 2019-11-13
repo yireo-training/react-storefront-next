@@ -1,7 +1,7 @@
 export default function createMenu() {
   const items = []
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 5; i++) {
     items.push(createGroup(i))
   }
 
@@ -13,7 +13,7 @@ export default function createMenu() {
 function createGroup(i) {
   const items = []
 
-  for (let j = 1; j <= 10; j++) {
+  for (let j = 1; j <= 5; j++) {
     items.push(createCategoryItem(j))
   }
 
@@ -27,7 +27,7 @@ function createGroup(i) {
 function createCategoryItem(i) {
   const items = []
 
-  for (let j = 1; j <= 10; j++) {
+  for (let j = 1; j <= 5; j++) {
     items.push(createSubcategoryItem(j))
   }
 
@@ -41,7 +41,7 @@ function createCategoryItem(i) {
 function createSubcategoryItem(i) {
   const items = []
 
-  for (let j = 1; j <= 10; j++) {
+  for (let j = 1; j <= 5; j++) {
     items.push(createProductItem(j))
   }
 

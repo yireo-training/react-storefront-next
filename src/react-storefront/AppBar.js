@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import throttle from 'lodash/throttle'
 import { Toolbar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useAmp } from 'next/amp'
 import PWAContext from './PWAContext'
 
 export const styles = theme => ({
@@ -91,7 +92,7 @@ export default function AppBar({ classes, children, fixed, offlineWarning }) {
   const lastScrollY = useRef()
   const unstickAt = useRef()
   const throttledScrollY = useRef()
-  const { amp, menu, offline } = useContext(PWAContext)
+  const { menu, offline } = useContext(PWAContext)
   const sampleScrollSpeed = throttle(() => (throttledScrollY.current = window.scrollY), 100)
   const items = React.Children.toArray(children)
 
@@ -136,7 +137,7 @@ export default function AppBar({ classes, children, fixed, offlineWarning }) {
   return (
     <div>
       {offline && <div className={classes.offline}>{offlineWarning}</div>}
-      <div className={clsx({ [classes.root]: true, [classes.withAmp]: amp })}>
+      <div className={clsx({ [classes.root]: true, [classes.withAmp]: useAmp() })}>
         <div
           className={clsx({
             [classes.wrap]: true,

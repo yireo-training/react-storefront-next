@@ -7,7 +7,7 @@ import { useAmp } from 'next/amp'
 import MenuExpander from './MenuExpander'
 
 function MenuBranch(props) {
-  const { depth, index, item, defaultExpanded, ...others } = props
+  const { depth, index, path, item, defaultExpanded, ...others } = props
   const amp = useAmp()
   const { onItemClick, classes, useExpanders } = useContext(MenuContext)
   const hasSubBranches = item.items.some(child => child.items != null)
@@ -24,17 +24,17 @@ function MenuBranch(props) {
     }
   }
 
-  const sublist = `${depth}.${index}`
+  const sublist = index
+  const list = path === '@' ? `@${index}` : `${path}.${index}`
 
   const ampProps = {
-    on:
-      depth === 0
-        ? `tap:AMP.setState({ rsfMenu: { list: '@${index}' } })`
-        : `tap:AMP.setState({ rsfMenu: { sublist: sublist == '${sublist}' ? null : '${sublist}' } })`
+    on: !showExpander
+      ? `tap:AMP.setState({ rsfMenu: { list: '${list}', last: rsfMenu.list } })`
+      : `tap:AMP.setState({ rsfMenu: { sublist: rsfMenu.sublist == ${sublist} ? null : ${sublist} } })`
   }
 
   const elements = [
-    <div key="item" amp-bind={`class=>rsfMenu.sublist == '${sublist}' ? 'expanded' : ''`}>
+    <div key="item" amp-bind={`class=>rsfMenu.sublist == ${sublist} ? 'expanded' : ''`}>
       <ListItem
         className="menu-item"
         classes={{

@@ -8,7 +8,7 @@ export default function LeafHeader({ goBack, item, parentPath }) {
   const { renderLeafHeader, classes } = useContext(MenuContext)
 
   const backButtonAmpProps = {
-    on: `tap:AMP.setState({ rsfMenu: { list: '${parentPath}' } })`
+    on: `tap:AMP.setState({ rsfMenu: { list: '${parentPath}', sublist: null } })`
   }
 
   if (renderLeafHeader) {
