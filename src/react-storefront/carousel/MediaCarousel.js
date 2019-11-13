@@ -66,13 +66,12 @@ const useStyles = makeStyles(styles, { name: 'RSFMediaCarousel' })
  * ```
  */
 function MediaCarousel(props) {
-  let { baseURL, thumbnail, imageProps, classes, product, magifyProps, ...others } = props
+  let { baseURL, thumbnail, imageProps, classes, product, color, magifyProps, ...others } = props
 
   const [imagesLoaded, setImagesLoaded] = useState(false)
   const styles = useStyles({ classes })
   const ref = useRef(null)
   const [over, setOver] = useState(false)
-  const color = product.color
   const productId = product.id
   const [media, setMedia] = useState(() => product.media)
 

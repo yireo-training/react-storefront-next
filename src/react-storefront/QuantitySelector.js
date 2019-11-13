@@ -48,7 +48,7 @@ function QuantitySelector({
   classes,
   addIcon,
   subtractIcon,
-  currentValue: value,
+  value,
   onValueChange,
   minValue,
   maxValue,
@@ -111,7 +111,7 @@ function QuantitySelector({
           'aria-label': ariaLabel,
           name,
           ...inputProps,
-          ...amp.bind({ field: 'value', value: `${amp.getValue()} || 1` })
+          ...amp.bind({ attribute: 'value', value: `${amp.getValue()} || 1` })
         }}
         {...{ [isAmp ? 'readOnly' : 'disabled']: true }}
         {...other}

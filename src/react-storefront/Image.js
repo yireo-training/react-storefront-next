@@ -79,7 +79,7 @@ function Image({
   amp,
   optimize,
   onValueChange,
-  currentValue,
+  value,
   ...imgAttributes
 }) {
   function getOptimizedSrc(url = src) {
@@ -160,7 +160,7 @@ function Image({
         <amp-img
           {...assignedAttributes}
           {...amp.bind({
-            field: 'src',
+            attribute: 'src',
             value: `'${optimizedUrlTemplate}'.split('__url__').join(encodeURIComponent(${amp.getValue(
               'src'
             )}))`

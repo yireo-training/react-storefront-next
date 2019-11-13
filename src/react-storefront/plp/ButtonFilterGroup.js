@@ -1,9 +1,10 @@
 import React, { useMemo, useContext } from 'react'
 import SearchResultsContext from './SearchResultsContext'
-import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import SwatchButton from '../SwatchButton'
+import SwatchProductOption from '../option/SwatchProductOption'
+import TextProductOption from '../option/TextProductOption'
 import { Hbox } from '../Box'
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -50,30 +51,18 @@ export default function ButtonFilterGroup(props) {
             </Hbox>
           )
 
-          if (image) {
-            return (
-              <SwatchButton
-                key={i}
-                classes={{ root: classes.button }}
-                {...facet.image}
-                selected={selected}
-                onClick={handleClick}
-                label={label}
-              />
-            )
-          } else {
-            return (
-              <Button
-                key={i}
-                classes={{ root: classes.button }}
-                onClick={handleClick}
-                variant={selected ? 'contained' : 'outlined'}
-                color={selected ? 'primary' : 'default'}
-              >
-                {label}
-              </Button>
-            )
-          }
+          const Variant = image ? SwatchProductOption : TextProductOption
+
+          return (
+            <Variant
+              key={i}
+              classes={{ root: classes.button }}
+              imageProps={facet.image}
+              selected={selected}
+              onClick={handleClick}
+              label={label}
+            />
+          )
         })}
       </div>
     ),

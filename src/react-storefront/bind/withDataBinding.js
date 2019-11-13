@@ -26,20 +26,23 @@ import capitalize from 'lodash/capitalize'
  * @return {Function}
  */
 export default function withDataBinding(Component) {
-  return ({ bind, name, ...props }) => {
+  const Wrapped = ({ bind, name, ...props }) => {
     const normalizedBind = normalizeBind(bind)
     const { ampState, getValue, setValue } = useContext(DataBindingContext)
     const boundProps = getBoundProps(normalizedBind, getValue, setValue)
     const createAmpValueExpression = getAmpValue(ampState, normalizedBind)
     const amp = useAmp()
 
+    if (!name && typeof bind === 'string') {
+      name = bind
+    }
+
     return (
       <Component
         {...props}
         {...boundProps}
-        ampState={ampState}
-        name={name || bind}
-        bind={bind}
+        name={name}
+        bind={normalizedBind}
         amp={{
           state: ampState,
           getValue: createAmpValueExpression,
@@ -49,17 +52,22 @@ export default function withDataBinding(Component) {
       />
     )
   }
+
+  Wrapped.propTypes = Component.propTypes
+  return Wrapped
 }
 
 /**
  * Creates a function that creates an amp-bind expression for a given field and prop.
  * @param {Boolean} amp True when amp is enabled
+ * @param {Object} bind The bind prop
  * @param {Function} createAmpValueExpression A function that generates AMP values expressions for the current state.
+ * @return {Object} A props object to spread
  */
 function getAmpBind(amp, bind, createAmpValueExpression) {
   if (!amp || !bind) return () => ({})
-  return ({ field, prop, value }) => ({
-    'amp-bind': `${field}=>${value !== undefined ? value : createAmpValueExpression(prop)}`
+  return ({ attribute, prop, value }) => ({
+    'amp-bind': `${attribute}->${value !== undefined ? value : createAmpValueExpression(prop)}`
   })
 }
 
@@ -72,10 +80,17 @@ function getAmpBind(amp, bind, createAmpValueExpression) {
  * @return {Function}
  */
 function createAmpEventHandler(amp, bind, ampState) {
-  if (!amp || !bind) return () => ({})
-  return ({ event, prop = 'currentValue', value }) => {
-    const field = bind[prop][0]
+  if (!amp || Object.keys(bind).length === 0) return () => ({})
 
+  return ({ event, prop = 'value', value }) => {
+    const expressions = bind[prop]
+    if (!expressions) {
+      console.warn(
+        `could not create AMP event handler for prop ${prop}. No prop with that name was found.`
+      )
+      return {}
+    }
+    const field = expressions[0]
     return { on: `${event}:AMP.setState({ ${ampState}: { ${field}: ${value} } })` }
   }
 }
@@ -103,8 +118,10 @@ function createAmpEventHandler(amp, bind, ampState) {
  * @return {Object}
  */
 function normalizeBind(bind) {
+  if (!bind) return {}
+
   if (!isObject(bind) || Array.isArray(bind)) {
-    bind = { currentValue: bind }
+    bind = { value: bind }
   }
 
   for (let key in bind) {
@@ -133,7 +150,7 @@ function normalizeBindValue(value) {
  *
  * ```js
  * {
- *   currentValue: (the value)
+ *   value: (the value)
  *   onValueChange: (function to update the value)
  * }
  * ```
@@ -151,7 +168,9 @@ function getBoundProps(bind, getValue, setValue) {
     props[prop] = getBoundValue(expression, getValue)
 
     if (expression.length === 1) {
-      props[getCallback(prop)] = value => setValue(expression[0], value)
+      props[getCallback(prop)] = value => {
+        setValue(expression[0], value)
+      }
     }
   }
 
@@ -164,11 +183,8 @@ function getBoundProps(bind, getValue, setValue) {
  * @return {String}
  */
 function getCallback(prop) {
-  if (prop === 'currentValue') {
-    return `onValueChange`
-  } else {
-    return `on${capitalize(prop)}Change`
-  }
+  const [first, ...rest] = prop
+  return `on${capitalize(first)}${rest.join('')}Change`
 }
 
 /**
@@ -184,7 +200,6 @@ function getBoundValue(expressions, getValue) {
       return value
     }
   }
-
   return null
 }
 
@@ -195,7 +210,7 @@ function getBoundValue(expressions, getValue) {
  * @return {String}
  */
 function getAmpValue(ampState, bind) {
-  return (prop = 'currentValue') => {
+  return (prop = 'value') => {
     if (!bind[prop]) {
       return null
     } else if (bind[prop].length === 1) {

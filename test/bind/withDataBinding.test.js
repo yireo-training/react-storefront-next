@@ -78,7 +78,7 @@ describe('withDataBinding', () => {
 
       mount(
         <Test>
-          <Component bind={['null', 'notNull']} />
+          <Component bind={['notNull', 'null']} />
         </Test>
       )
 
@@ -165,13 +165,31 @@ describe('withDataBinding', () => {
       let ampBind
 
       const Component = withDataBinding(({ amp, value }) => {
-        ampBind = amp.bind({ field: 'value', prop: 'value' })
+        ampBind = amp.bind({ attribute: 'value', prop: 'value' })
         return null
       })
 
       mount(
         <Test>
           <Component bind="quantity" />
+        </Test>
+      )
+
+      expect(ampBind).toEqual({})
+    })
+
+    it('should not generate an amp-bind property when bind is not set', () => {
+      mockAmp = true
+      let ampBind
+
+      const Component = withDataBinding(({ amp, value }) => {
+        ampBind = amp.bind({ field: 'value', prop: 'value' })
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component />
         </Test>
       )
 
@@ -188,7 +206,7 @@ describe('withDataBinding', () => {
       let ampBind
 
       const Component = withDataBinding(({ amp, value }) => {
-        ampBind = amp.bind({ field: 'value', prop: 'value' })
+        ampBind = amp.bind({ attribute: 'value', prop: 'value' })
         return null
       })
 
@@ -198,14 +216,14 @@ describe('withDataBinding', () => {
         </Test>
       )
 
-      expect(ampBind).toEqual({ 'amp-bind': 'value=>(page.quantity)' })
+      expect(ampBind).toEqual({ 'amp-bind': 'value->page.quantity' })
     })
 
     it('should generate a value that returns the first non-null state when bind is an array', () => {
       let ampBind
 
       const Component = withDataBinding(({ amp, value }) => {
-        ampBind = amp.bind({ field: 'value', prop: 'value' })
+        ampBind = amp.bind({ attribute: 'value', prop: 'value' })
         return null
       })
 
@@ -215,7 +233,75 @@ describe('withDataBinding', () => {
         </Test>
       )
 
-      expect(ampBind).toEqual({ 'amp-bind': 'value=>(page.null||page.quantity)' })
+      expect(ampBind).toEqual({ 'amp-bind': 'value->(page.null||page.quantity)' })
+    })
+
+    it('should accept custom value', () => {
+      let ampBind
+
+      const Component = withDataBinding(({ amp, value }) => {
+        ampBind = amp.bind({ attribute: 'value', value: 'custom' })
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component bind="quantity" />
+        </Test>
+      )
+
+      expect(ampBind).toEqual({ 'amp-bind': 'value->custom' })
+    })
+
+    it('should return default amp value', () => {
+      let ampValue
+
+      const Component = withDataBinding(({ amp, value }) => {
+        ampValue = amp.getValue()
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component bind="quantity" />
+        </Test>
+      )
+
+      expect(ampValue).toEqual('page.quantity')
+    })
+
+    it('should return amp value for a specific prop', () => {
+      let ampValue
+
+      const Component = withDataBinding(({ amp, value }) => {
+        ampValue = amp.getValue('src')
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component bind={{ src: 'product.image.src', alt: 'product.image.alt' }} />
+        </Test>
+      )
+
+      expect(ampValue).toEqual('page.product.image.src')
+    })
+
+    it('should return null when getting amp value with not found prop', () => {
+      let ampValue
+
+      const Component = withDataBinding(({ amp, value }) => {
+        ampValue = amp.getValue('notFound')
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component bind="quantity" />
+        </Test>
+      )
+
+      expect(ampValue).toEqual(null)
     })
 
     it('should generate an amp change handler', () => {
@@ -237,8 +323,51 @@ describe('withDataBinding', () => {
       )
 
       expect(handler).toEqual({
-        on: 'tap:AMP.setState({ page: { quantity: (page.quantity) + 1) } })'
+        on: 'tap:AMP.setState({ page: { quantity: page.quantity + 1) } })'
       })
+    })
+
+    it('should not generate an amp change handler when prop not found', () => {
+      let handler
+
+      const Component = withDataBinding(({ amp, value }) => {
+        handler = amp.createHandler({
+          event: 'tap',
+          prop: 'notfound',
+          value: `${amp.getValue()} + 1)`
+        })
+
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component bind="quantity" />
+        </Test>
+      )
+
+      expect(handler).toEqual({})
+    })
+
+    it('should not generate an amp change handler when bind not provided', () => {
+      let handler
+
+      const Component = withDataBinding(({ amp, value }) => {
+        handler = amp.createHandler({
+          event: 'tap',
+          value: `${amp.getValue()} + 1)`
+        })
+
+        return null
+      })
+
+      mount(
+        <Test>
+          <Component />
+        </Test>
+      )
+
+      expect(handler).toEqual({})
     })
   })
 })

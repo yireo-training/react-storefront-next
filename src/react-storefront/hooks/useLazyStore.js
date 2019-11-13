@@ -6,12 +6,15 @@ import fetch from 'isomorphic-unfetch'
 import get from 'lodash/get'
 
 export default function useLazyStore(lazyProps, additionalData = {}) {
-  const linkPageData = get(useContext(LinkContext), 'current')
   const isLazy = lazyProps.lazy ? true : false
   const isInitialMount = useRef(true)
 
+  // If linkPageData is null then lodash merge will overwrite everything in additionalData.pageData
+  // It will properly merge the values if linkPageData is undefined
+  const linkPageData = get(useContext(LinkContext), 'current') || undefined
+
   const createInitialState = () => {
-    return merge(additionalData, { pageData: linkPageData }, props, {
+    return merge({}, additionalData, { pageData: linkPageData }, props, {
       loading: lazyProps.lazy != null,
       pageData: {}
     })

@@ -5,21 +5,19 @@ import PropTypes from 'prop-types'
  * Returns a span whose text is pull from the specified store in react and from the field
  * of the same name provided by DataBindingProvider when rendering amp.
  */
-function Bind({ amp, currentValue }) {
+function Text({ amp, value }) {
   return (
     <span
       {...amp.bind({
-        field: 'text',
+        attribute: 'text',
         value: `${amp.getValue()} || ''`
       })}
     >
-      {currentValue}
+      {value}
     </span>
   )
 }
 
-Bind.propTypes = {
-  name: PropTypes.string.isRequired
-}
+Text.propTypes = {}
 
-export default withDataBinding(Bind)
+export default withDataBinding(Text)

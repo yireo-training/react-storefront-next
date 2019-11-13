@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
 import Lazy from 'react-storefront/Lazy'
-import ButtonSelector from 'react-storefront/ButtonSelector'
 import QuantitySelector from 'react-storefront/QuantitySelector'
 import useLazyStore from 'react-storefront/hooks/useLazyStore'
 import Accordion from 'react-storefront/Accordion'
@@ -18,11 +17,12 @@ import { Hbox } from 'react-storefront/Box'
 import Label from 'react-storefront/Label'
 import Fill from 'react-storefront/Fill'
 import Rating from 'react-storefront/Rating'
-import Bind from 'react-storefront/Bind'
+import Text from 'react-storefront/Text'
 import DataBindingProvider from 'react-storefront/bind/DataBindingProvider'
 import withCaching from '../../src/moov-xdn-next/src/withCaching'
 import createCustomCacheKey from '../../src/moov-xdn/src/createCustomCacheKey'
 import get from 'lodash/get'
+import ProductOptionSelector from 'react-storefront/option/ProductOptionSelector'
 
 const styles = theme => ({
   carouselWrap: {
@@ -39,8 +39,8 @@ const Product = React.memo(lazyProps => {
   const theme = useTheme()
   const [store, updateStore] = useLazyStore(lazyProps, { pageData: { quantity: 1 } })
   const classes = useStyles()
-  const [product, updateProduct] = useState(get(store, 'pageData.product') || {})
-
+  const product = get(store, 'pageData.product') || {}
+  const color = get(store, 'pageData.color')
   const { thumbnail } = useContext(PWAContext)
 
   const header = (
@@ -58,9 +58,9 @@ const Product = React.memo(lazyProps => {
   return (
     <DataBindingProvider
       id={`RSFProduct${product.id}`}
-      store={product}
-      updateStore={updateProduct}
-      root={null}
+      store={store}
+      updateStore={updateStore}
+      root="pageData"
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
@@ -74,6 +74,7 @@ const Product = React.memo(lazyProps => {
                 className={classes.carousel}
                 thumbnail={thumbnail.current}
                 product={product}
+                color={color}
                 // bind={{ productId: 'id', media: 'media', color: 'color' }}
               />
             </Fill>
@@ -89,10 +90,13 @@ const Product = React.memo(lazyProps => {
                     <Hbox style={{ marginBottom: 10 }}>
                       <Label>COLOR: </Label>
                       <Typography>
-                        <Bind bind="color.text" />
+                        <Text bind="color.text" />
                       </Typography>
                     </Hbox>
-                    <ButtonSelector options={product.colors} bind="color" />
+                    <ProductOptionSelector
+                      optionProps={{ showLabel: false }}
+                      bind={{ value: 'color', options: 'product.colors' }}
+                    />
                   </>
                 ) : (
                   <div>
@@ -111,10 +115,10 @@ const Product = React.memo(lazyProps => {
                     <Hbox style={{ marginBottom: 10 }}>
                       <Label>SIZE: </Label>
                       <Typography>
-                        <Bind bind="size.text" />
+                        <Text bind="size.text" />
                       </Typography>
                     </Hbox>
-                    <ButtonSelector options={product.sizes} bind="size" />
+                    <ProductOptionSelector bind={{ value: 'size', options: 'product.sizes' }} />
                   </>
                 ) : (
                   <div>

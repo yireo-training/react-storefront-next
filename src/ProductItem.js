@@ -7,7 +7,7 @@ import Rating from 'react-storefront/Rating'
 import ForwardThumbnail from 'react-storefront/ForwardThumbnail'
 import ProductThumbnail from './react-storefront/product-link/ProductThumbnail'
 import ProductLink from './react-storefront/product-link/ProductLink'
-import ProductColors from './react-storefront/product-link/ProductColors'
+import ProductOptionSelector from './react-storefront/option/ProductOptionSelector'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,10 +60,12 @@ function ProductItem({ product, index }) {
               <Typography variant="subtitle1" className={classes.name}>
                 {product.name}
               </Typography>
-              <ProductColors
-                colors={product.colors}
-                bind="color"
-                buttonProps={{ variant: 'small' }}
+              <ProductOptionSelector
+                bind={{ value: 'color', options: 'colors' }}
+                optionProps={{
+                  size: 'small',
+                  showLabel: false
+                }}
               />
               <Rating product={product} className={classes.rating} />
               <Typography className={classes.price}>{product.price}</Typography>

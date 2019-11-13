@@ -17,7 +17,7 @@ export default async function renderAmp(document, sheets) {
     const expressions = $el.attr('amp-bind').split(/,\s*/)
 
     for (let expression of expressions) {
-      const [name, value] = expression.split('=>')
+      const [name, value] = expression.split('->')
       $el.attr(`[${name}]`, value)
     }
 

@@ -13,12 +13,7 @@ export default function ProductLink({ classes, product, children }) {
   const [store, updateStore] = useState(product)
 
   return (
-    <DataBindingProvider
-      id={`RSFProductLink${product.id}`}
-      store={store}
-      updateStore={updateStore}
-      root={null}
-    >
+    <DataBindingProvider id={`p${product.id}`} store={store} updateStore={updateStore} root={null}>
       {children}
     </DataBindingProvider>
   )
