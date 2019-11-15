@@ -25,7 +25,8 @@ const theme = createMuiTheme({
   },
   headerHeight: 64,
   loadMaskOffsetTop: 64 + 56 + 4,
-  drawerWidth: 330
+  drawerWidth: 330,
+  overrides: {}
 })
 
 export default theme

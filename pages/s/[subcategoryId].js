@@ -6,7 +6,7 @@ import ProductItem from '../../components/ProductItem'
 import ShowMore from 'react-storefront/plp/ShowMore'
 import Head from 'next/head'
 import BackToTop from 'react-storefront/BackToTop'
-import Skeleton from 'react-storefront/Skeleton'
+import { Skeleton } from '@material-ui/lab'
 import { Hbox } from 'react-storefront/Box'
 import SortButton from 'react-storefront/plp/SortButton'
 import fetchProps from 'react-storefront/props/fetchProps'
@@ -18,6 +18,7 @@ import Filter from 'react-storefront/plp/Filter'
 import Fill from 'react-storefront/Fill'
 import SearchResultsProvider from 'react-storefront/plp/SearchResultsProvider'
 import DataBindingProvider from 'react-storefront/bind/DataBindingProvider'
+import ProductOptionSelector from 'react-storefront/option/ProductOptionSelector'
 
 const useStyles = makeStyles(theme => ({
   sideBar: {
@@ -38,7 +39,9 @@ const Subcategory = lazyProps => {
   const [store, updateStore] = useSearchResultsStore(lazyProps)
   const classes = useStyles()
   const theme = useTheme()
-  const { pageData, loading } = store
+  let { pageData, loading } = store
+  // pageData = {}
+  // loading = true
 
   return (
     <DataBindingProvider store={store} updateStore={updateStore}>
@@ -57,9 +60,13 @@ const Subcategory = lazyProps => {
             <Grid container style={{ position: 'relative' }}>
               <LoadMask show={store.reloading} transparent align="top" />
               <Grid item xs={12}>
-                <Typography component="h1" variant="h6" gutterBottom>
-                  {pageData.name || <Skeleton style={{ height: 24 }} />}
-                </Typography>
+                {pageData.name ? (
+                  <Typography component="h1" variant="h6" gutterBottom>
+                    {pageData.name}
+                  </Typography>
+                ) : (
+                  <Skeleton style={{ height: '1rem' }} />
+                )}
               </Grid>
               <Grid item xs={6} style={{ paddingRight: theme.spacing(1) }}>
                 <Hidden implementation="css" smUp>
@@ -71,15 +78,15 @@ const Subcategory = lazyProps => {
               </Grid>
               <Grid item xs={6}></Grid>
               <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Typography variant="caption" className={classes.total}>
-                  {loading ? (
-                    <Skeleton style={{ width: 100, height: 12, marginBottom: theme.spacing(1) }} />
-                  ) : (
+                {loading ? (
+                  <Skeleton width={100} height={12} />
+                ) : (
+                  <Typography variant="caption" className={classes.total}>
                     <span>
                       {pageData.total} total {pageData.total === 1 ? 'item' : 'items'}
                     </span>
-                  )}
-                </Typography>
+                  </Typography>
+                )}
               </Grid>
               <Grid item xs={12}>
                 {!loading ? (
@@ -95,12 +102,21 @@ const Subcategory = lazyProps => {
                       for (let i = 0; i < 10; i++) {
                         tiles.push(
                           <div key={i} style={{ marginBottom: theme.spacing(3) }}>
-                            <Fill style={{ marginBottom: '1em' }}>
-                              <Skeleton style={{ height: '100%' }} />
+                            <Fill style={{ marginBottom: theme.spacing(1) }}>
+                              <Skeleton height="100%" style={{ margin: 0 }} />
                             </Fill>
-                            <Skeleton style={{ height: 16 }} />
-                            <Skeleton style={{ height: 16 }} />
-                            <Skeleton style={{ height: 16 }} />
+                            <Skeleton height={14} />
+                            <ProductOptionSelector
+                              skeleton={4}
+                              variant="swatch"
+                              size="small"
+                              optionProps={{
+                                size: 'small',
+                                showLabel: false
+                              }}
+                            />
+                            <Skeleton height={10} />
+                            <Skeleton height={10} />
                           </div>
                         )
                       }
