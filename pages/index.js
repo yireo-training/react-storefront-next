@@ -30,3 +30,5 @@ export default function Index() {
     </Container>
   )
 }
+
+export const config = { amp: 'hybrid' }

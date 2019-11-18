@@ -8,6 +8,7 @@ import ForwardThumbnail from 'react-storefront/ForwardThumbnail'
 import ProductThumbnail from 'react-storefront/product-link/ProductThumbnail'
 import ProductLink from 'react-storefront/product-link/ProductLink'
 import ProductOptionSelector from 'react-storefront/option/ProductOptionSelector'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,11 +32,11 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function ProductItem({ product, index }) {
-  const classes = useStyles()
+function ProductItem({ product, index, classes, className, colorSelector }) {
+  classes = useStyles({ classes })
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(className, classes.root)}>
       <ForwardThumbnail>
         <ProductLink product={product}>
           <Vbox alignItems="stretch">
@@ -60,13 +61,15 @@ function ProductItem({ product, index }) {
               <Typography variant="subtitle1" className={classes.name}>
                 {product.name}
               </Typography>
-              <ProductOptionSelector
-                bind={{ value: 'color', options: 'colors' }}
-                optionProps={{
-                  size: 'small',
-                  showLabel: false
-                }}
-              />
+              {!colorSelector ? null : (
+                <ProductOptionSelector
+                  bind={{ value: 'color', options: 'colors' }}
+                  optionProps={{
+                    size: 'small',
+                    showLabel: false
+                  }}
+                />
+              )}
               <Rating product={product} className={classes.rating} />
               <Typography className={classes.price}>{product.price}</Typography>
             </div>
@@ -75,6 +78,10 @@ function ProductItem({ product, index }) {
       </ForwardThumbnail>
     </div>
   )
+}
+
+ProductItem.defaultProps = {
+  colorSelector: true
 }
 
 export default memo(ProductItem)

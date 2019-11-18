@@ -1,9 +1,6 @@
 import { useContext, useState } from 'react'
-import Lazy from 'react-storefront/Lazy'
 import QuantitySelector from 'react-storefront/QuantitySelector'
 import useLazyStore from 'react-storefront/hooks/useLazyStore'
-import Accordion from 'react-storefront/Accordion'
-import ExpandableSection from 'react-storefront/ExpandableSection'
 import fetchProps from 'react-storefront/props/fetchProps'
 import TabPanel from 'react-storefront/TabPanel'
 import CmsSlot from 'react-storefront/CmsSlot'
@@ -23,6 +20,8 @@ import withCaching from 'moov-xdn-next/withCaching'
 import createCustomCacheKey from 'moov-xdn/createCustomCacheKey'
 import get from 'lodash/get'
 import ProductOptionSelector from 'react-storefront/option/ProductOptionSelector'
+import SuggestedProducts from '../../components/product/SuggestedProducts'
+import Lazy from 'react-storefront/Lazy'
 
 const styles = theme => ({
   carouselWrap: {
@@ -144,6 +143,11 @@ const Product = React.memo(lazyProps => {
               <CmsSlot label="Description">{product.description}</CmsSlot>
               <CmsSlot label="Specs">{product.specs}</CmsSlot>
             </TabPanel>
+          </Grid>
+          <Grid item xs={12}>
+            <Lazy style={{ minHeight: 285 }}>
+              <SuggestedProducts product={product} />
+            </Lazy>
           </Grid>
         </Grid>
       </Container>
