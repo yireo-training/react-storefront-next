@@ -90,7 +90,7 @@ const Subcategory = lazyProps => {
               </Grid>
               <Grid item xs={12}>
                 {!loading ? (
-                  <ResponsiveTiles>
+                  <ResponsiveTiles autoScrollToNewTiles>
                     {pageData.products.map((product, i) => (
                       <ProductItem key={product.id} product={product} index={i} />
                     ))}
@@ -126,7 +126,7 @@ const Subcategory = lazyProps => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                {!loading && <ShowMore variant="infinite" style={{ paddingBottom: 200 }} />}
+                {!loading && <ShowMore variant="button" style={{ paddingBottom: 200 }} />}
               </Grid>
             </Grid>
           </Hbox>
