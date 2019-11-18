@@ -1,5 +1,6 @@
 import colors, { colorForId } from './colors'
 import capitalize from 'lodash/capitalize'
+import { loremIpsum } from 'lorem-ipsum'
 
 export default function createProduct(id, numColors = 4) {
   const color = colorForId(id)
@@ -39,8 +40,8 @@ export default function createProduct(id, numColors = 4) {
       { id: 'xl', text: 'XL', disabled: true },
       { id: 'xxl', text: 'XXL' }
     ],
-    descriptions: '',
-    specs: '',
+    description: loremIpsum({ count: 10 }),
+    specs: loremIpsum({ count: 10 }),
     colors: Object.keys(colors)
       .slice(0, numColors)
       .map(name => ({
