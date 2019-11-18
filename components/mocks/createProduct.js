@@ -39,6 +39,8 @@ export default function createProduct(id, numColors = 4) {
       { id: 'xl', text: 'XL', disabled: true },
       { id: 'xxl', text: 'XXL' }
     ],
+    descriptions: '',
+    specs: '',
     colors: Object.keys(colors)
       .slice(0, numColors)
       .map(name => ({

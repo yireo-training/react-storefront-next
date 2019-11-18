@@ -137,47 +137,13 @@ const Product = React.memo(lazyProps => {
                   <QuantitySelector bind="quantity" />
                 </Hbox>
               </Grid>
-              <Grid item xs={12}>
-                <TabPanel>
-                  <CmsSlot label="Description">Description</CmsSlot>
-                  <CmsSlot label="Specs">Test</CmsSlot>
-                  <div label="Reviews">
-                    {['here', 'here2', 'here3'].map((review, i) => (
-                      <Paper key={i}>{review}</Paper>
-                    ))}
-                  </div>
-                </TabPanel>
-              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Row>
-              <Accordion>
-                <ExpandableSection expanded title="First">
-                  <div>The first section</div>
-                </ExpandableSection>
-                <ExpandableSection title="Second">
-                  <div>The second section</div>
-                </ExpandableSection>
-                <ExpandableSection title="Third">
-                  <div>The third section</div>
-                </ExpandableSection>
-              </Accordion>
-            </Row>
-            <Row>
-              <ExpandableSection expanded title="First">
-                <div>The first no accordion section</div>
-              </ExpandableSection>
-              <ExpandableSection title="Second">
-                <div>The second no accordion section</div>
-              </ExpandableSection>
-            </Row>
-          </Grid>
-          <div style={{ height: 500 }}></div>
-          <Grid item xs={12}>
-            <Lazy style={{ minHeight: 200 }}>
-              <div>Lazy content</div>
-            </Lazy>
+            <TabPanel>
+              <CmsSlot label="Description">{product.description}</CmsSlot>
+              <CmsSlot label="Specs">{product.specs}</CmsSlot>
+            </TabPanel>
           </Grid>
         </Grid>
       </Container>
